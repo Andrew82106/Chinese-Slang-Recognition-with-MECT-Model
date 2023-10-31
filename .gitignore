@@ -1,0 +1,5 @@
+/.idea
+/datasets/NER
+/datasets/embeddings
+/datasets/charinfo
+/cache

@@ -1,0 +1,7 @@
+2023/08/22 00:10:37 - StaticEmbedding - [INFO] - Found 54 out of 59 words in the pre-training embedding.
+2023/08/22 00:10:53 - StaticEmbedding - [INFO] - Found 59 out of 73 words in the pre-training embedding.
+2023/08/22 00:10:53 - utils - [INFO] - Save cache to cache/demo_trainClip:Truebgminfreq_1char_min_freq_1word_min_freq_1only_train_min_freqTruenumber_norm0load_dataset_seed100.
+2023/08/22 00:10:56 - utils - [INFO] - Save cache to cache/yj.
+2023/08/22 00:11:10 - StaticEmbedding - [INFO] - Found 698668 out of 698670 words in the pre-training embedding.
+2023/08/22 00:11:19 - StaticEmbedding - [INFO] - Found 103 out of 108 words in the pre-training embedding.
+2023/08/22 00:11:20 - utils - [INFO] - Save cache to cache/demo_lattice_only_train:False_trainClip:True_norm_num:0char_min_freq1bigram_min_freq1word_min_freq1only_train_min_freqTruenumber_norm0lexicon_yjload_dataset_seed100.

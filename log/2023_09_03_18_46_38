@@ -1,0 +1,4 @@
+2023/09/03 10:46:38 - StaticEmbedding - [INFO] - Found 167 out of 173 words in the pre-training embedding.
+2023/09/03 10:46:53 - StaticEmbedding - [INFO] - Found 221 out of 260 words in the pre-training embedding.
+2023/09/03 10:46:53 - utils - [INFO] - Save cache to cache/demo_trainClip:Truebgminfreq_1char_min_freq_1word_min_freq_1only_train_min_freqTruenumber_norm0load_dataset_seed100.
+2023/09/03 10:46:56 - utils - [INFO] - Save cache to cache/yj.

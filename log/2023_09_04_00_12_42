@@ -1,0 +1,35 @@
+2023/09/03 16:12:47 - StaticEmbedding - [INFO] - Found 1879 out of 1897 words in the pre-training embedding.
+2023/09/03 16:13:03 - StaticEmbedding - [INFO] - Found 49366 out of 54557 words in the pre-training embedding.
+2023/09/03 16:13:04 - utils - [INFO] - Save cache to cache/demo_trainClip:Truebgminfreq_1char_min_freq_1word_min_freq_1only_train_min_freqTruenumber_norm0load_dataset_seed100.
+2023/09/03 16:13:07 - utils - [INFO] - Save cache to cache/yj.
+2023/09/03 16:13:25 - StaticEmbedding - [INFO] - Found 698668 out of 698670 words in the pre-training embedding.
+2023/09/03 16:13:35 - StaticEmbedding - [INFO] - Found 19383 out of 19401 words in the pre-training embedding.
+2023/09/03 16:13:39 - utils - [INFO] - Save cache to cache/demo_lattice_only_train:False_trainClip:True_norm_num:0char_min_freq1bigram_min_freq1word_min_freq1only_train_min_freqTruenumber_norm0lexicon_yjload_dataset_seed100.
+2023/09/03 16:13:39 - CNNRadicalLevelEmbedding - [INFO] - Start constructing character vocabulary.
+2023/09/03 16:13:39 - CNNRadicalLevelEmbedding - [INFO] - In total, there are 880 distinct characters.
+2023/09/03 16:13:42 - trainer - [INFO] - training epochs started 2023-09-03-16-13-42
+2023/09/03 16:15:31 - tester - [INFO] - Evaluate data in 35.59 seconds!
+2023/09/03 16:16:07 - tester - [INFO] - Evaluate data in 35.73 seconds!
+2023/09/03 16:16:07 - trainer - [INFO] - Evaluation on dev at Epoch 1/100. Step:1579/157900: 
+2023/09/03 16:16:07 - trainer - [INFO] - SpanFPreRecMetric: f=0.0, pre=0.0, rec=0.0
+label_acc: acc=0.834103
+
+2023/09/03 16:17:54 - tester - [INFO] - Evaluate data in 35.76 seconds!
+2023/09/03 16:18:30 - tester - [INFO] - Evaluate data in 36.02 seconds!
+2023/09/03 16:18:30 - trainer - [INFO] - Evaluation on dev at Epoch 2/100. Step:3158/157900: 
+2023/09/03 16:18:30 - trainer - [INFO] - SpanFPreRecMetric: f=0.000912, pre=0.000702, rec=0.001301
+label_acc: acc=0.129615
+
+2023/09/03 16:20:19 - tester - [INFO] - Evaluate data in 35.96 seconds!
+2023/09/03 16:20:55 - tester - [INFO] - Evaluate data in 35.95 seconds!
+2023/09/03 16:20:55 - trainer - [INFO] - Evaluation on dev at Epoch 3/100. Step:4737/157900: 
+2023/09/03 16:20:55 - trainer - [INFO] - SpanFPreRecMetric: f=0.00189, pre=0.615385, rec=0.000947
+label_acc: acc=0.834119
+
+2023/09/03 16:22:44 - tester - [INFO] - Evaluate data in 36.01 seconds!
+2023/09/03 16:23:19 - tester - [INFO] - Evaluate data in 35.56 seconds!
+2023/09/03 16:23:19 - trainer - [INFO] - Evaluation on dev at Epoch 4/100. Step:6316/157900: 
+2023/09/03 16:23:19 - trainer - [INFO] - SpanFPreRecMetric: f=0.217134, pre=0.411009, rec=0.147539
+label_acc: acc=0.843208
+
+2023/09/03 16:25:10 - tester - [INFO] - Evaluate data in 36.34 seconds!

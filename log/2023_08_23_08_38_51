@@ -1,0 +1,8 @@
+2023/08/23 00:38:51 - StaticEmbedding - [INFO] - Found 98 out of 104 words in the pre-training embedding.
+2023/08/23 00:39:07 - StaticEmbedding - [INFO] - Found 109 out of 127 words in the pre-training embedding.
+2023/08/23 00:39:07 - utils - [INFO] - Save cache to cache/demo_trainClip:Truebgminfreq_1char_min_freq_1word_min_freq_1only_train_min_freqTruenumber_norm0load_dataset_seed100.
+2023/08/23 00:39:09 - utils - [INFO] - Save cache to cache/yj.
+2023/08/23 00:39:23 - StaticEmbedding - [INFO] - Found 698668 out of 698670 words in the pre-training embedding.
+2023/08/23 00:39:32 - StaticEmbedding - [INFO] - Found 149 out of 154 words in the pre-training embedding.
+2023/08/23 00:39:33 - utils - [INFO] - Save cache to cache/demo_lattice_only_train:False_trainClip:True_norm_num:0char_min_freq1bigram_min_freq1word_min_freq1only_train_min_freqTruenumber_norm0lexicon_yjload_dataset_seed100.
+2023/08/23 00:39:34 - CNNRadicalLevelEmbedding - [INFO] - Start constructing character vocabulary.

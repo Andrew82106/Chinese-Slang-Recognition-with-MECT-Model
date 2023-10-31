@@ -1,0 +1,615 @@
+2023/08/22 09:20:30 - StaticEmbedding - [INFO] - Found 100 out of 103 words in the pre-training embedding.
+2023/08/22 09:20:45 - StaticEmbedding - [INFO] - Found 118 out of 131 words in the pre-training embedding.
+2023/08/22 09:20:45 - utils - [INFO] - Save cache to cache/demo_trainClip:Truebgminfreq_1char_min_freq_1word_min_freq_1only_train_min_freqTruenumber_norm0load_dataset_seed100.
+2023/08/22 09:20:48 - utils - [INFO] - Save cache to cache/yj.
+2023/08/22 09:21:02 - StaticEmbedding - [INFO] - Found 698668 out of 698670 words in the pre-training embedding.
+2023/08/22 09:21:12 - StaticEmbedding - [INFO] - Found 151 out of 154 words in the pre-training embedding.
+2023/08/22 09:21:12 - utils - [INFO] - Save cache to cache/demo_lattice_only_train:False_trainClip:True_norm_num:0char_min_freq1bigram_min_freq1word_min_freq1only_train_min_freqTruenumber_norm0lexicon_yjload_dataset_seed100.
+2023/08/22 09:21:13 - CNNRadicalLevelEmbedding - [INFO] - Start constructing character vocabulary.
+2023/08/22 09:21:13 - CNNRadicalLevelEmbedding - [INFO] - In total, there are 114 distinct characters.
+2023/08/22 09:21:15 - trainer - [INFO] - training epochs started 2023-08-22-09-21-15
+2023/08/22 09:21:16 - tester - [INFO] - Evaluate data in 0.02 seconds!
+2023/08/22 09:21:16 - tester - [INFO] - Evaluate data in 0.02 seconds!
+2023/08/22 09:21:16 - trainer - [INFO] - Evaluation on dev at Epoch 1/100. Step:1/100: 
+2023/08/22 09:21:16 - trainer - [INFO] - SpanFPreRecMetric: f=0.0, pre=0.0, rec=0.0
+label_acc: acc=0.761589
+
+2023/08/22 09:21:16 - tester - [INFO] - Evaluate data in 0.02 seconds!
+2023/08/22 09:21:16 - tester - [INFO] - Evaluate data in 0.02 seconds!
+2023/08/22 09:21:16 - trainer - [INFO] - Evaluation on dev at Epoch 2/100. Step:2/100: 
+2023/08/22 09:21:16 - trainer - [INFO] - SpanFPreRecMetric: f=0.0, pre=0.0, rec=0.0
+label_acc: acc=0.801325
+
+2023/08/22 09:21:16 - tester - [INFO] - Evaluate data in 0.02 seconds!
+2023/08/22 09:21:16 - tester - [INFO] - Evaluate data in 0.02 seconds!
+2023/08/22 09:21:16 - trainer - [INFO] - Evaluation on dev at Epoch 3/100. Step:3/100: 
+2023/08/22 09:21:16 - trainer - [INFO] - SpanFPreRecMetric: f=0.0, pre=0.0, rec=0.0
+label_acc: acc=0.801325
+
+2023/08/22 09:21:16 - tester - [INFO] - Evaluate data in 0.02 seconds!
+2023/08/22 09:21:16 - tester - [INFO] - Evaluate data in 0.02 seconds!
+2023/08/22 09:21:16 - trainer - [INFO] - Evaluation on dev at Epoch 4/100. Step:4/100: 
+2023/08/22 09:21:16 - trainer - [INFO] - SpanFPreRecMetric: f=0.0, pre=0.0, rec=0.0
+label_acc: acc=0.801325
+
+2023/08/22 09:21:16 - tester - [INFO] - Evaluate data in 0.02 seconds!
+2023/08/22 09:21:16 - tester - [INFO] - Evaluate data in 0.02 seconds!
+2023/08/22 09:21:16 - trainer - [INFO] - Evaluation on dev at Epoch 5/100. Step:5/100: 
+2023/08/22 09:21:16 - trainer - [INFO] - SpanFPreRecMetric: f=0.0, pre=0.0, rec=0.0
+label_acc: acc=0.801325
+
+2023/08/22 09:21:16 - tester - [INFO] - Evaluate data in 0.02 seconds!
+2023/08/22 09:21:16 - tester - [INFO] - Evaluate data in 0.02 seconds!
+2023/08/22 09:21:16 - trainer - [INFO] - Evaluation on dev at Epoch 6/100. Step:6/100: 
+2023/08/22 09:21:16 - trainer - [INFO] - SpanFPreRecMetric: f=0.0, pre=0.0, rec=0.0
+label_acc: acc=0.410596
+
+2023/08/22 09:21:16 - tester - [INFO] - Evaluate data in 0.02 seconds!
+2023/08/22 09:21:16 - tester - [INFO] - Evaluate data in 0.02 seconds!
+2023/08/22 09:21:16 - trainer - [INFO] - Evaluation on dev at Epoch 7/100. Step:7/100: 
+2023/08/22 09:21:16 - trainer - [INFO] - SpanFPreRecMetric: f=0.142857, pre=0.095238, rec=0.285714
+label_acc: acc=0.556291
+
+2023/08/22 09:21:16 - tester - [INFO] - Evaluate data in 0.02 seconds!
+2023/08/22 09:21:16 - tester - [INFO] - Evaluate data in 0.02 seconds!
+2023/08/22 09:21:16 - trainer - [INFO] - Evaluation on dev at Epoch 8/100. Step:8/100: 
+2023/08/22 09:21:16 - trainer - [INFO] - SpanFPreRecMetric: f=0.133333, pre=0.125, rec=0.142857
+label_acc: acc=0.748344
+
+2023/08/22 09:21:16 - tester - [INFO] - Evaluate data in 0.02 seconds!
+2023/08/22 09:21:16 - tester - [INFO] - Evaluate data in 0.02 seconds!
+2023/08/22 09:21:16 - trainer - [INFO] - Evaluation on dev at Epoch 9/100. Step:9/100: 
+2023/08/22 09:21:16 - trainer - [INFO] - SpanFPreRecMetric: f=0.0, pre=0.0, rec=0.0
+label_acc: acc=0.801325
+
+2023/08/22 09:21:17 - tester - [INFO] - Evaluate data in 0.02 seconds!
+2023/08/22 09:21:17 - tester - [INFO] - Evaluate data in 0.02 seconds!
+2023/08/22 09:21:17 - trainer - [INFO] - Evaluation on dev at Epoch 10/100. Step:10/100: 
+2023/08/22 09:21:17 - trainer - [INFO] - SpanFPreRecMetric: f=0.0, pre=0.0, rec=0.0
+label_acc: acc=0.801325
+
+2023/08/22 09:21:17 - tester - [INFO] - Evaluate data in 0.02 seconds!
+2023/08/22 09:21:17 - tester - [INFO] - Evaluate data in 0.02 seconds!
+2023/08/22 09:21:17 - trainer - [INFO] - Evaluation on dev at Epoch 11/100. Step:11/100: 
+2023/08/22 09:21:17 - trainer - [INFO] - SpanFPreRecMetric: f=0.146341, pre=0.088235, rec=0.428571
+label_acc: acc=0.615894
+
+2023/08/22 09:21:17 - tester - [INFO] - Evaluate data in 0.02 seconds!
+2023/08/22 09:21:17 - tester - [INFO] - Evaluate data in 0.02 seconds!
+2023/08/22 09:21:17 - trainer - [INFO] - Evaluation on dev at Epoch 12/100. Step:12/100: 
+2023/08/22 09:21:17 - trainer - [INFO] - SpanFPreRecMetric: f=0.315789, pre=0.25, rec=0.428571
+label_acc: acc=0.900662
+
+2023/08/22 09:21:17 - tester - [INFO] - Evaluate data in 0.02 seconds!
+2023/08/22 09:21:17 - tester - [INFO] - Evaluate data in 0.02 seconds!
+2023/08/22 09:21:17 - trainer - [INFO] - Evaluation on dev at Epoch 13/100. Step:13/100: 
+2023/08/22 09:21:17 - trainer - [INFO] - SpanFPreRecMetric: f=0.0, pre=0.0, rec=0.0
+label_acc: acc=0.81457
+
+2023/08/22 09:21:17 - tester - [INFO] - Evaluate data in 0.02 seconds!
+2023/08/22 09:21:17 - tester - [INFO] - Evaluate data in 0.02 seconds!
+2023/08/22 09:21:17 - trainer - [INFO] - Evaluation on dev at Epoch 14/100. Step:14/100: 
+2023/08/22 09:21:17 - trainer - [INFO] - SpanFPreRecMetric: f=0.0, pre=0.0, rec=0.0
+label_acc: acc=0.81457
+
+2023/08/22 09:21:17 - tester - [INFO] - Evaluate data in 0.02 seconds!
+2023/08/22 09:21:17 - tester - [INFO] - Evaluate data in 0.02 seconds!
+2023/08/22 09:21:17 - trainer - [INFO] - Evaluation on dev at Epoch 15/100. Step:15/100: 
+2023/08/22 09:21:17 - trainer - [INFO] - SpanFPreRecMetric: f=0.0, pre=0.0, rec=0.0
+label_acc: acc=0.81457
+
+2023/08/22 09:21:17 - tester - [INFO] - Evaluate data in 0.02 seconds!
+2023/08/22 09:21:17 - tester - [INFO] - Evaluate data in 0.02 seconds!
+2023/08/22 09:21:17 - trainer - [INFO] - Evaluation on dev at Epoch 16/100. Step:16/100: 
+2023/08/22 09:21:17 - trainer - [INFO] - SpanFPreRecMetric: f=0.166667, pre=0.2, rec=0.142857
+label_acc: acc=0.900662
+
+2023/08/22 09:21:17 - tester - [INFO] - Evaluate data in 0.02 seconds!
+2023/08/22 09:21:17 - tester - [INFO] - Evaluate data in 0.02 seconds!
+2023/08/22 09:21:17 - trainer - [INFO] - Evaluation on dev at Epoch 17/100. Step:17/100: 
+2023/08/22 09:21:17 - trainer - [INFO] - SpanFPreRecMetric: f=0.0, pre=0.0, rec=0.0
+label_acc: acc=0.860927
+
+2023/08/22 09:21:17 - tester - [INFO] - Evaluate data in 0.02 seconds!
+2023/08/22 09:21:17 - tester - [INFO] - Evaluate data in 0.02 seconds!
+2023/08/22 09:21:17 - trainer - [INFO] - Evaluation on dev at Epoch 18/100. Step:18/100: 
+2023/08/22 09:21:17 - trainer - [INFO] - SpanFPreRecMetric: f=0.111111, pre=0.090909, rec=0.142857
+label_acc: acc=0.913907
+
+2023/08/22 09:21:17 - tester - [INFO] - Evaluate data in 0.02 seconds!
+2023/08/22 09:21:17 - tester - [INFO] - Evaluate data in 0.02 seconds!
+2023/08/22 09:21:17 - trainer - [INFO] - Evaluation on dev at Epoch 19/100. Step:19/100: 
+2023/08/22 09:21:17 - trainer - [INFO] - SpanFPreRecMetric: f=0.0, pre=0.0, rec=0.0
+label_acc: acc=0.89404
+
+2023/08/22 09:21:18 - tester - [INFO] - Evaluate data in 0.02 seconds!
+2023/08/22 09:21:18 - tester - [INFO] - Evaluate data in 0.02 seconds!
+2023/08/22 09:21:18 - trainer - [INFO] - Evaluation on dev at Epoch 20/100. Step:20/100: 
+2023/08/22 09:21:18 - trainer - [INFO] - SpanFPreRecMetric: f=0.235294, pre=0.2, rec=0.285714
+label_acc: acc=0.913907
+
+2023/08/22 09:21:18 - tester - [INFO] - Evaluate data in 0.02 seconds!
+2023/08/22 09:21:18 - tester - [INFO] - Evaluate data in 0.02 seconds!
+2023/08/22 09:21:18 - trainer - [INFO] - Evaluation on dev at Epoch 21/100. Step:21/100: 
+2023/08/22 09:21:18 - trainer - [INFO] - SpanFPreRecMetric: f=0.714286, pre=0.714286, rec=0.714286
+label_acc: acc=0.966887
+
+2023/08/22 09:21:18 - tester - [INFO] - Evaluate data in 0.02 seconds!
+2023/08/22 09:21:18 - tester - [INFO] - Evaluate data in 0.02 seconds!
+2023/08/22 09:21:18 - trainer - [INFO] - Evaluation on dev at Epoch 22/100. Step:22/100: 
+2023/08/22 09:21:18 - trainer - [INFO] - SpanFPreRecMetric: f=0.3, pre=0.230769, rec=0.428571
+label_acc: acc=0.933775
+
+2023/08/22 09:21:18 - tester - [INFO] - Evaluate data in 0.02 seconds!
+2023/08/22 09:21:18 - tester - [INFO] - Evaluate data in 0.02 seconds!
+2023/08/22 09:21:18 - trainer - [INFO] - Evaluation on dev at Epoch 23/100. Step:23/100: 
+2023/08/22 09:21:18 - trainer - [INFO] - SpanFPreRecMetric: f=0.315789, pre=0.25, rec=0.428571
+label_acc: acc=0.94702
+
+2023/08/22 09:21:18 - tester - [INFO] - Evaluate data in 0.02 seconds!
+2023/08/22 09:21:18 - tester - [INFO] - Evaluate data in 0.02 seconds!
+2023/08/22 09:21:18 - trainer - [INFO] - Evaluation on dev at Epoch 24/100. Step:24/100: 
+2023/08/22 09:21:18 - trainer - [INFO] - SpanFPreRecMetric: f=0.333333, pre=0.272727, rec=0.428571
+label_acc: acc=0.94702
+
+2023/08/22 09:21:18 - tester - [INFO] - Evaluate data in 0.02 seconds!
+2023/08/22 09:21:18 - tester - [INFO] - Evaluate data in 0.02 seconds!
+2023/08/22 09:21:18 - trainer - [INFO] - Evaluation on dev at Epoch 25/100. Step:25/100: 
+2023/08/22 09:21:18 - trainer - [INFO] - SpanFPreRecMetric: f=0.75, pre=0.666667, rec=0.857143
+label_acc: acc=0.980132
+
+2023/08/22 09:21:18 - tester - [INFO] - Evaluate data in 0.02 seconds!
+2023/08/22 09:21:18 - tester - [INFO] - Evaluate data in 0.02 seconds!
+2023/08/22 09:21:18 - trainer - [INFO] - Evaluation on dev at Epoch 26/100. Step:26/100: 
+2023/08/22 09:21:18 - trainer - [INFO] - SpanFPreRecMetric: f=0.857143, pre=0.857143, rec=0.857143
+label_acc: acc=0.986755
+
+2023/08/22 09:21:18 - tester - [INFO] - Evaluate data in 0.02 seconds!
+2023/08/22 09:21:18 - tester - [INFO] - Evaluate data in 0.02 seconds!
+2023/08/22 09:21:18 - trainer - [INFO] - Evaluation on dev at Epoch 27/100. Step:27/100: 
+2023/08/22 09:21:18 - trainer - [INFO] - SpanFPreRecMetric: f=0.769231, pre=0.833333, rec=0.714286
+label_acc: acc=0.966887
+
+2023/08/22 09:21:18 - tester - [INFO] - Evaluate data in 0.02 seconds!
+2023/08/22 09:21:18 - tester - [INFO] - Evaluate data in 0.02 seconds!
+2023/08/22 09:21:18 - trainer - [INFO] - Evaluation on dev at Epoch 28/100. Step:28/100: 
+2023/08/22 09:21:18 - trainer - [INFO] - SpanFPreRecMetric: f=0.769231, pre=0.833333, rec=0.714286
+label_acc: acc=0.966887
+
+2023/08/22 09:21:18 - tester - [INFO] - Evaluate data in 0.02 seconds!
+2023/08/22 09:21:18 - tester - [INFO] - Evaluate data in 0.02 seconds!
+2023/08/22 09:21:18 - trainer - [INFO] - Evaluation on dev at Epoch 29/100. Step:29/100: 
+2023/08/22 09:21:18 - trainer - [INFO] - SpanFPreRecMetric: f=0.8, pre=0.75, rec=0.857143
+label_acc: acc=0.993377
+
+2023/08/22 09:21:19 - tester - [INFO] - Evaluate data in 0.02 seconds!
+2023/08/22 09:21:19 - tester - [INFO] - Evaluate data in 0.02 seconds!
+2023/08/22 09:21:19 - trainer - [INFO] - Evaluation on dev at Epoch 30/100. Step:30/100: 
+2023/08/22 09:21:19 - trainer - [INFO] - SpanFPreRecMetric: f=0.705882, pre=0.6, rec=0.857143
+label_acc: acc=0.966887
+
+2023/08/22 09:21:19 - tester - [INFO] - Evaluate data in 0.02 seconds!
+2023/08/22 09:21:19 - tester - [INFO] - Evaluate data in 0.02 seconds!
+2023/08/22 09:21:19 - trainer - [INFO] - Evaluation on dev at Epoch 31/100. Step:31/100: 
+2023/08/22 09:21:19 - trainer - [INFO] - SpanFPreRecMetric: f=0.705882, pre=0.6, rec=0.857143
+label_acc: acc=0.966887
+
+2023/08/22 09:21:19 - tester - [INFO] - Evaluate data in 0.02 seconds!
+2023/08/22 09:21:19 - tester - [INFO] - Evaluate data in 0.02 seconds!
+2023/08/22 09:21:19 - trainer - [INFO] - Evaluation on dev at Epoch 32/100. Step:32/100: 
+2023/08/22 09:21:19 - trainer - [INFO] - SpanFPreRecMetric: f=0.705882, pre=0.6, rec=0.857143
+label_acc: acc=0.966887
+
+2023/08/22 09:21:19 - tester - [INFO] - Evaluate data in 0.02 seconds!
+2023/08/22 09:21:19 - tester - [INFO] - Evaluate data in 0.02 seconds!
+2023/08/22 09:21:19 - trainer - [INFO] - Evaluation on dev at Epoch 33/100. Step:33/100: 
+2023/08/22 09:21:19 - trainer - [INFO] - SpanFPreRecMetric: f=0.705882, pre=0.6, rec=0.857143
+label_acc: acc=0.966887
+
+2023/08/22 09:21:19 - tester - [INFO] - Evaluate data in 0.02 seconds!
+2023/08/22 09:21:19 - tester - [INFO] - Evaluate data in 0.02 seconds!
+2023/08/22 09:21:19 - trainer - [INFO] - Evaluation on dev at Epoch 34/100. Step:34/100: 
+2023/08/22 09:21:19 - trainer - [INFO] - SpanFPreRecMetric: f=0.75, pre=0.666667, rec=0.857143
+label_acc: acc=0.97351
+
+2023/08/22 09:21:19 - tester - [INFO] - Evaluate data in 0.02 seconds!
+2023/08/22 09:21:19 - tester - [INFO] - Evaluate data in 0.02 seconds!
+2023/08/22 09:21:19 - trainer - [INFO] - Evaluation on dev at Epoch 35/100. Step:35/100: 
+2023/08/22 09:21:19 - trainer - [INFO] - SpanFPreRecMetric: f=0.857143, pre=0.857143, rec=0.857143
+label_acc: acc=0.986755
+
+2023/08/22 09:21:19 - tester - [INFO] - Evaluate data in 0.02 seconds!
+2023/08/22 09:21:19 - tester - [INFO] - Evaluate data in 0.02 seconds!
+2023/08/22 09:21:19 - trainer - [INFO] - Evaluation on dev at Epoch 36/100. Step:36/100: 
+2023/08/22 09:21:19 - trainer - [INFO] - SpanFPreRecMetric: f=0.857143, pre=0.857143, rec=0.857143
+label_acc: acc=0.980132
+
+2023/08/22 09:21:19 - tester - [INFO] - Evaluate data in 0.02 seconds!
+2023/08/22 09:21:19 - tester - [INFO] - Evaluate data in 0.02 seconds!
+2023/08/22 09:21:19 - trainer - [INFO] - Evaluation on dev at Epoch 37/100. Step:37/100: 
+2023/08/22 09:21:19 - trainer - [INFO] - SpanFPreRecMetric: f=0.857143, pre=0.857143, rec=0.857143
+label_acc: acc=0.986755
+
+2023/08/22 09:21:19 - tester - [INFO] - Evaluate data in 0.02 seconds!
+2023/08/22 09:21:19 - tester - [INFO] - Evaluate data in 0.02 seconds!
+2023/08/22 09:21:19 - trainer - [INFO] - Evaluation on dev at Epoch 38/100. Step:38/100: 
+2023/08/22 09:21:19 - trainer - [INFO] - SpanFPreRecMetric: f=0.933333, pre=0.875, rec=1.0
+label_acc: acc=0.993377
+
+2023/08/22 09:21:19 - tester - [INFO] - Evaluate data in 0.02 seconds!
+2023/08/22 09:21:19 - tester - [INFO] - Evaluate data in 0.02 seconds!
+2023/08/22 09:21:19 - trainer - [INFO] - Evaluation on dev at Epoch 39/100. Step:39/100: 
+2023/08/22 09:21:19 - trainer - [INFO] - SpanFPreRecMetric: f=0.75, pre=0.666667, rec=0.857143
+label_acc: acc=0.986755
+
+2023/08/22 09:21:20 - tester - [INFO] - Evaluate data in 0.02 seconds!
+2023/08/22 09:21:20 - tester - [INFO] - Evaluate data in 0.02 seconds!
+2023/08/22 09:21:20 - trainer - [INFO] - Evaluation on dev at Epoch 40/100. Step:40/100: 
+2023/08/22 09:21:20 - trainer - [INFO] - SpanFPreRecMetric: f=0.705882, pre=0.6, rec=0.857143
+label_acc: acc=0.980132
+
+2023/08/22 09:21:20 - tester - [INFO] - Evaluate data in 0.02 seconds!
+2023/08/22 09:21:20 - tester - [INFO] - Evaluate data in 0.02 seconds!
+2023/08/22 09:21:20 - trainer - [INFO] - Evaluation on dev at Epoch 41/100. Step:41/100: 
+2023/08/22 09:21:20 - trainer - [INFO] - SpanFPreRecMetric: f=0.8, pre=0.75, rec=0.857143
+label_acc: acc=0.993377
+
+2023/08/22 09:21:20 - tester - [INFO] - Evaluate data in 0.02 seconds!
+2023/08/22 09:21:20 - tester - [INFO] - Evaluate data in 0.02 seconds!
+2023/08/22 09:21:20 - trainer - [INFO] - Evaluation on dev at Epoch 42/100. Step:42/100: 
+2023/08/22 09:21:20 - trainer - [INFO] - SpanFPreRecMetric: f=0.8, pre=0.75, rec=0.857143
+label_acc: acc=0.993377
+
+2023/08/22 09:21:20 - tester - [INFO] - Evaluate data in 0.02 seconds!
+2023/08/22 09:21:20 - tester - [INFO] - Evaluate data in 0.02 seconds!
+2023/08/22 09:21:20 - trainer - [INFO] - Evaluation on dev at Epoch 43/100. Step:43/100: 
+2023/08/22 09:21:20 - trainer - [INFO] - SpanFPreRecMetric: f=0.75, pre=0.666667, rec=0.857143
+label_acc: acc=0.980132
+
+2023/08/22 09:21:20 - tester - [INFO] - Evaluate data in 0.02 seconds!
+2023/08/22 09:21:20 - tester - [INFO] - Evaluate data in 0.02 seconds!
+2023/08/22 09:21:20 - trainer - [INFO] - Evaluation on dev at Epoch 44/100. Step:44/100: 
+2023/08/22 09:21:20 - trainer - [INFO] - SpanFPreRecMetric: f=0.823529, pre=0.7, rec=1.0
+label_acc: acc=0.966887
+
+2023/08/22 09:21:20 - tester - [INFO] - Evaluate data in 0.02 seconds!
+2023/08/22 09:21:20 - tester - [INFO] - Evaluate data in 0.02 seconds!
+2023/08/22 09:21:20 - trainer - [INFO] - Evaluation on dev at Epoch 45/100. Step:45/100: 
+2023/08/22 09:21:20 - trainer - [INFO] - SpanFPreRecMetric: f=0.75, pre=0.666667, rec=0.857143
+label_acc: acc=0.960265
+
+2023/08/22 09:21:20 - tester - [INFO] - Evaluate data in 0.02 seconds!
+2023/08/22 09:21:20 - tester - [INFO] - Evaluate data in 0.02 seconds!
+2023/08/22 09:21:20 - trainer - [INFO] - Evaluation on dev at Epoch 46/100. Step:46/100: 
+2023/08/22 09:21:20 - trainer - [INFO] - SpanFPreRecMetric: f=0.875, pre=0.777778, rec=1.0
+label_acc: acc=0.980132
+
+2023/08/22 09:21:20 - tester - [INFO] - Evaluate data in 0.02 seconds!
+2023/08/22 09:21:20 - tester - [INFO] - Evaluate data in 0.02 seconds!
+2023/08/22 09:21:20 - trainer - [INFO] - Evaluation on dev at Epoch 47/100. Step:47/100: 
+2023/08/22 09:21:20 - trainer - [INFO] - SpanFPreRecMetric: f=1.0, pre=1.0, rec=1.0
+label_acc: acc=1.0
+
+2023/08/22 09:21:20 - tester - [INFO] - Evaluate data in 0.02 seconds!
+2023/08/22 09:21:20 - tester - [INFO] - Evaluate data in 0.02 seconds!
+2023/08/22 09:21:20 - trainer - [INFO] - Evaluation on dev at Epoch 48/100. Step:48/100: 
+2023/08/22 09:21:20 - trainer - [INFO] - SpanFPreRecMetric: f=1.0, pre=1.0, rec=1.0
+label_acc: acc=1.0
+
+2023/08/22 09:21:20 - tester - [INFO] - Evaluate data in 0.02 seconds!
+2023/08/22 09:21:20 - tester - [INFO] - Evaluate data in 0.02 seconds!
+2023/08/22 09:21:20 - trainer - [INFO] - Evaluation on dev at Epoch 49/100. Step:49/100: 
+2023/08/22 09:21:20 - trainer - [INFO] - SpanFPreRecMetric: f=1.0, pre=1.0, rec=1.0
+label_acc: acc=1.0
+
+2023/08/22 09:21:21 - tester - [INFO] - Evaluate data in 0.02 seconds!
+2023/08/22 09:21:21 - tester - [INFO] - Evaluate data in 0.02 seconds!
+2023/08/22 09:21:21 - trainer - [INFO] - Evaluation on dev at Epoch 50/100. Step:50/100: 
+2023/08/22 09:21:21 - trainer - [INFO] - SpanFPreRecMetric: f=1.0, pre=1.0, rec=1.0
+label_acc: acc=1.0
+
+2023/08/22 09:21:21 - tester - [INFO] - Evaluate data in 0.02 seconds!
+2023/08/22 09:21:21 - tester - [INFO] - Evaluate data in 0.02 seconds!
+2023/08/22 09:21:21 - trainer - [INFO] - Evaluation on dev at Epoch 51/100. Step:51/100: 
+2023/08/22 09:21:21 - trainer - [INFO] - SpanFPreRecMetric: f=1.0, pre=1.0, rec=1.0
+label_acc: acc=1.0
+
+2023/08/22 09:21:21 - tester - [INFO] - Evaluate data in 0.02 seconds!
+2023/08/22 09:21:21 - tester - [INFO] - Evaluate data in 0.02 seconds!
+2023/08/22 09:21:21 - trainer - [INFO] - Evaluation on dev at Epoch 52/100. Step:52/100: 
+2023/08/22 09:21:21 - trainer - [INFO] - SpanFPreRecMetric: f=1.0, pre=1.0, rec=1.0
+label_acc: acc=1.0
+
+2023/08/22 09:21:21 - tester - [INFO] - Evaluate data in 0.02 seconds!
+2023/08/22 09:21:21 - tester - [INFO] - Evaluate data in 0.02 seconds!
+2023/08/22 09:21:21 - trainer - [INFO] - Evaluation on dev at Epoch 53/100. Step:53/100: 
+2023/08/22 09:21:21 - trainer - [INFO] - SpanFPreRecMetric: f=1.0, pre=1.0, rec=1.0
+label_acc: acc=1.0
+
+2023/08/22 09:21:21 - tester - [INFO] - Evaluate data in 0.02 seconds!
+2023/08/22 09:21:21 - tester - [INFO] - Evaluate data in 0.02 seconds!
+2023/08/22 09:21:21 - trainer - [INFO] - Evaluation on dev at Epoch 54/100. Step:54/100: 
+2023/08/22 09:21:21 - trainer - [INFO] - SpanFPreRecMetric: f=1.0, pre=1.0, rec=1.0
+label_acc: acc=1.0
+
+2023/08/22 09:21:21 - tester - [INFO] - Evaluate data in 0.02 seconds!
+2023/08/22 09:21:21 - tester - [INFO] - Evaluate data in 0.02 seconds!
+2023/08/22 09:21:21 - trainer - [INFO] - Evaluation on dev at Epoch 55/100. Step:55/100: 
+2023/08/22 09:21:21 - trainer - [INFO] - SpanFPreRecMetric: f=1.0, pre=1.0, rec=1.0
+label_acc: acc=1.0
+
+2023/08/22 09:21:21 - tester - [INFO] - Evaluate data in 0.02 seconds!
+2023/08/22 09:21:21 - tester - [INFO] - Evaluate data in 0.02 seconds!
+2023/08/22 09:21:21 - trainer - [INFO] - Evaluation on dev at Epoch 56/100. Step:56/100: 
+2023/08/22 09:21:21 - trainer - [INFO] - SpanFPreRecMetric: f=1.0, pre=1.0, rec=1.0
+label_acc: acc=1.0
+
+2023/08/22 09:21:21 - tester - [INFO] - Evaluate data in 0.02 seconds!
+2023/08/22 09:21:21 - tester - [INFO] - Evaluate data in 0.02 seconds!
+2023/08/22 09:21:21 - trainer - [INFO] - Evaluation on dev at Epoch 57/100. Step:57/100: 
+2023/08/22 09:21:21 - trainer - [INFO] - SpanFPreRecMetric: f=1.0, pre=1.0, rec=1.0
+label_acc: acc=1.0
+
+2023/08/22 09:21:21 - tester - [INFO] - Evaluate data in 0.02 seconds!
+2023/08/22 09:21:21 - tester - [INFO] - Evaluate data in 0.02 seconds!
+2023/08/22 09:21:21 - trainer - [INFO] - Evaluation on dev at Epoch 58/100. Step:58/100: 
+2023/08/22 09:21:21 - trainer - [INFO] - SpanFPreRecMetric: f=1.0, pre=1.0, rec=1.0
+label_acc: acc=1.0
+
+2023/08/22 09:21:21 - tester - [INFO] - Evaluate data in 0.02 seconds!
+2023/08/22 09:21:21 - tester - [INFO] - Evaluate data in 0.02 seconds!
+2023/08/22 09:21:21 - trainer - [INFO] - Evaluation on dev at Epoch 59/100. Step:59/100: 
+2023/08/22 09:21:21 - trainer - [INFO] - SpanFPreRecMetric: f=1.0, pre=1.0, rec=1.0
+label_acc: acc=1.0
+
+2023/08/22 09:21:21 - tester - [INFO] - Evaluate data in 0.02 seconds!
+2023/08/22 09:21:21 - tester - [INFO] - Evaluate data in 0.02 seconds!
+2023/08/22 09:21:21 - trainer - [INFO] - Evaluation on dev at Epoch 60/100. Step:60/100: 
+2023/08/22 09:21:21 - trainer - [INFO] - SpanFPreRecMetric: f=1.0, pre=1.0, rec=1.0
+label_acc: acc=1.0
+
+2023/08/22 09:21:22 - tester - [INFO] - Evaluate data in 0.02 seconds!
+2023/08/22 09:21:22 - tester - [INFO] - Evaluate data in 0.02 seconds!
+2023/08/22 09:21:22 - trainer - [INFO] - Evaluation on dev at Epoch 61/100. Step:61/100: 
+2023/08/22 09:21:22 - trainer - [INFO] - SpanFPreRecMetric: f=1.0, pre=1.0, rec=1.0
+label_acc: acc=1.0
+
+2023/08/22 09:21:22 - tester - [INFO] - Evaluate data in 0.02 seconds!
+2023/08/22 09:21:22 - tester - [INFO] - Evaluate data in 0.02 seconds!
+2023/08/22 09:21:22 - trainer - [INFO] - Evaluation on dev at Epoch 62/100. Step:62/100: 
+2023/08/22 09:21:22 - trainer - [INFO] - SpanFPreRecMetric: f=1.0, pre=1.0, rec=1.0
+label_acc: acc=1.0
+
+2023/08/22 09:21:22 - tester - [INFO] - Evaluate data in 0.02 seconds!
+2023/08/22 09:21:22 - tester - [INFO] - Evaluate data in 0.02 seconds!
+2023/08/22 09:21:22 - trainer - [INFO] - Evaluation on dev at Epoch 63/100. Step:63/100: 
+2023/08/22 09:21:22 - trainer - [INFO] - SpanFPreRecMetric: f=1.0, pre=1.0, rec=1.0
+label_acc: acc=1.0
+
+2023/08/22 09:21:22 - tester - [INFO] - Evaluate data in 0.02 seconds!
+2023/08/22 09:21:22 - tester - [INFO] - Evaluate data in 0.02 seconds!
+2023/08/22 09:21:22 - trainer - [INFO] - Evaluation on dev at Epoch 64/100. Step:64/100: 
+2023/08/22 09:21:22 - trainer - [INFO] - SpanFPreRecMetric: f=1.0, pre=1.0, rec=1.0
+label_acc: acc=1.0
+
+2023/08/22 09:21:22 - tester - [INFO] - Evaluate data in 0.02 seconds!
+2023/08/22 09:21:22 - tester - [INFO] - Evaluate data in 0.02 seconds!
+2023/08/22 09:21:22 - trainer - [INFO] - Evaluation on dev at Epoch 65/100. Step:65/100: 
+2023/08/22 09:21:22 - trainer - [INFO] - SpanFPreRecMetric: f=1.0, pre=1.0, rec=1.0
+label_acc: acc=1.0
+
+2023/08/22 09:21:22 - tester - [INFO] - Evaluate data in 0.02 seconds!
+2023/08/22 09:21:22 - tester - [INFO] - Evaluate data in 0.02 seconds!
+2023/08/22 09:21:22 - trainer - [INFO] - Evaluation on dev at Epoch 66/100. Step:66/100: 
+2023/08/22 09:21:22 - trainer - [INFO] - SpanFPreRecMetric: f=1.0, pre=1.0, rec=1.0
+label_acc: acc=1.0
+
+2023/08/22 09:21:22 - tester - [INFO] - Evaluate data in 0.02 seconds!
+2023/08/22 09:21:22 - tester - [INFO] - Evaluate data in 0.02 seconds!
+2023/08/22 09:21:22 - trainer - [INFO] - Evaluation on dev at Epoch 67/100. Step:67/100: 
+2023/08/22 09:21:22 - trainer - [INFO] - SpanFPreRecMetric: f=1.0, pre=1.0, rec=1.0
+label_acc: acc=1.0
+
+2023/08/22 09:21:22 - tester - [INFO] - Evaluate data in 0.02 seconds!
+2023/08/22 09:21:22 - tester - [INFO] - Evaluate data in 0.02 seconds!
+2023/08/22 09:21:22 - trainer - [INFO] - Evaluation on dev at Epoch 68/100. Step:68/100: 
+2023/08/22 09:21:22 - trainer - [INFO] - SpanFPreRecMetric: f=1.0, pre=1.0, rec=1.0
+label_acc: acc=1.0
+
+2023/08/22 09:21:22 - tester - [INFO] - Evaluate data in 0.02 seconds!
+2023/08/22 09:21:22 - tester - [INFO] - Evaluate data in 0.02 seconds!
+2023/08/22 09:21:22 - trainer - [INFO] - Evaluation on dev at Epoch 69/100. Step:69/100: 
+2023/08/22 09:21:22 - trainer - [INFO] - SpanFPreRecMetric: f=1.0, pre=1.0, rec=1.0
+label_acc: acc=1.0
+
+2023/08/22 09:21:22 - tester - [INFO] - Evaluate data in 0.02 seconds!
+2023/08/22 09:21:22 - tester - [INFO] - Evaluate data in 0.02 seconds!
+2023/08/22 09:21:22 - trainer - [INFO] - Evaluation on dev at Epoch 70/100. Step:70/100: 
+2023/08/22 09:21:22 - trainer - [INFO] - SpanFPreRecMetric: f=1.0, pre=1.0, rec=1.0
+label_acc: acc=1.0
+
+2023/08/22 09:21:22 - tester - [INFO] - Evaluate data in 0.02 seconds!
+2023/08/22 09:21:22 - tester - [INFO] - Evaluate data in 0.02 seconds!
+2023/08/22 09:21:22 - trainer - [INFO] - Evaluation on dev at Epoch 71/100. Step:71/100: 
+2023/08/22 09:21:22 - trainer - [INFO] - SpanFPreRecMetric: f=1.0, pre=1.0, rec=1.0
+label_acc: acc=1.0
+
+2023/08/22 09:21:23 - tester - [INFO] - Evaluate data in 0.02 seconds!
+2023/08/22 09:21:23 - tester - [INFO] - Evaluate data in 0.02 seconds!
+2023/08/22 09:21:23 - trainer - [INFO] - Evaluation on dev at Epoch 72/100. Step:72/100: 
+2023/08/22 09:21:23 - trainer - [INFO] - SpanFPreRecMetric: f=1.0, pre=1.0, rec=1.0
+label_acc: acc=1.0
+
+2023/08/22 09:21:23 - tester - [INFO] - Evaluate data in 0.02 seconds!
+2023/08/22 09:21:23 - tester - [INFO] - Evaluate data in 0.02 seconds!
+2023/08/22 09:21:23 - trainer - [INFO] - Evaluation on dev at Epoch 73/100. Step:73/100: 
+2023/08/22 09:21:23 - trainer - [INFO] - SpanFPreRecMetric: f=1.0, pre=1.0, rec=1.0
+label_acc: acc=1.0
+
+2023/08/22 09:21:23 - tester - [INFO] - Evaluate data in 0.02 seconds!
+2023/08/22 09:21:23 - tester - [INFO] - Evaluate data in 0.02 seconds!
+2023/08/22 09:21:23 - trainer - [INFO] - Evaluation on dev at Epoch 74/100. Step:74/100: 
+2023/08/22 09:21:23 - trainer - [INFO] - SpanFPreRecMetric: f=1.0, pre=1.0, rec=1.0
+label_acc: acc=1.0
+
+2023/08/22 09:21:23 - tester - [INFO] - Evaluate data in 0.02 seconds!
+2023/08/22 09:21:23 - tester - [INFO] - Evaluate data in 0.02 seconds!
+2023/08/22 09:21:23 - trainer - [INFO] - Evaluation on dev at Epoch 75/100. Step:75/100: 
+2023/08/22 09:21:23 - trainer - [INFO] - SpanFPreRecMetric: f=1.0, pre=1.0, rec=1.0
+label_acc: acc=1.0
+
+2023/08/22 09:21:23 - tester - [INFO] - Evaluate data in 0.02 seconds!
+2023/08/22 09:21:23 - tester - [INFO] - Evaluate data in 0.02 seconds!
+2023/08/22 09:21:23 - trainer - [INFO] - Evaluation on dev at Epoch 76/100. Step:76/100: 
+2023/08/22 09:21:23 - trainer - [INFO] - SpanFPreRecMetric: f=1.0, pre=1.0, rec=1.0
+label_acc: acc=1.0
+
+2023/08/22 09:21:23 - tester - [INFO] - Evaluate data in 0.02 seconds!
+2023/08/22 09:21:23 - tester - [INFO] - Evaluate data in 0.02 seconds!
+2023/08/22 09:21:23 - trainer - [INFO] - Evaluation on dev at Epoch 77/100. Step:77/100: 
+2023/08/22 09:21:23 - trainer - [INFO] - SpanFPreRecMetric: f=1.0, pre=1.0, rec=1.0
+label_acc: acc=1.0
+
+2023/08/22 09:21:23 - tester - [INFO] - Evaluate data in 0.02 seconds!
+2023/08/22 09:21:23 - tester - [INFO] - Evaluate data in 0.02 seconds!
+2023/08/22 09:21:23 - trainer - [INFO] - Evaluation on dev at Epoch 78/100. Step:78/100: 
+2023/08/22 09:21:23 - trainer - [INFO] - SpanFPreRecMetric: f=1.0, pre=1.0, rec=1.0
+label_acc: acc=1.0
+
+2023/08/22 09:21:23 - tester - [INFO] - Evaluate data in 0.02 seconds!
+2023/08/22 09:21:23 - tester - [INFO] - Evaluate data in 0.02 seconds!
+2023/08/22 09:21:23 - trainer - [INFO] - Evaluation on dev at Epoch 79/100. Step:79/100: 
+2023/08/22 09:21:23 - trainer - [INFO] - SpanFPreRecMetric: f=1.0, pre=1.0, rec=1.0
+label_acc: acc=1.0
+
+2023/08/22 09:21:23 - tester - [INFO] - Evaluate data in 0.02 seconds!
+2023/08/22 09:21:23 - tester - [INFO] - Evaluate data in 0.02 seconds!
+2023/08/22 09:21:23 - trainer - [INFO] - Evaluation on dev at Epoch 80/100. Step:80/100: 
+2023/08/22 09:21:23 - trainer - [INFO] - SpanFPreRecMetric: f=1.0, pre=1.0, rec=1.0
+label_acc: acc=1.0
+
+2023/08/22 09:21:23 - tester - [INFO] - Evaluate data in 0.02 seconds!
+2023/08/22 09:21:23 - tester - [INFO] - Evaluate data in 0.02 seconds!
+2023/08/22 09:21:23 - trainer - [INFO] - Evaluation on dev at Epoch 81/100. Step:81/100: 
+2023/08/22 09:21:23 - trainer - [INFO] - SpanFPreRecMetric: f=1.0, pre=1.0, rec=1.0
+label_acc: acc=1.0
+
+2023/08/22 09:21:23 - tester - [INFO] - Evaluate data in 0.02 seconds!
+2023/08/22 09:21:23 - tester - [INFO] - Evaluate data in 0.02 seconds!
+2023/08/22 09:21:23 - trainer - [INFO] - Evaluation on dev at Epoch 82/100. Step:82/100: 
+2023/08/22 09:21:23 - trainer - [INFO] - SpanFPreRecMetric: f=1.0, pre=1.0, rec=1.0
+label_acc: acc=1.0
+
+2023/08/22 09:21:24 - tester - [INFO] - Evaluate data in 0.02 seconds!
+2023/08/22 09:21:24 - tester - [INFO] - Evaluate data in 0.02 seconds!
+2023/08/22 09:21:24 - trainer - [INFO] - Evaluation on dev at Epoch 83/100. Step:83/100: 
+2023/08/22 09:21:24 - trainer - [INFO] - SpanFPreRecMetric: f=1.0, pre=1.0, rec=1.0
+label_acc: acc=1.0
+
+2023/08/22 09:21:24 - tester - [INFO] - Evaluate data in 0.02 seconds!
+2023/08/22 09:21:24 - tester - [INFO] - Evaluate data in 0.02 seconds!
+2023/08/22 09:21:24 - trainer - [INFO] - Evaluation on dev at Epoch 84/100. Step:84/100: 
+2023/08/22 09:21:24 - trainer - [INFO] - SpanFPreRecMetric: f=1.0, pre=1.0, rec=1.0
+label_acc: acc=1.0
+
+2023/08/22 09:21:24 - tester - [INFO] - Evaluate data in 0.02 seconds!
+2023/08/22 09:21:24 - tester - [INFO] - Evaluate data in 0.02 seconds!
+2023/08/22 09:21:24 - trainer - [INFO] - Evaluation on dev at Epoch 85/100. Step:85/100: 
+2023/08/22 09:21:24 - trainer - [INFO] - SpanFPreRecMetric: f=1.0, pre=1.0, rec=1.0
+label_acc: acc=1.0
+
+2023/08/22 09:21:24 - tester - [INFO] - Evaluate data in 0.02 seconds!
+2023/08/22 09:21:24 - tester - [INFO] - Evaluate data in 0.02 seconds!
+2023/08/22 09:21:24 - trainer - [INFO] - Evaluation on dev at Epoch 86/100. Step:86/100: 
+2023/08/22 09:21:24 - trainer - [INFO] - SpanFPreRecMetric: f=1.0, pre=1.0, rec=1.0
+label_acc: acc=1.0
+
+2023/08/22 09:21:24 - tester - [INFO] - Evaluate data in 0.02 seconds!
+2023/08/22 09:21:24 - tester - [INFO] - Evaluate data in 0.02 seconds!
+2023/08/22 09:21:24 - trainer - [INFO] - Evaluation on dev at Epoch 87/100. Step:87/100: 
+2023/08/22 09:21:24 - trainer - [INFO] - SpanFPreRecMetric: f=1.0, pre=1.0, rec=1.0
+label_acc: acc=1.0
+
+2023/08/22 09:21:24 - tester - [INFO] - Evaluate data in 0.02 seconds!
+2023/08/22 09:21:24 - tester - [INFO] - Evaluate data in 0.02 seconds!
+2023/08/22 09:21:24 - trainer - [INFO] - Evaluation on dev at Epoch 88/100. Step:88/100: 
+2023/08/22 09:21:24 - trainer - [INFO] - SpanFPreRecMetric: f=1.0, pre=1.0, rec=1.0
+label_acc: acc=1.0
+
+2023/08/22 09:21:24 - tester - [INFO] - Evaluate data in 0.02 seconds!
+2023/08/22 09:21:24 - tester - [INFO] - Evaluate data in 0.02 seconds!
+2023/08/22 09:21:24 - trainer - [INFO] - Evaluation on dev at Epoch 89/100. Step:89/100: 
+2023/08/22 09:21:24 - trainer - [INFO] - SpanFPreRecMetric: f=1.0, pre=1.0, rec=1.0
+label_acc: acc=1.0
+
+2023/08/22 09:21:24 - tester - [INFO] - Evaluate data in 0.02 seconds!
+2023/08/22 09:21:24 - tester - [INFO] - Evaluate data in 0.02 seconds!
+2023/08/22 09:21:24 - trainer - [INFO] - Evaluation on dev at Epoch 90/100. Step:90/100: 
+2023/08/22 09:21:24 - trainer - [INFO] - SpanFPreRecMetric: f=1.0, pre=1.0, rec=1.0
+label_acc: acc=1.0
+
+2023/08/22 09:21:24 - tester - [INFO] - Evaluate data in 0.02 seconds!
+2023/08/22 09:21:24 - tester - [INFO] - Evaluate data in 0.02 seconds!
+2023/08/22 09:21:24 - trainer - [INFO] - Evaluation on dev at Epoch 91/100. Step:91/100: 
+2023/08/22 09:21:24 - trainer - [INFO] - SpanFPreRecMetric: f=1.0, pre=1.0, rec=1.0
+label_acc: acc=1.0
+
+2023/08/22 09:21:24 - tester - [INFO] - Evaluate data in 0.02 seconds!
+2023/08/22 09:21:24 - tester - [INFO] - Evaluate data in 0.02 seconds!
+2023/08/22 09:21:24 - trainer - [INFO] - Evaluation on dev at Epoch 92/100. Step:92/100: 
+2023/08/22 09:21:24 - trainer - [INFO] - SpanFPreRecMetric: f=1.0, pre=1.0, rec=1.0
+label_acc: acc=1.0
+
+2023/08/22 09:21:24 - tester - [INFO] - Evaluate data in 0.02 seconds!
+2023/08/22 09:21:24 - tester - [INFO] - Evaluate data in 0.02 seconds!
+2023/08/22 09:21:24 - trainer - [INFO] - Evaluation on dev at Epoch 93/100. Step:93/100: 
+2023/08/22 09:21:24 - trainer - [INFO] - SpanFPreRecMetric: f=1.0, pre=1.0, rec=1.0
+label_acc: acc=1.0
+
+2023/08/22 09:21:25 - tester - [INFO] - Evaluate data in 0.02 seconds!
+2023/08/22 09:21:25 - tester - [INFO] - Evaluate data in 0.02 seconds!
+2023/08/22 09:21:25 - trainer - [INFO] - Evaluation on dev at Epoch 94/100. Step:94/100: 
+2023/08/22 09:21:25 - trainer - [INFO] - SpanFPreRecMetric: f=1.0, pre=1.0, rec=1.0
+label_acc: acc=1.0
+
+2023/08/22 09:21:25 - tester - [INFO] - Evaluate data in 0.02 seconds!
+2023/08/22 09:21:25 - tester - [INFO] - Evaluate data in 0.02 seconds!
+2023/08/22 09:21:25 - trainer - [INFO] - Evaluation on dev at Epoch 95/100. Step:95/100: 
+2023/08/22 09:21:25 - trainer - [INFO] - SpanFPreRecMetric: f=1.0, pre=1.0, rec=1.0
+label_acc: acc=1.0
+
+2023/08/22 09:21:25 - tester - [INFO] - Evaluate data in 0.02 seconds!
+2023/08/22 09:21:25 - tester - [INFO] - Evaluate data in 0.02 seconds!
+2023/08/22 09:21:25 - trainer - [INFO] - Evaluation on dev at Epoch 96/100. Step:96/100: 
+2023/08/22 09:21:25 - trainer - [INFO] - SpanFPreRecMetric: f=1.0, pre=1.0, rec=1.0
+label_acc: acc=1.0
+
+2023/08/22 09:21:25 - tester - [INFO] - Evaluate data in 0.02 seconds!
+2023/08/22 09:21:25 - tester - [INFO] - Evaluate data in 0.02 seconds!
+2023/08/22 09:21:25 - trainer - [INFO] - Evaluation on dev at Epoch 97/100. Step:97/100: 
+2023/08/22 09:21:25 - trainer - [INFO] - SpanFPreRecMetric: f=1.0, pre=1.0, rec=1.0
+label_acc: acc=1.0
+
+2023/08/22 09:21:25 - tester - [INFO] - Evaluate data in 0.02 seconds!
+2023/08/22 09:21:25 - tester - [INFO] - Evaluate data in 0.02 seconds!
+2023/08/22 09:21:25 - trainer - [INFO] - Evaluation on dev at Epoch 98/100. Step:98/100: 
+2023/08/22 09:21:25 - trainer - [INFO] - SpanFPreRecMetric: f=1.0, pre=1.0, rec=1.0
+label_acc: acc=1.0
+
+2023/08/22 09:21:25 - tester - [INFO] - Evaluate data in 0.02 seconds!
+2023/08/22 09:21:25 - tester - [INFO] - Evaluate data in 0.02 seconds!
+2023/08/22 09:21:25 - trainer - [INFO] - Evaluation on dev at Epoch 99/100. Step:99/100: 
+2023/08/22 09:21:25 - trainer - [INFO] - SpanFPreRecMetric: f=1.0, pre=1.0, rec=1.0
+label_acc: acc=1.0
+
+2023/08/22 09:21:25 - tester - [INFO] - Evaluate data in 0.02 seconds!
+2023/08/22 09:21:25 - tester - [INFO] - Evaluate data in 0.02 seconds!
+2023/08/22 09:21:25 - trainer - [INFO] - Evaluation on dev at Epoch 100/100. Step:100/100: 
+2023/08/22 09:21:25 - trainer - [INFO] - SpanFPreRecMetric: f=1.0, pre=1.0, rec=1.0
+label_acc: acc=1.0
+
+2023/08/22 09:21:25 - trainer - [INFO] - 
+In Epoch:47/Step:47, got best dev performance:
+2023/08/22 09:21:25 - trainer - [INFO] - SpanFPreRecMetric: f=1.0, pre=1.0, rec=1.0
+label_acc: acc=1.0
+2023/08/22 09:21:25 - trainer - [INFO] - Reloaded the best model.

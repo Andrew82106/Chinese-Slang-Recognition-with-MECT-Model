@@ -1,0 +1,53 @@
+2023/09/03 10:38:44 - utils - [INFO] - Read cache from cache/weibo_trainClip:Truebgminfreq_1char_min_freq_1word_min_freq_1only_train_min_freqTruenumber_norm0load_dataset_seed100.
+2023/09/03 10:38:44 - utils - [INFO] - Read cache from cache/yj.
+2023/09/03 10:38:45 - utils - [INFO] - Read cache from cache/weibo_lattice_only_train:False_trainClip:True_norm_num:0char_min_freq1bigram_min_freq1word_min_freq1only_train_min_freqTruenumber_norm0lexicon_yjload_dataset_seed100.
+2023/09/03 10:38:45 - CNNRadicalLevelEmbedding - [INFO] - Start constructing character vocabulary.
+2023/09/03 10:38:45 - CNNRadicalLevelEmbedding - [INFO] - In total, there are 982 distinct characters.
+2023/09/03 10:38:47 - trainer - [INFO] - training epochs started 2023-09-03-10-38-47
+2023/09/03 10:39:07 - tester - [INFO] - Evaluate data in 1.46 seconds!
+2023/09/03 10:39:08 - tester - [INFO] - Evaluate data in 1.63 seconds!
+2023/09/03 10:39:08 - trainer - [INFO] - Evaluation on dev at Epoch 1/50. Step:135/6750: 
+2023/09/03 10:39:08 - trainer - [INFO] - SpanFPreRecMetric: f=0.0, pre=0.0, rec=0.0
+label_acc: acc=0.93278
+
+2023/09/03 10:39:28 - tester - [INFO] - Evaluate data in 1.57 seconds!
+2023/09/03 10:39:29 - tester - [INFO] - Evaluate data in 1.42 seconds!
+2023/09/03 10:39:29 - trainer - [INFO] - Evaluation on dev at Epoch 2/50. Step:270/6750: 
+2023/09/03 10:39:29 - trainer - [INFO] - SpanFPreRecMetric: f=0.0, pre=0.0, rec=0.0
+label_acc: acc=0.93278
+
+2023/09/03 10:39:48 - tester - [INFO] - Evaluate data in 1.19 seconds!
+2023/09/03 10:39:49 - tester - [INFO] - Evaluate data in 1.23 seconds!
+2023/09/03 10:39:49 - trainer - [INFO] - Evaluation on dev at Epoch 3/50. Step:405/6750: 
+2023/09/03 10:39:49 - trainer - [INFO] - SpanFPreRecMetric: f=0.045549, pre=0.117021, rec=0.028278
+label_acc: acc=0.937625
+
+2023/09/03 10:40:07 - tester - [INFO] - Evaluate data in 1.55 seconds!
+2023/09/03 10:40:08 - tester - [INFO] - Evaluate data in 1.24 seconds!
+2023/09/03 10:40:08 - trainer - [INFO] - Evaluation on dev at Epoch 4/50. Step:540/6750: 
+2023/09/03 10:40:08 - trainer - [INFO] - SpanFPreRecMetric: f=0.273205, pre=0.428571, rec=0.200514
+label_acc: acc=0.944825
+
+2023/09/03 10:40:26 - tester - [INFO] - Evaluate data in 1.2 seconds!
+2023/09/03 10:40:27 - tester - [INFO] - Evaluate data in 1.21 seconds!
+2023/09/03 10:40:27 - trainer - [INFO] - Evaluation on dev at Epoch 5/50. Step:675/6750: 
+2023/09/03 10:40:27 - trainer - [INFO] - SpanFPreRecMetric: f=0.343949, pre=0.451883, rec=0.277635
+label_acc: acc=0.94884
+
+2023/09/03 10:40:45 - tester - [INFO] - Evaluate data in 1.18 seconds!
+2023/09/03 10:40:46 - tester - [INFO] - Evaluate data in 1.22 seconds!
+2023/09/03 10:40:46 - trainer - [INFO] - Evaluation on dev at Epoch 6/50. Step:810/6750: 
+2023/09/03 10:40:46 - trainer - [INFO] - SpanFPreRecMetric: f=0.429022, pre=0.555102, rec=0.349614
+label_acc: acc=0.951333
+
+2023/09/03 10:41:04 - tester - [INFO] - Evaluate data in 1.2 seconds!
+2023/09/03 10:41:05 - tester - [INFO] - Evaluate data in 1.23 seconds!
+2023/09/03 10:41:05 - trainer - [INFO] - Evaluation on dev at Epoch 7/50. Step:945/6750: 
+2023/09/03 10:41:05 - trainer - [INFO] - SpanFPreRecMetric: f=0.451237, pre=0.520134, rec=0.398458
+label_acc: acc=0.953617
+
+2023/09/03 10:41:09 - trainer - [INFO] - 
+In Epoch:7/Step:945, got best dev performance:
+2023/09/03 10:41:09 - trainer - [INFO] - SpanFPreRecMetric: f=0.451237, pre=0.520134, rec=0.398458
+label_acc: acc=0.953617
+2023/09/03 10:41:09 - trainer - [INFO] - Reloaded the best model.
