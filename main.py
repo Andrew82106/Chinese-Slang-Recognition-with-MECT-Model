@@ -42,7 +42,7 @@ import sys
 
 parser = argparse.ArgumentParser()
 
-parser.add_argument('--status', default='train', choices=['train'])
+parser.add_argument('--status', default='train', choices=['train', 'run'])
 parser.add_argument('--msg', default='_')
 parser.add_argument('--train_clip', default=False, help='是不是要把train的char长度限制在200以内')
 parser.add_argument('--device', default='0')
@@ -171,7 +171,7 @@ if args.device != 'cpu':
     assert args.device.isdigit()
     device = torch.device('cuda:{}'.format(args.device))
 else:
-    device = torch.device('cpu')
+    device = None
 
 # device = None  # in order to run on macbook
 refresh_data = False
@@ -482,6 +482,44 @@ if args.status == 'train':
                       device=device, callbacks=callbacks, dev_batch_size=args.test_batch,
                       test_use_tqdm=False,
                       print_every=5,
-                      check_code_level=-1)
+                      check_code_level=-1,
+                      save_path="/root/autodl-tmp/Chinese-Slang-Recognition-with-MECT-Model/model")
 
     trainer.train()
+
+elif args.status == 'run':
+    print("INFO:: Load Model")
+    model_path = '/root/autodl-tmp/Chinese-Slang-Recognition-with-MECT-Model/model/best_MECTNER_f_2023-11-02-12-50-39'
+    states = torch.load(model_path).state_dict()
+    model.load_state_dict(states)
+    from fastNLP.core.predictor import Predictor
+    import pprint
+    import random
+    import time
+    random.seed(time.time())
+    
+    
+    predictor = Predictor(model)   # 这里的model是加载权重之后的model
+    print(">>>>>>>成功加载模型<<<<<<<")
+    text = datasets  # 文本
+    print("变量 'text'的内容展示:")
+    for i in text:
+        print(str(i) + ":", end=" ")
+        print(text[i].field_arrays.keys())
+        # print(text[i][:5])
+    
+    print(f"debug::{len(text['test'])}")
+    sentenceID = random.randint(0, len(text['test'])-1)
+    sentence = text['test'][sentenceID-1:sentenceID]
+    test_label_list = predictor.predict(sentence)  # 预测结果
+    test_raw_char = sentence['raw_chars']     # 原始文字
+    print(f">>>>>>>待测试句为第{sentenceID}句，内容如下：<<<<<<<\n{sentence}")
+    print(">>>>>>>待测试句原始文字和长度：<<<<<<<")
+    for i in test_raw_char:
+        print(f"sentence:{i}\n length:{len(i)}")
+    print(f">>>>>>>预测结果：<<<<<<<\n{test_label_list}")
+    print(f">>>>>>>标准结果：<<<<<<<\n{sentence['target'][0]}")
+    print(f">>>>>>>标准结果长度：<<<<<<<\n{len(sentence['target'][0])}")
+    print(f">>>>>>>预测结果pred值：<<<<<<<\n{test_label_list['pred'][0][0]}")
+    print(f">>>>>>>预测结果pred值长度：<<<<<<<\n{len(test_label_list['pred'][0][0])}")
+    

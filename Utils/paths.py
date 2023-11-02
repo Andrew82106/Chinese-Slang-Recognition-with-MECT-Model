@@ -1,6 +1,6 @@
 import os
 
-rootPth = "/home/MECT4CNER"
+rootPth = "/root/autodl-tmp/Chinese-Slang-Recognition-with-MECT-Model"
 embeddings = os.path.join(rootPth, "datasets/embeddings")
 charinfo = os.path.join(rootPth, "datasets/charinfo")
 NER = os.path.join(rootPth, "datasets/NER")
