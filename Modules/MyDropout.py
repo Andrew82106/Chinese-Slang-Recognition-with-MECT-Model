@@ -3,6 +3,9 @@ from torch import nn
 
 
 class MyDropout(nn.Module):
+    """
+    以p的概率进行dropout以提高模型泛化能力
+    """
     def __init__(self, p):
         super().__init__()
         assert 0 <= p <= 1

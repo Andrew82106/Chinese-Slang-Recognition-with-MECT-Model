@@ -150,6 +150,17 @@ class CSR_MECTNER(nn.Module):
     def __init__(self, lattice_embed, bigram_embed, components_embed, hidden_size,
                  k_proj, q_proj, v_proj, r_proj,
                  label_size, max_seq_len, dropout, dataset, ff_size):
+        """
+        1：
+            结合main.py里面的代码
+            lattice_embed, bigram_embed, components_embed,这三个变量应该是在CNNRadicalLevelEmbedding函数中构建的三个模块
+            其分别属于：
+                <class 'Modules.StaticEmbedding.StaticEmbedding'>
+                <class 'Modules.StaticEmbedding.StaticEmbedding'>
+                <class 'Modules.CNNRadicalLevelEmbedding.CNNRadicalLevelEmbedding'>
+            这三个类
+            具体的功能应该是字embedding，双字embedding和部首embedding模块
+        """
         super().__init__()
 
         self.dataset = dataset
@@ -157,6 +168,7 @@ class CSR_MECTNER(nn.Module):
         self.lattice_embed = lattice_embed
         self.bigram_embed = bigram_embed
         self.components_embed = components_embed
+        
         self.label_size = label_size
         self.hidden_size = hidden_size
         self.max_seq_len = max_seq_len
@@ -230,17 +242,25 @@ class CSR_MECTNER(nn.Module):
         self.crf = get_crf_zero_init(self.label_size)
 
     def forward(self, lattice, bigrams, seq_len, lex_num, pos_s, pos_e, target):
+        """
+        fastnlp.core.Trainer的forward的参数来自于datasets变量中被设为input的field，因此这里的lattice、bigrams等变量的含义和main.py中的datasets变量中的函数是一样的。
+
+        """
         batch_size = lattice.size(0)
         max_seq_len_and_lex_num = lattice.size(1)
         max_seq_len = bigrams.size(1)
 
         raw_embed = self.lattice_embed(lattice)
+        # 对lattice数据进行embedding操作
 
         char_mask = seq_len_to_mask(seq_len, max_len=max_seq_len_and_lex_num).bool()
         char = lattice.masked_fill_(~char_mask, 0)
+        # 使用 seq_len_to_mask 函数生成掩码 char_mask，并根据生成的掩码来更新 lattice 张量。
+        
         components_embed = self.components_embed(char)
         components_embed.masked_fill_(~(char_mask).unsqueeze(-1), 0)
         components_embed = self.components_proj(components_embed)
+        
         bigrams_embed = self.bigram_embed(bigrams)
         bigrams_embed = torch.cat([bigrams_embed,
                                    torch.zeros(size=[batch_size, max_seq_len_and_lex_num - max_seq_len,
@@ -280,6 +300,11 @@ class CSR_MECTNER(nn.Module):
             return {'loss': loss}
         else:
             pred, path = self.crf.viterbi_decode(pred, mask)
-            result = {'pred': pred, 'fusion': fusion}
+            result = {
+                'pred': pred, 
+                'fusion': fusion, 
+                'radical_encoded': radical_encoded, 
+                'char_encoded': char_encoded
+            }
 
             return result

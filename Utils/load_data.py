@@ -303,7 +303,7 @@ def load_demo(path, char_embedding_path=None, bigram_embedding_path=None, index_
     loader = ConllLoader(['chars', 'target'])
     train_bundle = loader.load(train_path)  # 这一句有invalid instance的情况出现
     test_bundle = loader.load(test_path)
-
+    
     # fastNLP.io.loader.conll  ConllLoader：读取打标数据中的chars和target，调用load方法后返回的是一个包含句子和其标注的数据结构
     datasets = dict()
     datasets['train'] = train_bundle.datasets['train']
@@ -312,6 +312,7 @@ def load_demo(path, char_embedding_path=None, bigram_embedding_path=None, index_
 
     datasets['train'].apply_field(get_bigrams, field_name='chars', new_field_name='bigrams')
     datasets['test'].apply_field(get_bigrams, field_name='chars', new_field_name='bigrams')
+    
     # apply_field方法：将DataSet中的每个instance中的名为 `field_name` 的field传给func，并获取它的返回值，放在名为`new_field_name`的field下。
     """
     get_bigrams函数：将输入的词语成对输出
@@ -640,3 +641,14 @@ def equip_chinese_ner_with_lexicon(datasets, vocabs, embeddings, w_list, word_em
                                     field_name='lattice', new_field_name='lattice')
 
     return datasets, vocabs, embeddings
+    """
+    当这段代码被执行时，`datasets`、`vocabs` 和 `embeddings` 这三个变量会被填充以帮助构建和处理数据集、词汇表和嵌入向量。下面是它们的具体内容和作用：
+
+1. `datasets`：它是一个字典，包含训练、开发和测试数据集。每个数据集都是一个由示例组成的数据集对象，包含不同的字段，比如字符、bigram、词汇、词典等。这些数据集对象可以用于训练模型和评估模型性能。
+
+2. `vocabs`：这是一个字典，包含了不同类型的词汇表。在这个代码段中，`vocabs` 存储了字符、bigram、词汇和 lattice（可能是特定的词汇表类型）的词汇表。这些词汇表用于将文本数据中的字符、词汇和其他元素映射到唯一的索引，以便模型能够对其进行处理。
+
+3. `embeddings`：这也是一个字典，存储了不同类型的嵌入向量。在这段代码中，它存储了与词汇表相关联的嵌入向量，如 `word_embedding` 和 `lattice_embedding`。这些嵌入向量用于将离散的字符或词汇转换为连续的向量表示，以便模型能够更好地处理和理解这些数据。
+
+这些变量的填充内容是代码执行过程中生成的，它们的作用是帮助整个数据处理和模型训练过程能够顺利进行，同时为模型提供处理文本数据所需的必要信息。
+    """

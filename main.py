@@ -4,7 +4,7 @@ from Modules.CNNRadicalLevelEmbedding import CNNRadicalLevelEmbedding
 from Utils.load_data import *
 from Utils.paths import *
 from Utils.utils import norm_static_embedding, MyFitlogCallback, print_info, get_peking_time
-from model import MECTNER
+from model import MECTNER, CSR_MECTNER
 
 use_fitlog = False
 if not use_fitlog:
@@ -31,7 +31,7 @@ from fastNLP import LRScheduler, DataSetIter, SequentialSampler
 from torch.optim.lr_scheduler import LambdaLR
 # from models import LSTM_SeqLabel,LSTM_SeqLabel_True
 from fastNLP import logger
-
+import pprint
 import traceback
 import warnings
 import sys
@@ -341,6 +341,10 @@ if args.dataset == 'weibo':
         cache_name = 'ne' + cache_name
     elif args.label == 'nm':
         cache_name = 'nm' + cache_name
+
+print(datasets['train'])
+
+
 datasets, vocabs, embeddings = equip_chinese_ner_with_lexicon(datasets, vocabs, embeddings,
                                                               w_list, yangjie_rich_pretrain_word_path,
                                                               _refresh=refresh_data, _cache_fp=cache_name,
@@ -349,10 +353,58 @@ datasets, vocabs, embeddings = equip_chinese_ner_with_lexicon(datasets, vocabs, 
                                                               number_normalized=args.number_normalized,
                                                               lattice_min_freq=args.lattice_min_freq,
                                                               only_train_min_freq=args.only_train_min_freq)
-# equip_chinese_ner_with_lexicon返回三个东西：datasets, vocabs, embeddings
+# equip_chinese_ner_with_lexicon返回三个东西：datasets, vocabs, embeddings, 具体含义见load_data.py
+def debug_dataset(datasets):
+    print(datasets['train'][0])
+    pprint.pprint(f"chars:{datasets['train'][0]['chars']}, len={len(datasets['train'][0]['chars'])}")
+    pprint.pprint(f"target:{datasets['train'][0]['target']}")
+    pprint.pprint(f"bigrams:{datasets['train'][0]['bigrams']}, len={len(datasets['train'][0]['bigrams'])}")
+    pprint.pprint(f"seq_len:{datasets['train'][0]['seq_len']}")
+    pprint.pprint(f"raw_chars:{datasets['train'][0]['raw_chars']}")
+    pprint.pprint(f"lexicons:{datasets['train'][0]['lexicons']}")
+    pprint.pprint(f"lex_num:{datasets['train'][0]['lex_num']}")
+    pprint.pprint(f"lex_s:{datasets['train'][0]['lex_s']}")
+    pprint.pprint(f"lex_e:{datasets['train'][0]['lex_e']}")
+    pprint.pprint(f"lattice:{datasets['train'][0]['lattice']}, len={len(datasets['train'][0]['lattice'])}")
+    pprint.pprint(f"pos_s:{datasets['train'][0]['pos_s']}")
+    pprint.pprint(f"pos_e:{datasets['train'][0]['pos_e']}")
+    exit(0)
 """
 其中，datasets是一个字典，包含train和test两个键，每一个键都对应一个<class 'fastNLP.core.dataset.DataSet'>
+<class 'fastNLP.core.dataset.DataSet'>中存放：
+| chars     | target     | bigrams     | seq_len 
+| lexicons     | raw_chars     | lex_num | lex_s     
+| lex_e     | lattice     | pos_s     | pos_e     
+这些数据项
 
+vocabs样例如下：
+{'bigram': Vocabulary(['科技', '技全', '全方', '方位', '位资']...),
+ 'char': Vocabulary(['科', '技', '全', '方', '位']...),
+ 'label': Vocabulary(['O', 'B-PER.NOM', 'I-PER.NOM', 'B-LOC.NAM', 'I-LOC.NAM']...),
+ 'lattice': Vocabulary(['科', '技', '全', '方', '位']...),
+ 'word': Vocabulary(['</s>', '-unknown-', '中国', '记者', '今天']...)}
+ 
+embeddings样例如下：
+ {'bigram': StaticEmbedding(
+  (dropout_layer): Dropout(p=0, inplace=False)
+  (embedding): Embedding(41160, 50, padding_idx=0)
+  (dropout): MyDropout()
+),
+ 'char': StaticEmbedding(
+  (dropout_layer): Dropout(p=0, inplace=False)
+  (embedding): Embedding(3374, 50, padding_idx=0)
+  (dropout): MyDropout()
+),
+ 'lattice': StaticEmbedding(
+  (dropout_layer): Dropout(p=0, inplace=False)
+  (embedding): Embedding(17814, 50, padding_idx=0)
+  (dropout): MyDropout()
+),
+ 'word': StaticEmbedding(
+  (dropout_layer): Dropout(p=0, inplace=False)
+  (embedding): Embedding(698670, 50, padding_idx=0)
+  (dropout): MyDropout()
+)}
 """
 max_seq_len = max(*map(lambda x: max(x['seq_len']), datasets.values()))
 
@@ -397,11 +449,25 @@ embeddings['components'] = CNNRadicalLevelEmbedding(vocab=vocabs['lattice'], emb
                                                     kernel_sizes=[3], char_dropout=args.char_dropout,
                                                     dropout=args.radical_dropout, pool_method='max'
                                                     , include_word_start_end=False, min_char_freq=1)
+
+
+print("embeddings")
+print(embeddings)
+for i in embeddings:
+    print(i, type(embeddings[i]))
+exit(0)
 print("finish embeddings model!")
-model = MECTNER(embeddings['lattice'], embeddings['bigram'], embeddings['components'], args.hidden,
+model_old = MECTNER(embeddings['lattice'], embeddings['bigram'], embeddings['components'], args.hidden,
                 k_proj=args.k_proj, q_proj=args.q_proj, v_proj=args.v_proj, r_proj=args.r_proj,
                 label_size=len(vocabs['label']), max_seq_len=max_seq_len,
                 dropout=dropout, dataset=args.dataset, ff_size=args.ff)
+
+model_pro = CSR_MECTNER(embeddings['lattice'], embeddings['bigram'], embeddings['components'], args.hidden,
+                k_proj=args.k_proj, q_proj=args.q_proj, v_proj=args.v_proj, r_proj=args.r_proj,
+                label_size=len(vocabs['label']), max_seq_len=max_seq_len,
+                dropout=dropout, dataset=args.dataset, ff_size=args.ff)
+
+model = model_pro
 
 print("test:", vocabs['lattice'].to_word(24))
 for n, p in model.named_parameters():
@@ -463,16 +529,11 @@ lrschedule_callback = LRScheduler(lr_scheduler=LambdaLR(optimizer, lambda epoch:
 clip_callback = GradientClipCallback(clip_type='value', clip_value=5)
 
 callbacks = [evaluate_callback, lrschedule_callback, clip_callback, WarmupCallback(warmup=args.warmup)]
-# 在 main.py 中的模型定义之前添加以下代码
-"""
-if torch.cuda.device_count() > 1:
-    print("使用多个GPU...")
-    model = nn.DataParallel(model)
-    device = None
-"""
+
 
 if args.status == 'train':
     print("start training")
+    # fastnlp Trainer 文档：https://fastnlp.readthedocs.io/zh/stable/_modules/fastNLP/core/trainer.html
     trainer = Trainer(datasets['train'], model, optimizer, loss,
                       args.batch // args.update_every,
                       update_every=args.update_every,
@@ -486,14 +547,13 @@ if args.status == 'train':
                       save_path="/root/autodl-tmp/Chinese-Slang-Recognition-with-MECT-Model/model")
 
     trainer.train()
-
+    
 elif args.status == 'run':
     print("INFO:: Load Model")
-    model_path = '/root/autodl-tmp/Chinese-Slang-Recognition-with-MECT-Model/model/best_MECTNER_f_2023-11-02-12-50-39'
+    model_path = '/root/autodl-tmp/Chinese-Slang-Recognition-with-MECT-Model/model/best_CSR_MECTNER_f_2023-11-04-09-22-33'
     states = torch.load(model_path).state_dict()
     model.load_state_dict(states)
     from fastNLP.core.predictor import Predictor
-    import pprint
     import random
     import time
     random.seed(time.time())
@@ -506,7 +566,7 @@ elif args.status == 'run':
     for i in text:
         print(str(i) + ":", end=" ")
         print(text[i].field_arrays.keys())
-        # print(text[i][:5])
+
     
     print(f"debug::{len(text['test'])}")
     sentenceID = random.randint(0, len(text['test'])-1)
@@ -517,9 +577,15 @@ elif args.status == 'run':
     print(">>>>>>>待测试句原始文字和长度：<<<<<<<")
     for i in test_raw_char:
         print(f"sentence:{i}\n length:{len(i)}")
-    print(f">>>>>>>预测结果：<<<<<<<\n{test_label_list}")
+    pprint.pprint(f">>>>>>>预测结果：<<<<<<<\n{test_label_list}")
+    print(f">>>>>>>结构： pred shape：<<<<<<<\n{test_label_list['pred'][0].shape}")
+    print(f">>>>>>>结构： fusion shape：<<<<<<<\n{test_label_list['fusion'][0].shape}")
+    print(f">>>>>>>结构： radical_encoded shape：<<<<<<<\n{test_label_list['radical_encoded'][0].shape}")
+    print(f">>>>>>>结构： char_encoded shape：<<<<<<<\n{test_label_list['char_encoded'][0].shape}")
     print(f">>>>>>>标准结果：<<<<<<<\n{sentence['target'][0]}")
     print(f">>>>>>>标准结果长度：<<<<<<<\n{len(sentence['target'][0])}")
     print(f">>>>>>>预测结果pred值：<<<<<<<\n{test_label_list['pred'][0][0]}")
     print(f">>>>>>>预测结果pred值长度：<<<<<<<\n{len(test_label_list['pred'][0][0])}")
+    print(f">>>>>>>预测结果fusion值：<<<<<<<\n{test_label_list['fusion'][0][0]}")
+    print(f">>>>>>>预测结果fusion值长度：<<<<<<<\n{len(test_label_list['fusion'][0][0])}")
     

@@ -288,6 +288,7 @@ def load_weibo_ner(path, unigram_embedding_path=None, bigram_embedding_path=None
 
     return datasets, vocabs, embeddings
 
+
 @cache_results(_cache_fp='cache/demo', _refresh=True)
 def load_demo(path, char_embedding_path=None, bigram_embedding_path=None, index_token=True, train_clip=False,
                     char_min_freq=1, bigram_min_freq=1, only_train_min_freq=0):
@@ -300,31 +301,43 @@ def load_demo(path, char_embedding_path=None, bigram_embedding_path=None, index_
     print(f"train_path:{train_path}")
     
     loader = ConllLoader(['chars', 'target'])
-    train_bundle = loader.load(train_path) # 这一句有invalid instance的情况出现 
+    train_bundle = loader.load(train_path)  # 这一句有invalid instance的情况出现
     test_bundle = loader.load(test_path)
     
+    # fastNLP.io.loader.conll  ConllLoader：读取打标数据中的chars和target，调用load方法后返回的是一个包含句子和其标注的数据结构
     datasets = dict()
     datasets['train'] = train_bundle.datasets['train']
     datasets['test'] = test_bundle.datasets['train']
+    # 将train和test中的fastNLP.core.DataSet提取出来放入dataset中（主要是只有这部分是有用的）
 
     datasets['train'].apply_field(get_bigrams, field_name='chars', new_field_name='bigrams')
     datasets['test'].apply_field(get_bigrams, field_name='chars', new_field_name='bigrams')
-
+    
+    # apply_field方法：将DataSet中的每个instance中的名为 `field_name` 的field传给func，并获取它的返回值，放在名为`new_field_name`的field下。
+    """
+    get_bigrams函数：将输入的词语成对输出
+    get_bigrams("hello")
+    >>>['he', 'el', 'll', 'lo', 'o<end>']
+    """
+    # 因此这两句的意思就是将原来的datasets中的chars列的内容成对输出，结果放在同一instance的bigrams列下
     datasets['train'].add_seq_len('chars')
     datasets['test'].add_seq_len('chars')
-
+    # add_seq_len方法：将使用len()直接对field_name中每个元素作用，将其结果作为seqence length, 并放入seq_len这个field。
+    # 这两句就是统计句子长度用的
     char_vocab = Vocabulary()
     bigram_vocab = Vocabulary()
     label_vocab = Vocabulary()
     print(datasets.keys())
-    # print(len(datasets['dev']))
     print(len(datasets['test']))
     print(len(datasets['train']))
+
     char_vocab.from_dataset(datasets['train'], field_name='chars',
                             no_create_entry_dataset=[datasets['test']])
     bigram_vocab.from_dataset(datasets['train'], field_name='bigrams',
                               no_create_entry_dataset=[datasets['test']])
     label_vocab.from_dataset(datasets['train'], field_name='target')
+    # from_dataset方法：使用dataset的对应field中词构建词典:
+    # 因此上面这几句就是将datasets中的chars，bigrams，target三个field中的内容提取出来生成对应的Vocabulary对象char_vocab，bigram_vocab，label_vocab
     if index_token:
         char_vocab.index_dataset(datasets['train'], datasets['test'],
                                  field_name='chars', new_field_name='chars')
@@ -332,13 +345,15 @@ def load_demo(path, char_embedding_path=None, bigram_embedding_path=None, index_
                                    field_name='bigrams', new_field_name='bigrams')
         label_vocab.index_dataset(datasets['train'], datasets['test'],
                                   field_name='target', new_field_name='target')
+        # index_dataset：将DataSet中对应field的词转为数字，Example::
 
     vocabs = {}
     vocabs['char'] = char_vocab
     vocabs['label'] = label_vocab
     vocabs['bigram'] = bigram_vocab
-    vocabs['label'] = label_vocab
-
+    vocabs['label'] = label_vocab  # 不太明白这句话的意义在哪里，这不是重复的嘛
+    # 这里就将所有的Vocabulary对象集合起来放在vocabs这个字典里面，方便后续调用
+    # tips：fastNLP.core.vocabulary对象：用于构建, 存储和使用 str 到 int 的一一映射
     embeddings = {}
     if char_embedding_path is not None:
         char_embedding = StaticEmbedding(char_vocab, char_embedding_path, word_dropout=0.01,
@@ -349,7 +364,8 @@ def load_demo(path, char_embedding_path=None, bigram_embedding_path=None, index_
         bigram_embedding = StaticEmbedding(bigram_vocab, bigram_embedding_path, word_dropout=0.01,
                                            min_freq=bigram_min_freq, only_train_min_freq=only_train_min_freq)
         embeddings['bigram'] = bigram_embedding
-
+    # StaticEmbedding函数就简单理解为将词语转化为向量，维度为50维
+    # 因此上面两部分就对单个字符char和双字符bigram进行向量化，然后放入embeddings这个字典中了
     return datasets, vocabs, embeddings
 
 
@@ -579,6 +595,7 @@ def equip_chinese_ner_with_lexicon(datasets, vocabs, embeddings, w_list, word_em
         lex_s = ins['lex_s']
         seq_len = ins['seq_len']
         pos_s = list(range(seq_len)) + lex_s
+        # lex_s是啥，为啥要加一个这个东西
 
         return pos_s
 
@@ -624,3 +641,14 @@ def equip_chinese_ner_with_lexicon(datasets, vocabs, embeddings, w_list, word_em
                                     field_name='lattice', new_field_name='lattice')
 
     return datasets, vocabs, embeddings
+    """
+    当这段代码被执行时，`datasets`、`vocabs` 和 `embeddings` 这三个变量会被填充以帮助构建和处理数据集、词汇表和嵌入向量。下面是它们的具体内容和作用：
+
+1. `datasets`：它是一个字典，包含训练、开发和测试数据集。每个数据集都是一个由示例组成的数据集对象，包含不同的字段，比如字符、bigram、词汇、词典等。这些数据集对象可以用于训练模型和评估模型性能。
+
+2. `vocabs`：这是一个字典，包含了不同类型的词汇表。在这个代码段中，`vocabs` 存储了字符、bigram、词汇和 lattice（可能是特定的词汇表类型）的词汇表。这些词汇表用于将文本数据中的字符、词汇和其他元素映射到唯一的索引，以便模型能够对其进行处理。
+
+3. `embeddings`：这也是一个字典，存储了不同类型的嵌入向量。在这段代码中，它存储了与词汇表相关联的嵌入向量，如 `word_embedding` 和 `lattice_embedding`。这些嵌入向量用于将离散的字符或词汇转换为连续的向量表示，以便模型能够更好地处理和理解这些数据。
+
+这些变量的填充内容是代码执行过程中生成的，它们的作用是帮助整个数据处理和模型训练过程能够顺利进行，同时为模型提供处理文本数据所需的必要信息。
+    """
