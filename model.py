@@ -260,23 +260,39 @@ class CSR_MECTNER(nn.Module):
         components_embed = self.components_embed(char)
         components_embed.masked_fill_(~(char_mask).unsqueeze(-1), 0)
         components_embed = self.components_proj(components_embed)
+        # self.components_proj = nn.Linear(self.components_embed_size, self.hidden_size)
+        # 用一个线性全连接层把部首的size连接到hidden_size中
+        # 构建部首embedding结果
         
         bigrams_embed = self.bigram_embed(bigrams)
         bigrams_embed = torch.cat([bigrams_embed,
                                    torch.zeros(size=[batch_size, max_seq_len_and_lex_num - max_seq_len,
                                                      self.bigram_size]).to(bigrams_embed)], dim=1)
+        # 构建bigrams embedding结果
+        
         raw_embed_char = torch.cat([raw_embed, bigrams_embed], dim=-1)
+        # 将lattice数据的结果和bigrams的结果融合起来
+        # 可是lattice数据的结果里面已经有bigrams的结果了，为什么还融合一遍
 
         raw_embed_char = self.embed_dropout(raw_embed_char)
         raw_embed = self.gaz_dropout(raw_embed)
+        # MyDropout(self.dropout['embed'])
+        # MyDropout(self.dropout['gaz'])
+        # 这里就是对raw_embed以embed和gaz的概率进行dropout
 
         embed_char = self.char_proj(raw_embed_char)
+        # self.char_proj = nn.Linear(self.char_input_size, self.hidden_size)
+        # 和components_proj类似，用一个线性全连接层把raw_embed_char的size连接到hidden_size中
         char_mask = seq_len_to_mask(seq_len, max_len=max_seq_len_and_lex_num).bool()
         embed_char.masked_fill_(~(char_mask.unsqueeze(-1)), 0)
+        # 对embed_char进行mask
 
         embed_lex = self.lex_proj(raw_embed)
+        # self.lex_proj = nn.Linear(self.lex_input_size, self.hidden_size)
+        # 用一个线性全连接层把raw_embed的size连接到hidden_size中
         lex_mask = (seq_len_to_mask(seq_len + lex_num).bool() ^ char_mask.bool())
         embed_lex.masked_fill_(~lex_mask.unsqueeze(-1), 0)
+        # 对embed_lex 进行mask
 
         assert char_mask.size(1) == lex_mask.size(1)
         embedding = embed_char + embed_lex
@@ -290,9 +306,22 @@ class CSR_MECTNER(nn.Module):
 
         fusion = torch.cat([radical_encoded, char_encoded], dim=-1)
         output = self.output_dropout(fusion)
+        # self.output_dropout = MyDropout(self.dropout['output'])
         output = output[:, :max_seq_len, :]
+        """
+        您给出的代码片段 output = output[:, :max_seq_len, :] 是Python中使用切片(slice)操作一个多维数组（例如：NumPy数组）的常见方式。此代码的目的是截取数组的一部分。
+        output[:, :max_seq_len, :]: 这里的切片操作针对的是一个三维数组。
+        :: 表示选取该维度的所有元素。
+        :max_seq_len: 表示在该维度上切片，从开始到max_seq_len位置。
+        最后一个:也表示选取该维度的所有元素。
+        假设 output 是一个形状为 (batch_size, seq_len, features) 的三维数组，那么该切片操作将数组截断到 max_seq_len 长度，以 max_seq_len 为截断长度，使得在序列长度这一维度上不超过 max_seq_len。
+        """
+        seq_output = output
+        # 我感觉这个应该是最理想的输出结果，这个里面应该包含了每一个字的字向量
         pred = self.output(output)
-
+        # self.output = nn.Linear(self.hidden_size * 2, self.label_size)
+        # 也就是说，self.output的长度就是self.hidden_size * 2
+        
         mask = seq_len_to_mask(seq_len).bool()
 
         if self.training:
@@ -304,7 +333,12 @@ class CSR_MECTNER(nn.Module):
                 'pred': pred, 
                 'fusion': fusion, 
                 'radical_encoded': radical_encoded, 
-                'char_encoded': char_encoded
+                'char_encoded': char_encoded,
+                'seq_output': seq_output,
+                'batch_size': batch_size,
+                'max_seq_len_and_lex_num': max_seq_len_and_lex_num,
+                'max_seq_len': max_seq_len
+                
             }
 
             return result

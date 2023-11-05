@@ -342,7 +342,7 @@ if args.dataset == 'weibo':
     elif args.label == 'nm':
         cache_name = 'nm' + cache_name
 
-print(datasets['train'])
+# print(datasets['train'])
 
 
 datasets, vocabs, embeddings = equip_chinese_ner_with_lexicon(datasets, vocabs, embeddings,

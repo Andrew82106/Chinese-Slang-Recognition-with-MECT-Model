@@ -39,3 +39,41 @@ python main.py --dataset demo
 一个解决方法是使用多卡训练，大一点的GPU训练等等。多卡训练还没研究明白，大的GPU没有。
 
 另一个解决办法是将数据集中长度太长的句子直接删掉，现在就是这样做的，训练集已经跑起来了。现在是凌晨，等今天早上起床看看效果如何。
+
+
+
+# 11.5 日工作工作总结
+
+
+## MECT4CNER 模型结构展示
+
+重新梳理了model.py文件中的MECT4CNER模型结构，具体结构如下：
+
+![WechatIMG1032.jpg](md_cache/WechatIMG1032.jpg)
+
+## 完善了CSR_MECTNER模型
+
+基于MECT4CNER模型的结构，新写了一个CSR_MECTNER模型，将这个模型的Output改成了输出中间结果：
+
+```py
+if self.training:
+            loss = self.crf(pred, target, mask).mean(dim=0)
+            return {'loss': loss}
+        else:
+            pred, path = self.crf.viterbi_decode(pred, mask)
+            result = {
+                'pred': pred, 
+                'fusion': fusion, 
+                'radical_encoded': radical_encoded, 
+                'char_encoded': char_encoded,
+                'seq_output': seq_output,
+                'batch_size': batch_size,
+                'max_seq_len_and_lex_num': max_seq_len_and_lex_num,
+                'max_seq_len': max_seq_len
+                
+            }
+
+            return result
+```
+
+接下来应该就能进行下一步词向量的合成了
