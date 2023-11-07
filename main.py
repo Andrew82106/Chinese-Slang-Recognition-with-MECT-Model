@@ -1,5 +1,5 @@
 import fitlog
-
+import tqdm
 from Modules.CNNRadicalLevelEmbedding import CNNRadicalLevelEmbedding
 from Utils.load_data import *
 from Utils.paths import *
@@ -42,7 +42,7 @@ import sys
 
 parser = argparse.ArgumentParser()
 
-parser.add_argument('--status', default='train', choices=['train', 'run'])
+parser.add_argument('--status', default='train', choices=['train', 'run', 'generate'])
 parser.add_argument('--msg', default='_')
 parser.add_argument('--train_clip', default=False, help='是不是要把train的char长度限制在200以内')
 parser.add_argument('--device', default='0')
@@ -598,3 +598,44 @@ elif args.status == 'run':
     except Exception as e:
         print(e)
         pass
+elif args.status == 'generate':
+    # 生成词向量
+    model_path = '/root/autodl-tmp/Chinese-Slang-Recognition-with-MECT-Model/model/best_CSR_MECTNER_f_2023-11-06-13-55-21'
+    states = torch.load(model_path).state_dict()
+    model.load_state_dict(states)
+    from Modules.CharacterToWord import CTW
+    from Modules.WordCut import ChineseTokenizer
+    from Utils.ToAndFromPickle import write_to_pickle, load_from_pickle
+    from fastNLP.core.predictor import Predictor
+    import random
+    import time
+    random.seed(time.time())
+    
+    
+    predictor = Predictor(model)   # 这里的model是加载权重之后的model
+    print(">>>>>>>成功加载模型<<<<<<<")
+    text = datasets  # 文本
+    sentenceID = random.randint(0, len(text['test'])-1)
+    CharacterToWord = CTW()
+    tokenizer = ChineseTokenizer()
+    save_path = "/root/autodl-tmp/Chinese-Slang-Recognition-with-MECT-Model/datasets/pickle_data"
+    res = {"tokenize": [], "wordVector": []}
+    for i in tqdm.tqdm(range(len(text['test'])), desc="将字向量转化为词向量"):
+        sentence = text['test'][i:i+1]
+        test_label_list = predictor.predict(sentence)  # 预测结果
+        test_raw_char = sentence['raw_chars']     # 原始文字
+        # print(f"test_raw_char:{test_raw_char[0]}")
+        sentence = ""
+        for i in test_raw_char[0]:
+            sentence += i
+        mect4cner_out_vector = test_label_list['seq_output']
+        tokenize = tokenizer.tokenize(sentence)
+        wordVector = CharacterToWord.run(mect4cner_out_vector, tokenize['wordGroupsID'])
+        res['tokenize'].append(tokenize)
+        res['wordVector'].append(wordVector)
+    file_name = f"{args.dataset}.pkl"
+    write_to_pickle(os.path.join(save_path, file_name), res)
+    print(f"successfully save to {os.path.join(save_path, file_name)}")
+    
+        
+        
