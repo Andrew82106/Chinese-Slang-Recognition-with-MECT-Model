@@ -151,5 +151,6 @@ IndexError: index 94392 is out of bounds for dimension 0 with size 42889
   
   初步跑了一下聚类，发现在tieba数据集中和weibo数据集中，很多词语的向量在前两维上都有共性，比如下图为“你”这一字符在前两维的投影
   
-  ![你 in tieba.png](md_cache/你 in tieba.png)
-  ![你 in weibo.png](md_cache/你 in weibo.png)
+![你 in tieba.png](md_cache/你 in tieba.png)
+  
+![你 in weibo.png](md_cache/你 in weibo.png)
