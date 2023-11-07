@@ -30,3 +30,7 @@ python main.py --dataset weibo --status generate --device cpu --extra_datasets t
 
 ## stage4: dbscan聚类分析
 
+
+```py
+python cluster.py
+```
