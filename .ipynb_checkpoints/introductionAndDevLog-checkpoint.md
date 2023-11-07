@@ -92,7 +92,7 @@ if self.training:
  
  - 构建了字向量到词向量的模块``CharacterToWord.py``，后续可以将提升后的模型接入该类中
  
- - 尝试构建贴吧数据集
+ - 构建贴吧数据集
  
  这里需要注意的一点是，贴吧数据集不需要做标记，也就是所有的字的标记都是O。这样的话直接用这个数据集套上已有的模型，就可以直接输出词向量，可以认为这个词向量是基于已有的MECT4CNER模型的拟合的模型构建的。
  
@@ -146,3 +146,10 @@ if self.training:
 IndexError: index 94392 is out of bounds for dimension 0 with size 42889
  ```
  现在测得，对于贴吧数据集，使用微博的MECT模型，句子数量在5k是可以满足词表大小的，此时词表大小只有12396左右，微博MECT模型词表大小有42889
+ 
+  - 构建聚类模块cluster.py
+  
+  初步跑了一下聚类，发现在tieba数据集中和weibo数据集中，很多词语的向量在前两维上都有共性，比如下图为“你”这一字符在前两维的投影
+  
+  ![你 in tieba.png](md_cache/你 in tieba.png)
+  ![你 in weibo.png](md_cache/你 in weibo.png)

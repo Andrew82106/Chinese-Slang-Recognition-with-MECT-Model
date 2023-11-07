@@ -4,6 +4,7 @@ rootPth = "/root/autodl-tmp/Chinese-Slang-Recognition-with-MECT-Model"
 embeddings = os.path.join(rootPth, "datasets/embeddings")
 charinfo = os.path.join(rootPth, "datasets/charinfo")
 NER = os.path.join(rootPth, "datasets/NER")
+vector = os.path.join(rootPth, "datasets/pickle_data")
 
 
 yangjie_rich_pretrain_unigram_path = os.path.join(embeddings, 'gigaword_chn.all.a2b.uni.ite50.vec')
@@ -25,5 +26,7 @@ weibo_ner_path = os.path.join(NER, 'Weibo_NER')
 demo_ner_path = os.path.join(NER, 'Demo_NER')
 tieba_path = os.path.join(NER, 'tieba')
 
+tieba_vector = os.path.join(vector, 'tieba.pkl')
+weibo_vector = os.path.join(vector, 'weibo.pkl')
 if __name__ == '__main__':
     print(charinfo)
