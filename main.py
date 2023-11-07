@@ -170,8 +170,10 @@ if args.debug:
 if args.device != 'cpu':
     assert args.device.isdigit()
     device = torch.device('cuda:{}'.format(args.device))
+    print('device: cuda:{}'.format(args.device))
 else:
     device = None
+    print('device: cpu')
 
 # device = None  # in order to run on macbook
 refresh_data = False
@@ -450,12 +452,12 @@ embeddings['components'] = CNNRadicalLevelEmbedding(vocab=vocabs['lattice'], emb
                                                     dropout=args.radical_dropout, pool_method='max'
                                                     , include_word_start_end=False, min_char_freq=1)
 
-
-print("embeddings")
-print(embeddings)
-for i in embeddings:
-    print(i, type(embeddings[i]))
-exit(0)
+def debug_embeddings():
+    print("embeddings")
+    print(embeddings)
+    for i in embeddings:
+        print(i, type(embeddings[i]))
+    exit(0)
 print("finish embeddings model!")
 model_old = MECTNER(embeddings['lattice'], embeddings['bigram'], embeddings['components'], args.hidden,
                 k_proj=args.k_proj, q_proj=args.q_proj, v_proj=args.v_proj, r_proj=args.r_proj,
@@ -550,7 +552,8 @@ if args.status == 'train':
     
 elif args.status == 'run':
     print("INFO:: Load Model")
-    model_path = '/root/autodl-tmp/Chinese-Slang-Recognition-with-MECT-Model/model/best_CSR_MECTNER_f_2023-11-04-09-22-33'
+    # model_path = '/root/autodl-tmp/Chinese-Slang-Recognition-with-MECT-Model/model/best_CSR_MECTNER_f_2023-11-06-08-39-05'
+    model_path = '/root/autodl-tmp/Chinese-Slang-Recognition-with-MECT-Model/model/best_CSR_MECTNER_f_2023-11-06-13-55-21'
     states = torch.load(model_path).state_dict()
     model.load_state_dict(states)
     from fastNLP.core.predictor import Predictor
@@ -571,21 +574,27 @@ elif args.status == 'run':
     print(f"debug::{len(text['test'])}")
     sentenceID = random.randint(0, len(text['test'])-1)
     sentence = text['test'][sentenceID-1:sentenceID]
+    print(f">>>>>>>待测试句为第{sentenceID}句，内容如下：<<<<<<<\n{sentence}")
     test_label_list = predictor.predict(sentence)  # 预测结果
     test_raw_char = sentence['raw_chars']     # 原始文字
-    print(f">>>>>>>待测试句为第{sentenceID}句，内容如下：<<<<<<<\n{sentence}")
+    
     print(">>>>>>>待测试句原始文字和长度：<<<<<<<")
     for i in test_raw_char:
         print(f"sentence:{i}\n length:{len(i)}")
     pprint.pprint(f">>>>>>>预测结果：<<<<<<<\n{test_label_list}")
-    print(f">>>>>>>结构： pred shape：<<<<<<<\n{test_label_list['pred'][0].shape}")
-    print(f">>>>>>>结构： fusion shape：<<<<<<<\n{test_label_list['fusion'][0].shape}")
-    print(f">>>>>>>结构： radical_encoded shape：<<<<<<<\n{test_label_list['radical_encoded'][0].shape}")
-    print(f">>>>>>>结构： char_encoded shape：<<<<<<<\n{test_label_list['char_encoded'][0].shape}")
-    print(f">>>>>>>标准结果：<<<<<<<\n{sentence['target'][0]}")
-    print(f">>>>>>>标准结果长度：<<<<<<<\n{len(sentence['target'][0])}")
-    print(f">>>>>>>预测结果pred值：<<<<<<<\n{test_label_list['pred'][0][0]}")
-    print(f">>>>>>>预测结果pred值长度：<<<<<<<\n{len(test_label_list['pred'][0][0])}")
-    print(f">>>>>>>预测结果fusion值：<<<<<<<\n{test_label_list['fusion'][0][0]}")
-    print(f">>>>>>>预测结果fusion值长度：<<<<<<<\n{len(test_label_list['fusion'][0][0])}")
-    
+    try:
+        print(f">>>>>>>结构： pred shape：<<<<<<<\n{test_label_list['pred'][0].shape}")
+        print(f">>>>>>>结构： fusion shape：<<<<<<<\n{test_label_list['fusion'][0].shape}")
+        print(f">>>>>>>结构： radical_encoded shape：<<<<<<<\n{test_label_list['radical_encoded'][0].shape}")
+        print(f">>>>>>>结构： char_encoded shape：<<<<<<<\n{test_label_list['char_encoded'][0].shape}")
+        print(f">>>>>>>标准结果：<<<<<<<\n{sentence['target'][0]}")
+        print(f">>>>>>>标准结果长度：<<<<<<<\n{len(sentence['target'][0])}")
+        print(f">>>>>>>预测结果pred值：<<<<<<<\n{test_label_list['pred'][0][0]}")
+        print(f">>>>>>>预测结果pred值长度：<<<<<<<\n{len(test_label_list['pred'][0][0])}")
+        print(f">>>>>>>预测结果fusion值：<<<<<<<\n{test_label_list['fusion'][0][0]}")
+        print(f">>>>>>>预测结果fusion值长度：<<<<<<<\n{len(test_label_list['fusion'][0][0])}")
+        print(f">>>>>>>seq_output：<<<<<<<\n{test_label_list['seq_output']}")
+        print(f">>>>>>>seq_output shape：<<<<<<<\n{test_label_list['seq_output'][0].shape}")
+    except Exception as e:
+        print(e)
+        pass

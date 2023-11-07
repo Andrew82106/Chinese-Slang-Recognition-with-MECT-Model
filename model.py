@@ -317,6 +317,9 @@ class CSR_MECTNER(nn.Module):
         假设 output 是一个形状为 (batch_size, seq_len, features) 的三维数组，那么该切片操作将数组截断到 max_seq_len 长度，以 max_seq_len 为截断长度，使得在序列长度这一维度上不超过 max_seq_len。
         """
         seq_output = output
+        # seq_output 的形状是(batchsize, max_seq_length, embedding_length)
+        # 也就是批量大小 x 最长句子的大小 x embedding维度数，其中embedding维度数为256
+        # 如果只输入一句话的话，那么seq_output的形状就是(1, 句子长度, 256)
         # 我感觉这个应该是最理想的输出结果，这个里面应该包含了每一个字的字向量
         pred = self.output(output)
         # self.output = nn.Linear(self.hidden_size * 2, self.label_size)
@@ -334,11 +337,14 @@ class CSR_MECTNER(nn.Module):
                 'fusion': fusion, 
                 'radical_encoded': radical_encoded, 
                 'char_encoded': char_encoded,
-                'seq_output': seq_output,
-                'batch_size': batch_size,
-                'max_seq_len_and_lex_num': max_seq_len_and_lex_num,
-                'max_seq_len': max_seq_len
+                'seq_output': seq_output
                 
             }
-
+            # note: 之前出现过如下报错：
+            """
+              File "/root/miniconda3/envs/normalpython/lib/python3.9/site-packages/fastNLP/core/predictor.py", line 70, in predict
+              value = value.cpu().numpy()
+              AttributeError: 'int' object has no attribute 'cpu'
+            """
+            # 这个是因为result变量里面出现了int的缘故，因此要debug的话不返回int就行
             return result
