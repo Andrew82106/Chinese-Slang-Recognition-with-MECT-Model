@@ -43,6 +43,7 @@ import sys
 parser = argparse.ArgumentParser()
 
 parser.add_argument('--status', default='train', choices=['train', 'run', 'generate'])
+parser.add_argument('--extra_datasets', default='None', choices=['None', 'tieba'])
 parser.add_argument('--msg', default='_')
 parser.add_argument('--train_clip', default=False, help='是不是要把train的char长度限制在200以内')
 parser.add_argument('--device', default='0')
@@ -140,7 +141,7 @@ parser.add_argument('--embed_dropout_pos', default='0')
 parser.add_argument('--abs_pos_fusion_func', default='nonlinear_add',
                     choices=['add', 'concat', 'nonlinear_concat', 'nonlinear_add', 'concat_nonlinear', 'add_nonlinear'])
 
-parser.add_argument('--dataset', default='demo', help='weibo|resume|ontonotes|msra')
+parser.add_argument('--dataset', default='demo', help='weibo|resume|ontonotes|msra|tieba')
 parser.add_argument('--label', default='all', help='ne|nm|all')
 
 args = parser.parse_args()
@@ -247,6 +248,18 @@ elif args.dataset == 'demo':
                                              bigram_min_freq=args.bigram_min_freq,
                                              only_train_min_freq=args.only_train_min_freq
                                              )
+"""
+elif args.dataset == 'tieba':
+    datasets, vocabs, embeddings = load_tieba(tieba_path, yangjie_rich_pretrain_unigram_path,
+                                             yangjie_rich_pretrain_bigram_path,
+                                             _refresh=refresh_data, index_token=False, train_clip=args.train_clip,
+                                             _cache_fp=raw_dataset_cache_name,
+                                             char_min_freq=args.char_min_freq,
+                                             bigram_min_freq=args.bigram_min_freq,
+                                             only_train_min_freq=args.only_train_min_freq
+                                             )
+"""
+
 if args.gaz_dropout < 0:
     args.gaz_dropout = args.embed_dropout
 
@@ -321,6 +334,21 @@ elif args.dataset == 'weibo':
     args.components_embed_lr_rate = 0.0014
     args.momentum = 0.9
     args.epoch = 50
+"""
+elif args.dataset == 'tieba':
+    args.ff_dropout = 0.2
+    args.ff_dropout_2 = 0.4
+    args.gaz_dropout = 0.5
+    args.head_dim = 16
+    args.ff = 384
+    args.hidden = 128
+    args.radical_dropout = 0.2
+    args.warmup = 0.3
+    args.lr = 0.0018
+    args.components_embed_lr_rate = 0.0014
+    args.momentum = 0.9
+    args.epoch = 50
+"""
 
 ###################################### datasets setting ######################################
 
@@ -351,7 +379,7 @@ datasets, vocabs, embeddings = equip_chinese_ner_with_lexicon(datasets, vocabs, 
                                                               w_list, yangjie_rich_pretrain_word_path,
                                                               _refresh=refresh_data, _cache_fp=cache_name,
                                                               only_lexicon_in_train=args.only_lexicon_in_train,
-                                                              word_char_mix_embedding_path=yangjie_rich_pretrain_char_and_word_path,
+                                                            word_char_mix_embedding_path=yangjie_rich_pretrain_char_and_word_path,
                                                               number_normalized=args.number_normalized,
                                                               lattice_min_freq=args.lattice_min_freq,
                                                               only_train_min_freq=args.only_train_min_freq)
@@ -552,7 +580,6 @@ if args.status == 'train':
     
 elif args.status == 'run':
     print("INFO:: Load Model")
-    # model_path = '/root/autodl-tmp/Chinese-Slang-Recognition-with-MECT-Model/model/best_CSR_MECTNER_f_2023-11-06-08-39-05'
     model_path = '/root/autodl-tmp/Chinese-Slang-Recognition-with-MECT-Model/model/best_CSR_MECTNER_f_2023-11-06-13-55-21'
     states = torch.load(model_path).state_dict()
     model.load_state_dict(states)
@@ -611,17 +638,66 @@ elif args.status == 'generate':
     import time
     random.seed(time.time())
     
-    
+    # datasets1 = copy.deepcopy(datasets)
     predictor = Predictor(model)   # 这里的model是加载权重之后的model
     print(">>>>>>>成功加载模型<<<<<<<")
-    text = datasets  # 文本
+    
+    if args.extra_datasets != 'None':
+        raw_dataset_cache_name1 = os.path.join('cache', args.extra_datasets +
+                                      '_trainClip:{}'.format(args.train_clip)
+                                      + 'bgminfreq_{}'.format(args.bigram_min_freq)
+                                      + 'char_min_freq_{}'.format(args.char_min_freq)
+                                      + 'word_min_freq_{}'.format(args.word_min_freq)
+                                      + 'only_train_min_freq{}'.format(args.only_train_min_freq)
+                                      + 'number_norm{}'.format(args.number_normalized)
+                                      + 'load_dataset_seed{}'.format(load_dataset_seed)
+                                      )
+        cache_name1 = os.path.join('cache', (args.extra_datasets + '_lattice' + '_only_train:{}' +
+                                    '_trainClip:{}' + '_norm_num:{}'
+                                    + 'char_min_freq{}' + 'bigram_min_freq{}' + 'word_min_freq{}' + 'only_train_min_freq{}'
+                                    + 'number_norm{}' + 'lexicon_{}' + 'load_dataset_seed{}')
+                          .format(args.only_lexicon_in_train,
+                                  args.train_clip, args.number_normalized, args.char_min_freq,
+                                  args.bigram_min_freq, args.word_min_freq, args.only_train_min_freq,
+                                  args.number_normalized, args.lexicon_name, load_dataset_seed))
+        datasets, vocabs, embeddings = load_tieba(tieba_path, yangjie_rich_pretrain_unigram_path,
+                                             yangjie_rich_pretrain_bigram_path,
+                                             _refresh=refresh_data, index_token=False, train_clip=args.train_clip,
+                                             _cache_fp=raw_dataset_cache_name1,
+                                             char_min_freq=args.char_min_freq,
+                                             bigram_min_freq=args.bigram_min_freq,
+                                             only_train_min_freq=args.only_train_min_freq
+                                             )
+        datasets, vocabs, embeddings = equip_chinese_ner_with_lexicon(datasets, vocabs, embeddings,
+                                                              w_list, yangjie_rich_pretrain_word_path,
+                                                              _refresh=refresh_data, _cache_fp=cache_name1,
+                                                              only_lexicon_in_train=args.only_lexicon_in_train,
+                                                            word_char_mix_embedding_path=yangjie_rich_pretrain_char_and_word_path,
+                                                              number_normalized=args.number_normalized,
+                                                              lattice_min_freq=args.lattice_min_freq,
+                                                              only_train_min_freq=args.only_train_min_freq)
+        text = datasets  # 文本
+        print(">>>>>>>成功加载外入数据集<<<<<<<")
+        # print(text)
+        # exit(0)
+    else:
+        text = datasets  # 文本
+    # text = datasets
     sentenceID = random.randint(0, len(text['test'])-1)
     CharacterToWord = CTW()
     tokenizer = ChineseTokenizer()
     save_path = "/root/autodl-tmp/Chinese-Slang-Recognition-with-MECT-Model/datasets/pickle_data"
     res = {"tokenize": [], "wordVector": []}
     for i in tqdm.tqdm(range(len(text['test'])), desc="将字向量转化为词向量"):
+        # print(text['test'])
+        # exit(0)
         sentence = text['test'][i:i+1]
+        sentence.set_target("target")
+        sentence.set_input("bigrams")
+        sentence.set_input("seq_len")
+        sentence.set_input("lex_num")
+        sentence.set_input("target")
+        # sentence.print_field_meta()
         test_label_list = predictor.predict(sentence)  # 预测结果
         test_raw_char = sentence['raw_chars']     # 原始文字
         # print(f"test_raw_char:{test_raw_char[0]}")
@@ -633,7 +709,10 @@ elif args.status == 'generate':
         wordVector = CharacterToWord.run(mect4cner_out_vector, tokenize['wordGroupsID'])
         res['tokenize'].append(tokenize)
         res['wordVector'].append(wordVector)
-    file_name = f"{args.dataset}.pkl"
+        
+        
+        
+    file_name = f"{args.dataset if args.extra_datasets == 'None' else args.extra_datasets}.pkl"
     write_to_pickle(os.path.join(save_path, file_name), res)
     print(f"successfully save to {os.path.join(save_path, file_name)}")
     

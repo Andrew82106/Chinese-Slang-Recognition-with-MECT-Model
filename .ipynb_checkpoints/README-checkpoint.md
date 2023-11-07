@@ -1,6 +1,5 @@
 # Improved MECT Model Integration with Large-scale Language Models for Chinese Criminal Slang Recognition Framework Research
 
-
 # usage
 
 ## stage1: 原MECT4CNER模型训练命令：
@@ -22,8 +21,12 @@ python main.py --dataset weibo --status run --device cpu
 ## stage3: 数据集输出为词向量：
 
 ```py
+# 加载训练集对应测试集并转化为词向量
 python main.py --dataset weibo --status generate --device cpu
+
+# 加载外部数据集并转化为词向量
+python main.py --dataset weibo --status generate --device cpu --extra_datasets tieba
 ```
 
-## stage4: 聚类分析
+## stage4: dbscan聚类分析
 

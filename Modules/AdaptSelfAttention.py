@@ -41,6 +41,8 @@ class AdaptSelfAttention(nn.Module):
             self.randomAttention = nn.Parameter(torch.empty(1, self.num_heads, 640, 640), requires_grad=True)
         if dataset == 'demo':
             self.randomAttention = nn.Parameter(torch.empty(1, self.num_heads, 540, 540), requires_grad=True)
+        if dataset == 'tieba':
+            self.randomAttention = nn.Parameter(torch.empty(1, self.num_heads, 320, 320), requires_grad=True)
         if dataset == 'resume':
             self.randomAttention = nn.Parameter(torch.empty(1, self.num_heads, 344, 344), requires_grad=True)
         if dataset == 'ontonotes':

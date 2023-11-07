@@ -23,6 +23,7 @@ msra_ner_cn_path = os.path.join(NER, 'MSRA_NER')
 resume_ner_path = '/home/ws/data/ResumeNER'
 weibo_ner_path = os.path.join(NER, 'Weibo_NER')
 demo_ner_path = os.path.join(NER, 'Demo_NER')
+tieba_path = os.path.join(NER, 'tieba')
 
 if __name__ == '__main__':
     print(charinfo)

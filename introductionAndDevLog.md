@@ -92,4 +92,57 @@ if self.training:
  
  - 构建了字向量到词向量的模块``CharacterToWord.py``，后续可以将提升后的模型接入该类中
  
+ - 尝试构建贴吧数据集
  
+ 这里需要注意的一点是，贴吧数据集不需要做标记，也就是所有的字的标记都是O。这样的话直接用这个数据集套上已有的模型，就可以直接输出词向量，可以认为这个词向量是基于已有的MECT4CNER模型的拟合的模型构建的。
+ 
+ 但是仅仅替换数据集好像不太行，因为fastnlp的Trainer训练的时候存的是模型的statedict，因此加载模型的时候需要把原模型初始化出来后再load state dict，否则的话模型size不匹配，应该得想个别的办法弄弄
+ 
+ 尝试用微博训练出来的模型去跑贴吧的数据集，然后发现报这个错：
+
+ 
+ ```py
+ TypeError: forward() missing 4 required positional arguments: 'bigrams', 'seq_len', 'lex_num', and 'target'
+ ```
+ 
+ 一开始以为是表的问题，试了试原数据集，发现又能跑动，然后就估计是原数据表和新数据表的内容不一样
+ 
+ 但是翻来覆去看，就没看到啥问题，两个表的表头和数据类型都是一模一样的
+ 
+ 然后以为是词表太大了，把词表搞小一点，贴吧数据集只拿了11句话来弄，但是小词表也是不行
+ 
+ 很无语
+ 
+ 到处找了一下午，最后突然灵光乍现想起了这个：
+ 
+ > fastnlp.core.Trainer的forward的参数来自于datasets变量中被设为input的field
+ 
+ 然后调试了一下贴吧数据集的表的信息：
+ 
+
+| field_names | chars | target | bigrams | seq_len | lexicons | raw_chars | lex_num | lex_s | lex_e | lattice | pos_s | pos_e |
+|-------------|-------|--------|---------|---------|----------|-----------|---------|-------|-------|---------|-------|-------|
+|   is_input  | False | False  |  False  |  False  |  False   |   False   |  False  | False | False |   True  |  True |  True |
+|  is_target  | False | False  |  False  |  False  |  False   |   False   |  False  | False | False |  False  | False | False |
+| ignore_type |       |        |         |         |          |           |         |       |       |  False  | False | False |
+|  pad_value  |       |        |         |         |          |           |         |       |       |    0    |   0   |   0   |
+
+
+ 然后发现，上面报错的那四个变量，确实没有放到input里面去。。。。。。一下午时间就干了个这个。。。。。。。
+ 
+ 同时，如果外接数据集过大的话，确实会出现词表溢出的情况，比如下面：
+ ```py
+ Traceback (most recent call last):
+  File "/root/autodl-tmp/Chinese-Slang-Recognition-with-MECT-Model/main.py", line 701, in <module>
+    test_label_list = predictor.predict(sentence)  # 预测结果
+  File "/root/miniconda3/envs/normalpython/lib/python3.9/site-packages/fastNLP/core/predictor.py", line 64, in predict
+    prediction = predict_func(**refined_batch_x)
+  File "/root/autodl-tmp/Chinese-Slang-Recognition-with-MECT-Model/model.py", line 267, in forward
+    bigrams_embed = self.bigram_embed(bigrams)
+  File "/root/miniconda3/envs/normalpython/lib/python3.9/site-packages/torch/nn/modules/module.py", line 727, in _call_impl
+    result = self.forward(*input, **kwargs)
+  File "/root/autodl-tmp/Chinese-Slang-Recognition-with-MECT-Model/Modules/StaticEmbedding.py", line 309, in forward
+    words = self.words_to_words[words]
+IndexError: index 94392 is out of bounds for dimension 0 with size 42889
+ ```
+ 现在测得，对于贴吧数据集，使用微博的MECT模型，句子数量在5k是可以满足词表大小的，此时词表大小只有12396左右，微博MECT模型词表大小有42889
