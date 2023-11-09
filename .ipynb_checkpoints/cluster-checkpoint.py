@@ -5,9 +5,11 @@ from sklearn.preprocessing import StandardScaler
 from sklearn.datasets import make_blobs
 from Utils.paths import *
 from Utils.summary_word_vector import summary_lex
+import tqdm
 import pickle
 import torch
-
+plt.rcParams['font.sans-serif']=['SimHei'] #Show Chinese label
+plt.rcParams['axes.unicode_minus']=False   #These two lines need to be set manually
 
 def saveFig(X, clusters, name="your_plot_name", xlabel='Feature 1', ylabel='Feature 2', title='DBSCAN Clustering'):
     plt.scatter(X[:, 0], X[:, 1], c=clusters, cmap='viridis')
@@ -17,7 +19,7 @@ def saveFig(X, clusters, name="your_plot_name", xlabel='Feature 1', ylabel='Feat
     plt.savefig(f'cluster_result/{name}.png')
     
 
-def dbscan(X, eps=25, savefig=False, word=None):
+def dbscan(X, eps=25, savefig=False, word=None, dataset=None):
     """
     X: input matrix with size N x 256
     """
@@ -65,21 +67,71 @@ def read_vector(dataset, word):
     return X
     
 
-def cluster(dataset, word):
+def cluster(dataset, word, eps=25, savefig=False):
+    """
+    聚类接口api
+    """
     X = read_vector(dataset, word)
-    res = dbscan(X, savefig=dataset, word=word)
-    print(f"number of nodes:{len(res)}\nnumber of clusters:{len(set(res))}")
+    res = dbscan(
+        X, 
+        eps=eps,
+        savefig=savefig, 
+        dataset=dataset,
+        word=word
+    )
+    num_of_clusters = len(set(res))
     
+    metric = num_of_clusters
+    
+    return metric
+
+
+def generate_list_with_delta(min_interval, max_interval, delta):
+    my_list = []
+    current_value = min_interval
+    while current_value <= max_interval:
+        my_list.append(current_value)
+        current_value += delta
+    return my_list
+
+
+def maximize_metric_for_eps(dataset, word, delta=10, min_interval=1, max_interval=100, minndelta=0.001):
+    """
+    以精度为标准，递归的查找metric的最大值，从而求得聚类的最大值
+    """
+    maxx_metric = 0
+    maxx_met_eps = -1
+    
+    forLst = generate_list_with_delta(min_interval, max_interval, delta)
+
+    for eps in forLst:
+        metric = cluster(dataset, word, eps)
+        # print(f"eps:{eps} metric:{metric}")
+        if maxx_metric < metric:
+            maxx_metric = metric
+            maxx_met_eps = eps
+            
+    if delta > minndelta:
+        new_delta = delta/5
+        # print(f"recursive to next delta:{new_delta}")
+        return maximize_metric_for_eps(dataset, word, new_delta, maxx_met_eps-(2*new_delta), maxx_met_eps+ 2*new_delta)
+    else:
+        return maxx_metric, maxx_met_eps
 
 
 if __name__ == "__main__":
-    word_sit = summary_lex('weibo')
-    word_sit1 = summary_lex('tieba')
-    for i in word_sit:
-        if i not in word_sit1:
-            continue
-        if word_sit[i] > 50 and word_sit1[i]>50:
-            print(word_sit[i])
-            print(word_sit1[i])
-            cluster('weibo', i)
-            cluster('tieba', i)
+    # best_metric, best_eps = maximize_metric_for_eps("tieba", "你")
+    # print(f"best_eps:{best_eps}, best_metric:{best_metric}")
+    Lex_tieba = summary_lex("tieba")
+    Lex_weibo = summary_lex("weibo")
+    count = 50
+    aim_word_Lst = [] # 统计一下在两个词典中出现次数都大于count的词组
+    for i in tqdm.tqdm(Lex_tieba):
+        if Lex_tieba[i] > count and (i in Lex_weibo and Lex_weibo[i] > count):
+            aim_word_Lst.append(i)
+    # print(aim_word_Lst,len(aim_word_Lst))
+    for i in aim_word_Lst:
+        best_metric, best_eps = maximize_metric_for_eps("tieba", i)
+        best_metric1, best_eps1 = maximize_metric_for_eps("weibo", i)
+        print(f"word:{i}\nbest_metric in tieba:{best_metric}\nbest_metric in weibo:{best_metric1}")
+            

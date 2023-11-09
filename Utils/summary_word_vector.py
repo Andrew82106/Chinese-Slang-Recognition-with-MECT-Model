@@ -7,10 +7,11 @@ def summary_lex(dataset):
     """
     统计dataset中的各个词语出现次数
     """
-    assert dataset in ['weibo', 'tieba'], f"dataset illegal, got {dataset}"
+    assert dataset in ['weibo', 'tieba', 'msra'], f"dataset illegal, got {dataset}"
     nameToPath = {
         'tieba': tieba_vector,
-        'weibo': weibo_vector
+        'weibo': weibo_vector,
+        'msra': msra_vector
     }
     with open(nameToPath[dataset], 'rb') as f:
         X_dict = pickle.load(f)

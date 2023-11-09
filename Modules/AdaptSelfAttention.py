@@ -38,13 +38,13 @@ class AdaptSelfAttention(nn.Module):
         if dataset == 'weibo':
             self.randomAttention = nn.Parameter(torch.empty(1, self.num_heads, 320, 320), requires_grad=True)
         if dataset == 'msra':
-            self.randomAttention = nn.Parameter(torch.empty(1, self.num_heads, 640, 640), requires_grad=True)
+            self.randomAttention = nn.Parameter(torch.empty(1, self.num_heads, 990, 990), requires_grad=True)
         if dataset == 'demo':
             self.randomAttention = nn.Parameter(torch.empty(1, self.num_heads, 540, 540), requires_grad=True)
         if dataset == 'tieba':
             self.randomAttention = nn.Parameter(torch.empty(1, self.num_heads, 320, 320), requires_grad=True)
         if dataset == 'resume':
-            self.randomAttention = nn.Parameter(torch.empty(1, self.num_heads, 344, 344), requires_grad=True)
+            self.randomAttention = nn.Parameter(torch.empty(1, self.num_heads, 540, 540), requires_grad=True)
         if dataset == 'ontonotes':
             self.randomAttention = nn.Parameter(torch.empty(1, self.num_heads, 477, 477), requires_grad=True)
         if dataset == 'tc':

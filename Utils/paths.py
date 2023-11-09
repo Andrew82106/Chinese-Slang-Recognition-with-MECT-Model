@@ -21,12 +21,14 @@ radical_eng_path = os.path.join(charinfo, 'radicalEng.json')
 
 ontonote4ner_cn_path = '/home/ws/data/OntoNote4NER'
 msra_ner_cn_path = os.path.join(NER, 'MSRA_NER')
-resume_ner_path = '/home/ws/data/ResumeNER'
+resume_ner_path = os.path.join(NER, 'resume_NER')
 weibo_ner_path = os.path.join(NER, 'Weibo_NER')
 demo_ner_path = os.path.join(NER, 'Demo_NER')
 tieba_path = os.path.join(NER, 'tieba')
 
+
 tieba_vector = os.path.join(vector, 'tieba.pkl')
 weibo_vector = os.path.join(vector, 'weibo.pkl')
+msra_vector = os.path.join(vector, 'msra.pkl')
 if __name__ == '__main__':
     print(charinfo)

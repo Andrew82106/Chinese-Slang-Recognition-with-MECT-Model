@@ -142,12 +142,17 @@ def load_resume_ner(path, char_embedding_path=None, bigram_embedding_path=None, 
 @cache_results(_cache_fp='cache/msraner1', _refresh=False)
 def load_msra_ner_1(path, char_embedding_path=None, bigram_embedding_path=None, index_token=True, train_clip=False,
                     char_min_freq=1, bigram_min_freq=1, only_train_min_freq=0):
+    # print(train_clip)
+    # exit(0)
     if train_clip:
         train_path = os.path.join(path, 'train_dev.char.bmes_clip1')
         test_path = os.path.join(path, 'test.char.bmes_clip1')
     else:
         train_path = os.path.join(path, 'train_dev.char.bmes')
         test_path = os.path.join(path, 'test.char.bmes')
+        # train_path = os.path.join(path, 'train.txt')
+        # test_path = os.path.join(path, 'test.txt')
+        print(">>>>>>>>>>>>>>>>>>>>>>load all msra<<<<<<<<<<<<<<<<<<<<<<<<<<<<")
 
     loader = ConllLoader(['chars', 'target'])
     train_bundle = loader.load(train_path)
@@ -213,9 +218,13 @@ def load_weibo_ner(path, unigram_embedding_path=None, bigram_embedding_path=None
 
     # print(datasets['train'][:5])
 
-    train_path = os.path.join(path, 'weiboNER_2nd_conll.train_deseg')
-    dev_path = os.path.join(path, 'weiboNER_2nd_conll.dev_deseg')
-    test_path = os.path.join(path, 'weiboNER_2nd_conll.test_deseg')
+    # train_path = os.path.join(path, 'weiboNER_2nd_conll.train_deseg')
+    # dev_path = os.path.join(path, 'weiboNER_2nd_conll.dev_deseg')
+    # test_path = os.path.join(path, 'weiboNER_2nd_conll.test_deseg')
+    
+    train_path = os.path.join(path, 'weiboNER_2nd_conll.train')
+    dev_path = os.path.join(path, 'weiboNER_2nd_conll.dev')
+    test_path = os.path.join(path, 'weiboNER_2nd_conll.test')
 
     paths = {}
     paths['train'] = train_path

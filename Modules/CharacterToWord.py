@@ -8,7 +8,7 @@ class CTW(nn.Module):
     """
     def __init__(self):
         self.algo = 0
-        self.embeddings_size = 256
+        self.embeddings_size = [256,320]
         
     def seq(self, TensorInput):
         while TensorInput.shape != torch.squeeze(TensorInput, 0).shape:
@@ -22,7 +22,7 @@ class CTW(nn.Module):
             except Exception as e:
                 raise TypeError(f"Unable to convert to tensor. Error: {e}")
         data = self.seq(data)
-        if len(data.shape) != 2 or data.shape[1] != self.embeddings_size:
+        if len(data.shape) != 2 or data.shape[1] not in self.embeddings_size:
             raise ValueError(f"Tensor shape should be N*{self.embeddings_size}. Got {data.shape}.")
 
         return data

@@ -69,9 +69,9 @@ parser.add_argument('--only_lexicon_in_train', default=False)
 parser.add_argument('--word_min_freq', default=1, type=int)
 
 # hyper of training
-# parser.add_argument('--early_stop',default=40,type=int)
+parser.add_argument('--early_stop',default=40,type=int)
 parser.add_argument('--epoch', default=100, type=int)
-parser.add_argument('--batch', default=10, type=int)
+parser.add_argument('--batch', default=20, type=int)
 parser.add_argument('--optim', default='sgd', help='sgd|adam')
 parser.add_argument('--lr', default=1e-3, type=float)
 parser.add_argument('--embed_lr_rate', default=1, type=float)
@@ -231,6 +231,7 @@ elif args.dataset == 'weibo':
                                                   only_train_min_freq=args.only_train_min_freq
                                                   )
 elif args.dataset == 'msra':
+    args.train_clip = True
     datasets, vocabs, embeddings = load_msra_ner_1(msra_ner_cn_path, yangjie_rich_pretrain_unigram_path,
                                                    yangjie_rich_pretrain_bigram_path,
                                                    _refresh=refresh_data, index_token=False, train_clip=args.train_clip,
@@ -580,7 +581,7 @@ if args.status == 'train':
     
 elif args.status == 'run':
     print("INFO:: Load Model")
-    model_path = '/root/autodl-tmp/Chinese-Slang-Recognition-with-MECT-Model/model/best_CSR_MECTNER_f_2023-11-06-13-55-21'
+    model_path = '/root/autodl-tmp/Chinese-Slang-Recognition-with-MECT-Model/model/best_CSR_MECTNER_f_msra'
     states = torch.load(model_path).state_dict()
     model.load_state_dict(states)
     from fastNLP.core.predictor import Predictor
@@ -627,7 +628,8 @@ elif args.status == 'run':
         pass
 elif args.status == 'generate':
     # 生成词向量
-    model_path = '/root/autodl-tmp/Chinese-Slang-Recognition-with-MECT-Model/model/best_CSR_MECTNER_f_2023-11-06-13-55-21'
+    # model_path = '/root/autodl-tmp/Chinese-Slang-Recognition-with-MECT-Model/model/best_CSR_MECTNER_f_2023-11-06-13-55-21'
+    model_path = '/root/autodl-tmp/Chinese-Slang-Recognition-with-MECT-Model/model/best_CSR_MECTNER_f_msra'
     states = torch.load(model_path).state_dict()
     model.load_state_dict(states)
     from Modules.CharacterToWord import CTW
@@ -688,9 +690,16 @@ elif args.status == 'generate':
     tokenizer = ChineseTokenizer()
     save_path = "/root/autodl-tmp/Chinese-Slang-Recognition-with-MECT-Model/datasets/pickle_data"
     res = {"tokenize": [], "wordVector": []}
+    suc = 0
+    fai = 0
     for i in tqdm.tqdm(range(len(text['test'])), desc="将字向量转化为词向量"):
-        # print(text['test'])
-        # exit(0)
+        
+        try:
+            if (suc+fai)%1000 == 0:
+                print(f"suc rate:{100*suc/(suc+fai)}%")
+        except:
+            pass
+        
         sentence = text['test'][i:i+1]
         sentence.set_target("target")
         sentence.set_input("bigrams")
@@ -698,7 +707,12 @@ elif args.status == 'generate':
         sentence.set_input("lex_num")
         sentence.set_input("target")
         # sentence.print_field_meta()
-        test_label_list = predictor.predict(sentence)  # 预测结果
+        try:
+            test_label_list = predictor.predict(sentence)  # 预测结果
+        except Exception as e:
+            fai += 1
+            continue
+        suc += 1
         test_raw_char = sentence['raw_chars']     # 原始文字
         # print(f"test_raw_char:{test_raw_char[0]}")
         sentence = ""
@@ -709,7 +723,6 @@ elif args.status == 'generate':
         wordVector = CharacterToWord.run(mect4cner_out_vector, tokenize['wordGroupsID'])
         res['tokenize'].append(tokenize)
         res['wordVector'].append(wordVector)
-        
         
         
     file_name = f"{args.dataset if args.extra_datasets == 'None' else args.extra_datasets}.pkl"
