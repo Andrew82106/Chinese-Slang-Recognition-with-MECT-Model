@@ -10,6 +10,7 @@ from Modules.DWT import *
 import tqdm
 import pickle
 import torch
+import functools
 plt.rcParams['font.sans-serif']=['SimHei'] #Show Chinese label
 plt.rcParams['axes.unicode_minus']=False   #These two lines need to be set manually
 
@@ -34,6 +35,7 @@ def index2(metricLstA: list, metricLstB: list):
     return naive_DTW(metricLstA, metricLstB)
 
 
+@functools.lru_cache(1024)
 def dbscan(X, eps=25, savefig=False, word=None, dataset=None):
     """
     X: input matrix with size N x 256
@@ -116,6 +118,8 @@ def maximize_metric_for_eps(dataset, word, delta=10, min_interval=1, max_interva
     forLst = generate_list_with_delta(min_interval, max_interval, delta)
     # print(forLst)
     for eps in forLst:
+        if eps <= 0:
+            continue
         # print(f"eps:{eps} ", end="")
         metric = cluster(dataset, word, eps)
         # print(f"metric:{metric}")
@@ -126,13 +130,17 @@ def maximize_metric_for_eps(dataset, word, delta=10, min_interval=1, max_interva
     if delta > minndelta:
         new_delta = delta/5
         # print(f"recursive to next delta:{new_delta}")
-        return maximize_metric_for_eps(dataset, word, new_delta, maxx_met_eps-(2*new_delta), maxx_met_eps+ 2*new_delta)
+        res = maximize_metric_for_eps(dataset, word, new_delta, maxx_met_eps-(2*new_delta), maxx_met_eps+ 2*new_delta)
+        if res == 0:
+            return maxx_metric
+        else:
+            return res
     else:
         # return maxx_metric, maxx_met_eps
         return maxx_metric
     
     
-def calc_metric_in_steps(dataset, word, delta=10, min_interval=1, max_interval=100):
+def calc_metric_in_steps(dataset, word, delta=1, min_interval=1, max_interval=100):
     """
     平均的对某个范围内的聚类结果进行采样
     """
@@ -142,7 +150,7 @@ def calc_metric_in_steps(dataset, word, delta=10, min_interval=1, max_interval=1
     for eps in tqdm.tqdm(forLst):
         metric = cluster(dataset, word, eps)
         res.append(metric)
-    
+    print(f"res:{res}")
     return res
 
 

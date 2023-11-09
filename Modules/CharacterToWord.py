@@ -22,6 +22,8 @@ class CTW(nn.Module):
             except Exception as e:
                 raise TypeError(f"Unable to convert to tensor. Error: {e}")
         data = self.seq(data)
+        if len(data.shape) == 1:
+            data = data.unsqueeze(0)
         if len(data.shape) != 2 or data.shape[1] not in self.embeddings_size:
             raise ValueError(f"Tensor shape should be N*{self.embeddings_size}. Got {data.shape}.")
 
