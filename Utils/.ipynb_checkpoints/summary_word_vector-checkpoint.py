@@ -1,18 +1,14 @@
 import pickle
 import torch
 from Utils.paths import *
+from Utils.outfitDataset import OutdatasetLst, nameToPath
 
 
 def summary_lex(dataset):
     """
     统计dataset中的各个词语出现次数
     """
-    assert dataset in ['weibo', 'tieba', 'msra'], f"dataset illegal, got {dataset}"
-    nameToPath = {
-        'tieba': tieba_vector,
-        'weibo': weibo_vector,
-        'msra': msra_vector
-    }
+    assert dataset in OutdatasetLst, f"dataset illegal, got {dataset}"
     with open(nameToPath[dataset], 'rb') as f:
         X_dict = pickle.load(f)
     word_dict = {}

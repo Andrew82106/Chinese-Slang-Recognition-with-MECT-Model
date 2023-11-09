@@ -25,10 +25,14 @@ resume_ner_path = os.path.join(NER, 'resume_NER')
 weibo_ner_path = os.path.join(NER, 'Weibo_NER')
 demo_ner_path = os.path.join(NER, 'Demo_NER')
 tieba_path = os.path.join(NER, 'tieba')
+PKU_path = os.path.join(NER, 'PKU')
+wiki_path = os.path.join(NER, 'wiki')
 
 
 tieba_vector = os.path.join(vector, 'tieba.pkl')
 weibo_vector = os.path.join(vector, 'weibo.pkl')
 msra_vector = os.path.join(vector, 'msra.pkl')
+PKU_vector = os.path.join(vector, 'PKU.pkl')
+wiki_vector = os.path.join(vector, 'wiki.pkl')
 if __name__ == '__main__':
     print(charinfo)

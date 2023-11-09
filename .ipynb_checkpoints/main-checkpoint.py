@@ -29,6 +29,7 @@ from fastNLP.core.metrics import SpanFPreRecMetric, AccuracyMetric
 from fastNLP.core.callback import WarmupCallback, GradientClipCallback, EarlyStopCallback
 from fastNLP import LRScheduler, DataSetIter, SequentialSampler
 from torch.optim.lr_scheduler import LambdaLR
+from Utils.outfitDataset import OutdatasetLst
 # from models import LSTM_SeqLabel,LSTM_SeqLabel_True
 from fastNLP import logger
 import pprint
@@ -43,7 +44,7 @@ import sys
 parser = argparse.ArgumentParser()
 
 parser.add_argument('--status', default='train', choices=['train', 'run', 'generate'])
-parser.add_argument('--extra_datasets', default='None', choices=['None', 'tieba'])
+parser.add_argument('--extra_datasets', default='None', choices=OutdatasetLst)
 parser.add_argument('--msg', default='_')
 parser.add_argument('--train_clip', default=False, help='是不是要把train的char长度限制在200以内')
 parser.add_argument('--device', default='0')
@@ -581,7 +582,7 @@ if args.status == 'train':
     
 elif args.status == 'run':
     print("INFO:: Load Model")
-    model_path = '/root/autodl-tmp/Chinese-Slang-Recognition-with-MECT-Model/model/best_CSR_MECTNER_f_msra'
+    model_path = '/root/autodl-tmp/Chinese-Slang-Recognition-with-MECT-Model/model/best_CSR_MECTNER_f_msra1.0'
     states = torch.load(model_path).state_dict()
     model.load_state_dict(states)
     from fastNLP.core.predictor import Predictor
@@ -662,14 +663,33 @@ elif args.status == 'generate':
                                   args.train_clip, args.number_normalized, args.char_min_freq,
                                   args.bigram_min_freq, args.word_min_freq, args.only_train_min_freq,
                                   args.number_normalized, args.lexicon_name, load_dataset_seed))
-        datasets, vocabs, embeddings = load_tieba(tieba_path, yangjie_rich_pretrain_unigram_path,
-                                             yangjie_rich_pretrain_bigram_path,
-                                             _refresh=refresh_data, index_token=False, train_clip=args.train_clip,
-                                             _cache_fp=raw_dataset_cache_name1,
-                                             char_min_freq=args.char_min_freq,
-                                             bigram_min_freq=args.bigram_min_freq,
-                                             only_train_min_freq=args.only_train_min_freq
-                                             )
+        if args.extra_datasets == 'tieba':
+            datasets, vocabs, embeddings = load_tieba(tieba_path, yangjie_rich_pretrain_unigram_path,
+                                                 yangjie_rich_pretrain_bigram_path,
+                                                 _refresh=refresh_data, index_token=False, train_clip=args.train_clip,
+                                                 _cache_fp=raw_dataset_cache_name1,
+                                                 char_min_freq=args.char_min_freq,
+                                                 bigram_min_freq=args.bigram_min_freq,
+                                                 only_train_min_freq=args.only_train_min_freq
+                                                 )
+        elif args.extra_datasets == 'PKU':
+             datasets, vocabs, embeddings = load_PKU(PKU_path, yangjie_rich_pretrain_unigram_path,
+                                                 yangjie_rich_pretrain_bigram_path,
+                                                 _refresh=refresh_data, index_token=False, train_clip=args.train_clip,
+                                                 _cache_fp=raw_dataset_cache_name1,
+                                                 char_min_freq=args.char_min_freq,
+                                                 bigram_min_freq=args.bigram_min_freq,
+                                                 only_train_min_freq=args.only_train_min_freq
+                                                 )
+        elif args.extra_datasets == 'wiki':
+             datasets, vocabs, embeddings = load_wiki(wiki_path, yangjie_rich_pretrain_unigram_path,
+                                                 yangjie_rich_pretrain_bigram_path,
+                                                 _refresh=refresh_data, index_token=False, train_clip=args.train_clip,
+                                                 _cache_fp=raw_dataset_cache_name1,
+                                                 char_min_freq=args.char_min_freq,
+                                                 bigram_min_freq=args.bigram_min_freq,
+                                                 only_train_min_freq=args.only_train_min_freq
+                                                 )
         datasets, vocabs, embeddings = equip_chinese_ner_with_lexicon(datasets, vocabs, embeddings,
                                                               w_list, yangjie_rich_pretrain_word_path,
                                                               _refresh=refresh_data, _cache_fp=cache_name1,

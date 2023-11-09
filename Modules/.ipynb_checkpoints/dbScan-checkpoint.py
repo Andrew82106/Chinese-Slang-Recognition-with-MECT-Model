@@ -5,7 +5,8 @@ from sklearn.preprocessing import StandardScaler
 from sklearn.datasets import make_blobs
 from Utils.paths import *
 from Utils.summary_word_vector import summary_lex
-from DWT import *
+from Utils.outfitDataset import OutdatasetLst, nameToPath
+from Modules.DWT import *
 import tqdm
 import pickle
 import torch
@@ -59,11 +60,7 @@ def mkData():
 
 
 def read_vector(dataset, word):
-    assert dataset in ['weibo', 'tieba'], f"dataset illegal, got {dataset}"
-    nameToPath = {
-        'tieba': tieba_vector,
-        'weibo': weibo_vector
-    }
+    assert dataset in OutdatasetLst, f"dataset illegal, got {dataset}"
     with open(nameToPath[dataset], 'rb') as f:
         X_dict = pickle.load(f)
     X = None
@@ -117,10 +114,11 @@ def maximize_metric_for_eps(dataset, word, delta=10, min_interval=1, max_interva
     maxx_met_eps = -1
     
     forLst = generate_list_with_delta(min_interval, max_interval, delta)
-
+    # print(forLst)
     for eps in forLst:
+        # print(f"eps:{eps} ", end="")
         metric = cluster(dataset, word, eps)
-        # print(f"eps:{eps} metric:{metric}")
+        # print(f"metric:{metric}")
         if maxx_metric < metric:
             maxx_metric = metric
             maxx_met_eps = eps
@@ -138,9 +136,10 @@ def calc_metric_in_steps(dataset, word, delta=10, min_interval=1, max_interval=1
     """
     平均的对某个范围内的聚类结果进行采样
     """
+    # print('calc_metric_in_steps')
     forLst = generate_list_with_delta(min_interval, max_interval, delta)
     res = []
-    for eps in forLst:
+    for eps in tqdm.tqdm(forLst):
         metric = cluster(dataset, word, eps)
         res.append(metric)
     
@@ -151,7 +150,7 @@ if __name__ == "__main__":
     # best_metric, best_eps = maximize_metric_for_eps("tieba", "你")
     # print(f"best_eps:{best_eps}, best_metric:{best_metric}")
     Lex_tieba = summary_lex("tieba")
-    Lex_weibo = summary_lex("weibo")
+    Lex_weibo = summary_lex("PKU")
     count = 50
     aim_word_Lst = [] # 统计一下在两个词典中出现次数都大于count的词组
     for i in tqdm.tqdm(Lex_tieba):
