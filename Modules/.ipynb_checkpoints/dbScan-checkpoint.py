@@ -10,7 +10,8 @@ from Modules.DWT import *
 import tqdm
 import pickle
 import torch
-import functools
+from Utils.AutoCache import Cache
+cache = Cache()
 plt.rcParams['font.sans-serif']=['SimHei'] #Show Chinese label
 plt.rcParams['axes.unicode_minus']=False   #These two lines need to be set manually
 
@@ -35,7 +36,6 @@ def index2(metricLstA: list, metricLstB: list):
     return naive_DTW(metricLstA, metricLstB)
 
 
-@functools.lru_cache(1024)
 def dbscan(X, eps=25, savefig=False, word=None, dataset=None):
     """
     X: input matrix with size N x 256
@@ -80,6 +80,7 @@ def read_vector(dataset, word):
     return X
     
 
+@cache.cache_result(cache_path='cache_function_cluster.pkl')
 def cluster(dataset, word, eps=25, savefig=False):
     """
     聚类接口api

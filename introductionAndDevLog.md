@@ -235,3 +235,7 @@ word 你 in dataset weibo and tieba with function 最大化聚类函数: differe
   - 提出对整套算法的评测方案
   
   首先找数据集，数据集中人为的挑出一些暗语，然后以这些暗语为样本进行测试，计算F1值。
+  
+  - 开发记忆化模块，使用缓存进行提速
+  
+  详见Utils/AutoCache.py

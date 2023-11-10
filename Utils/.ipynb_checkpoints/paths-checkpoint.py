@@ -5,6 +5,7 @@ embeddings = os.path.join(rootPth, "datasets/embeddings")
 charinfo = os.path.join(rootPth, "datasets/charinfo")
 NER = os.path.join(rootPth, "datasets/NER")
 vector = os.path.join(rootPth, "datasets/pickle_data")
+cache_path = os.path.join(rootPth, "cache")
 
 
 yangjie_rich_pretrain_unigram_path = os.path.join(embeddings, 'gigaword_chn.all.a2b.uni.ite50.vec')

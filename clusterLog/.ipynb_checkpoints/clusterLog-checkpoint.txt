@@ -1,0 +1,13 @@
+word 身体 in dataset PKU and tieba with function 取样函数: difference is 0.0
+word 身体 in dataset PKU and tieba with function 最大化聚类函数: difference is 5
+word 大学 in dataset PKU and tieba with function 取样函数: difference is 0.0
+word 大学 in dataset PKU and tieba with function 最大化聚类函数: difference is 4
+word 运动员 in dataset PKU and tieba with function 取样函数: difference is 1.0
+word 身体 in dataset PKU and tieba with function 取样函数: difference is 0.0
+word 身体 in dataset PKU and tieba with function 最大化聚类函数: difference is 5
+word 大学 in dataset PKU and tieba with function 取样函数: difference is 0.0
+word 大学 in dataset PKU and tieba with function 最大化聚类函数: difference is 4
+word 运动员 in dataset PKU and tieba with function 取样函数: difference is 1.0
+word 运动员 in dataset PKU and tieba with function 最大化聚类函数: difference is 4
+word 身体 in dataset PKU and tieba with function 取样函数: difference is 0.0
+word 身体 in dataset PKU and tieba with function 最大化聚类函数: difference is 5

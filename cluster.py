@@ -35,7 +35,7 @@ def Find_many_word(dataset1, dataset2, mes=False):
 
 
 def compare(word, datasetLst):
-    file = "log/clusterLog/"
+    file = "clusterLog/"
     for FunctionID in range(0, 2):  # 对不同指标函数的结果进行测试
         metricLst = []
         for i in datasetLst:
