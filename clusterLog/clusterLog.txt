@@ -39,3 +39,17 @@ word 工资 in dataset PKU and tieba with function 取样函数: difference is 1
 word 工资 in dataset PKU and tieba with function 最大化聚类函数: difference is 3
 word 垃圾 in dataset PKU and tieba with function 取样函数: difference is 14.0
 word 垃圾 in dataset PKU and tieba with function 最大化聚类函数: difference is 5
+word 身体 in dataset PKU and tieba with function 取样函数: difference is 13.0
+word 身体 in dataset PKU and tieba with function 最大化聚类函数: difference is 5
+word 大学 in dataset PKU and tieba with function 取样函数: difference is 9.0
+word 大学 in dataset PKU and tieba with function 最大化聚类函数: difference is 4
+word 运动员 in dataset PKU and tieba with function 取样函数: difference is 1.0
+word 运动员 in dataset PKU and tieba with function 最大化聚类函数: difference is 4
+word 工资 in dataset PKU and tieba with function 取样函数: difference is 15.0
+word 工资 in dataset PKU and tieba with function 最大化聚类函数: difference is 3
+word 垃圾 in dataset PKU and tieba with function 取样函数: difference is 14.0
+word 垃圾 in dataset PKU and tieba with function 最大化聚类函数: difference is 5
+word 美国 in dataset PKU and tieba with function 取样函数: difference is 11.0
+word 美国 in dataset PKU and tieba with function 最大化聚类函数: difference is 3
+word 中国 in dataset PKU and tieba with function 取样函数: difference is 47.0
+word 中国 in dataset PKU and tieba with function 最大化聚类函数: difference is 25
