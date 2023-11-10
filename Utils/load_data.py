@@ -513,6 +513,62 @@ def load_PKU(path, char_embedding_path=None, bigram_embedding_path=None, index_t
         embeddings['bigram'] = bigram_embedding
     return datasets, vocabs, embeddings
 
+@cache_results(_cache_fp='cache/anwang', _refresh=True)
+def load_anwang(path, char_embedding_path=None, bigram_embedding_path=None, index_token=True, train_clip=False,
+                    char_min_freq=1, bigram_min_freq=1, only_train_min_freq=0):
+    train_path = os.path.join(path, 'anwang.bmes')
+    test_path = os.path.join(path, 'anwang.bmes')
+    
+    loader = ConllLoader(['chars', 'target'])
+    train_bundle = loader.load(train_path)  # 这一句有invalid instance的情况出现
+    test_bundle = loader.load(test_path)
+   
+    datasets = dict()
+    datasets['train'] = train_bundle.datasets['train']
+    datasets['test'] = test_bundle.datasets['train']
+   
+
+    datasets['train'].apply_field(get_bigrams, field_name='chars', new_field_name='bigrams')
+    datasets['test'].apply_field(get_bigrams, field_name='chars', new_field_name='bigrams')
+    datasets['train'].add_seq_len('chars')
+    datasets['test'].add_seq_len('chars')
+    char_vocab = Vocabulary()
+    bigram_vocab = Vocabulary()
+    label_vocab = Vocabulary()
+    print(datasets.keys())
+    print(len(datasets['test']))
+    print(len(datasets['train']))
+
+    char_vocab.from_dataset(datasets['train'], field_name='chars',
+                            no_create_entry_dataset=[datasets['test']])
+    bigram_vocab.from_dataset(datasets['train'], field_name='bigrams',
+                              no_create_entry_dataset=[datasets['test']])
+    label_vocab.from_dataset(datasets['train'], field_name='target')
+    if index_token:
+        char_vocab.index_dataset(datasets['train'], datasets['test'],
+                                 field_name='chars', new_field_name='chars')
+        bigram_vocab.index_dataset(datasets['train'], datasets['test'],
+                                   field_name='bigrams', new_field_name='bigrams')
+        label_vocab.index_dataset(datasets['train'], datasets['test'],
+                                  field_name='target', new_field_name='target')
+
+    vocabs = {}
+    vocabs['char'] = char_vocab
+    vocabs['label'] = label_vocab
+    vocabs['bigram'] = bigram_vocab
+    vocabs['label'] = label_vocab 
+    embeddings = {}
+    if char_embedding_path is not None:
+        char_embedding = StaticEmbedding(char_vocab, char_embedding_path, word_dropout=0.01,
+                                         min_freq=char_min_freq, only_train_min_freq=only_train_min_freq)
+        embeddings['char'] = char_embedding
+
+    if bigram_embedding_path is not None:
+        bigram_embedding = StaticEmbedding(bigram_vocab, bigram_embedding_path, word_dropout=0.01,
+                                           min_freq=bigram_min_freq, only_train_min_freq=only_train_min_freq)
+        embeddings['bigram'] = bigram_embedding
+    return datasets, vocabs, embeddings
+
 
 @cache_results(_cache_fp='cache/wiki', _refresh=True)
 def load_wiki(path, char_embedding_path=None, bigram_embedding_path=None, index_token=True, train_clip=False,

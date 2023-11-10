@@ -690,6 +690,15 @@ elif args.status == 'generate':
                                                  bigram_min_freq=args.bigram_min_freq,
                                                  only_train_min_freq=args.only_train_min_freq
                                                  )
+        elif args.extra_datasets == 'anwang':
+             datasets, vocabs, embeddings = load_anwang(anwang_path, yangjie_rich_pretrain_unigram_path,
+                                                 yangjie_rich_pretrain_bigram_path,
+                                                 _refresh=refresh_data, index_token=False, train_clip=args.train_clip,
+                                                 _cache_fp=raw_dataset_cache_name1,
+                                                 char_min_freq=args.char_min_freq,
+                                                 bigram_min_freq=args.bigram_min_freq,
+                                                 only_train_min_freq=args.only_train_min_freq
+                                                 )
         datasets, vocabs, embeddings = equip_chinese_ner_with_lexicon(datasets, vocabs, embeddings,
                                                               w_list, yangjie_rich_pretrain_word_path,
                                                               _refresh=refresh_data, _cache_fp=cache_name1,

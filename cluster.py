@@ -58,3 +58,7 @@ if __name__ == "__main__":
     compare("身体", ["PKU", "tieba"])
     compare("大学", ["PKU", "tieba"])
     compare("运动员", ["PKU", "tieba"])
+    compare("工资", ["PKU", "tieba"])
+    compare("垃圾", ["PKU", "tieba"])
+    compare("美国", ["PKU", "tieba"])
+    compare("中国", ["PKU", "tieba"])

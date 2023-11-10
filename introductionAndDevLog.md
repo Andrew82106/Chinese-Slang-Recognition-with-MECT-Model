@@ -239,3 +239,15 @@ word 你 in dataset weibo and tieba with function 最大化聚类函数: differe
   - 开发记忆化模块，使用缓存进行提速
   
   详见Utils/AutoCache.py
+  
+  关于提速这件事情，之前做过的调研表示，其实sklearn也是可以gpu加速的，使用cudf包就可以，但是问题在于，这个包一般的pip安装不了，得下源代码编译。
+  
+  于是找了另外一个库：[sklearnex库](https://cloud.tencent.com/developer/article/2042042)
+  
+  这个库据说也可以加速一些，但是是基于CPU加速的，服务器的GPU还是闲着的......
+  
+  - 添加数据集
+  
+  添加了暗语数据集，使用msra的模型能够达到100%的转化率，可以的
+  
+  下一步是需要去找一些有明显俚语的数据集
