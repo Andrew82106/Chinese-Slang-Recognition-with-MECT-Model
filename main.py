@@ -1,3 +1,5 @@
+import os
+
 import fitlog
 import tqdm
 from Modules.CNNRadicalLevelEmbedding import CNNRadicalLevelEmbedding
@@ -190,7 +192,7 @@ for k, v in args.__dict__.items():
 
 
 raw_dataset_cache_name = os.path.join('cache', args.dataset +
-                                      '_trainClip:{}'.format(args.train_clip)
+                                      '_trainClip{}'.format(args.train_clip)
                                       + 'bgminfreq_{}'.format(args.bigram_min_freq)
                                       + 'char_min_freq_{}'.format(args.char_min_freq)
                                       + 'word_min_freq_{}'.format(args.word_min_freq)
@@ -360,8 +362,8 @@ w_list = load_yangjie_rich_pretrain_word_list(yangjie_rich_pretrain_word_path,
                                               _refresh=refresh_data,
                                               _cache_fp='cache/{}'.format(args.lexicon_name))
 # w_list就是一个词表
-cache_name = os.path.join('cache', (args.dataset + '_lattice' + '_only_train:{}' +
-                                    '_trainClip:{}' + '_norm_num:{}'
+cache_name = os.path.join('cache', (args.dataset + '_lattice' + '_only_train{}' +
+                                    '_trainClip{}' + '_norm_num{}'
                                     + 'char_min_freq{}' + 'bigram_min_freq{}' + 'word_min_freq{}' + 'only_train_min_freq{}'
                                     + 'number_norm{}' + 'lexicon_{}' + 'load_dataset_seed{}')
                           .format(args.only_lexicon_in_train,
@@ -375,6 +377,18 @@ if args.dataset == 'weibo':
         cache_name = 'nm' + cache_name
 
 # print(datasets['train'])
+
+def debugOnWin():
+    print(cache_name)
+    print(yangjie_rich_pretrain_word_path)
+    print(yangjie_rich_pretrain_char_and_word_path)
+
+
+if "\\" in cache_name:
+    cache_name = cache_name.replace("/", "\\")
+    cache_name = os.path.join(rootPth, cache_name)
+
+debugOnWin()
 
 
 datasets, vocabs, embeddings = equip_chinese_ner_with_lexicon(datasets, vocabs, embeddings,
@@ -630,7 +644,7 @@ elif args.status == 'run':
 elif args.status == 'generate':
     # 生成词向量
     # model_path = '/root/autodl-tmp/Chinese-Slang-Recognition-with-MECT-Model/model/best_CSR_MECTNER_f_2023-11-06-13-55-21'
-    model_path = '/root/autodl-tmp/Chinese-Slang-Recognition-with-MECT-Model/model/best_CSR_MECTNER_f_msra'
+    model_path = os.path.join(rootPth, 'model/best_CSR_MECTNER_f_msra')
     states = torch.load(model_path).state_dict()
     model.load_state_dict(states)
     from Modules.CharacterToWord import CTW
@@ -647,7 +661,7 @@ elif args.status == 'generate':
     
     if args.extra_datasets != 'None':
         raw_dataset_cache_name1 = os.path.join('cache', args.extra_datasets +
-                                      '_trainClip:{}'.format(args.train_clip)
+                                      '_trainClip{}'.format(args.train_clip)
                                       + 'bgminfreq_{}'.format(args.bigram_min_freq)
                                       + 'char_min_freq_{}'.format(args.char_min_freq)
                                       + 'word_min_freq_{}'.format(args.word_min_freq)
@@ -656,7 +670,7 @@ elif args.status == 'generate':
                                       + 'load_dataset_seed{}'.format(load_dataset_seed)
                                       )
         cache_name1 = os.path.join('cache', (args.extra_datasets + '_lattice' + '_only_train:{}' +
-                                    '_trainClip:{}' + '_norm_num:{}'
+                                    '_trainClip{}' + '_norm_num{}'
                                     + 'char_min_freq{}' + 'bigram_min_freq{}' + 'word_min_freq{}' + 'only_train_min_freq{}'
                                     + 'number_norm{}' + 'lexicon_{}' + 'load_dataset_seed{}')
                           .format(args.only_lexicon_in_train,
@@ -717,18 +731,18 @@ elif args.status == 'generate':
     sentenceID = random.randint(0, len(text['test'])-1)
     CharacterToWord = CTW()
     tokenizer = ChineseTokenizer()
-    save_path = "/root/autodl-tmp/Chinese-Slang-Recognition-with-MECT-Model/datasets/pickle_data"
+    save_path = os.path.join(rootPth, "datasets/pickle_data")
     res = {"tokenize": [], "wordVector": []}
     suc = 0
     fai = 0
     for i in tqdm.tqdm(range(len(text['test'])), desc="将字向量转化为词向量"):
-        
+        """
         try:
             if (suc+fai)%1000 == 0:
                 print(f"suc rate:{100*suc/(suc+fai)}%")
         except:
             pass
-        
+        """
         sentence = text['test'][i:i+1]
         sentence.set_target("target")
         sentence.set_input("bigrams")
@@ -752,7 +766,7 @@ elif args.status == 'generate':
         wordVector = CharacterToWord.run(mect4cner_out_vector, tokenize['wordGroupsID'])
         res['tokenize'].append(tokenize)
         res['wordVector'].append(wordVector)
-        
+    print(f"suc rate:{100 * suc / (suc + fai)}%")
         
     file_name = f"{args.dataset if args.extra_datasets == 'None' else args.extra_datasets}.pkl"
     write_to_pickle(os.path.join(save_path, file_name), res)

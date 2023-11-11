@@ -15,8 +15,11 @@ with open(radical_eng_path, 'r') as f:
     engRadicalLst = json.load(f)
 
 char_info = dict()
-with open(radical_path, 'r') as f:
-    lines = f.readlines()
+with open(radical_path, 'r', encoding='utf-8') as f:
+    try:
+        lines = f.readlines()
+    except Exception as e:
+        raise Exception(str(e) + f"\npath={radical_path}")
     for line in lines:
         char, info = line.split('\t', 1)
         char_info[char] = info.replace('\n', '').split('\t')

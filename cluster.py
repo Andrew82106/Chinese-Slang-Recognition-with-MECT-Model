@@ -1,4 +1,5 @@
 from Modules.dbScan import *
+import tqdm
 import os
 
 metrics_calc_function = [
@@ -47,14 +48,19 @@ def compare(word, datasetLst):
                     continue
                 index = evaluate_function[FunctionID](metricLst[i], metricLst[j])
                 log = f"word {word} in dataset {datasetLst[i]} and {datasetLst[j]} with function {function_name[FunctionID]}: difference is {index}"
-                print(log)
+                # print(log)
                 with open(os.path.join(file, "clusterLog.txt"), "a", encoding='utf-8') as f:
                     f.write(str(log) + "\n")
 
 
 if __name__ == "__main__":
-    d = Find_many_word("PKU", "tieba", 1)
+    d = Find_many_word("wiki", "anwang", 1)
+    d.reverse()
     print(d)
+    for i in tqdm.tqdm(d):
+        compare(i, ["wiki", "tieba"])
+        # print(i)
+    """
     compare("身体", ["PKU", "tieba"])
     compare("大学", ["PKU", "tieba"])
     compare("运动员", ["PKU", "tieba"])
@@ -62,3 +68,4 @@ if __name__ == "__main__":
     compare("垃圾", ["PKU", "tieba"])
     compare("美国", ["PKU", "tieba"])
     compare("中国", ["PKU", "tieba"])
+    """

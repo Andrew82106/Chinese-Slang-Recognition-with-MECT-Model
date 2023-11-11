@@ -4,6 +4,7 @@ from sklearn.cluster import DBSCAN
 from sklearn.preprocessing import StandardScaler
 from sklearn.datasets import make_blobs
 from sklearnex import patch_sklearn, unpatch_sklearn
+
 patch_sklearn()
 from Utils.paths import *
 from Utils.summary_word_vector import summary_lex
@@ -13,9 +14,11 @@ import tqdm
 import pickle
 import torch
 from Utils.AutoCache import Cache
+
 cache = Cache()
-plt.rcParams['font.sans-serif']=['SimHei'] #Show Chinese label
-plt.rcParams['axes.unicode_minus']=False   #These two lines need to be set manually
+plt.rcParams['font.sans-serif'] = ['SimHei']  # Show Chinese label
+plt.rcParams['axes.unicode_minus'] = False  # These two lines need to be set manually
+
 
 def saveFig(X, clusters, name="your_plot_name", xlabel='Feature 1', ylabel='Feature 2', title='DBSCAN Clustering'):
     plt.scatter(X[:, 0], X[:, 1], c=clusters, cmap='viridis')
@@ -24,11 +27,12 @@ def saveFig(X, clusters, name="your_plot_name", xlabel='Feature 1', ylabel='Feat
     plt.ylabel(ylabel)
     plt.savefig(f'cluster_result/{name}.png')
 
+
 def index1(metricA: int, metricB: int):
     """
     按照第一种方法计算指标的相似度
     """
-    return abs(metricA-metricB)
+    return abs(metricA - metricB)
 
 
 def index2(metricLstA: list, metricLstB: list):
@@ -47,9 +51,9 @@ def dbscan(X, eps=25, savefig=False, word=None, dataset=None):
     clusters = dbscan.fit_predict(X)
     if savefig:
         saveFig(
-            X, 
-            clusters, 
-            name=savefig if word is None else f"{word} in {savefig}", 
+            X,
+            clusters,
+            name=savefig if word is None else f"{word} in {savefig}",
             title=f"{savefig} clustering" if word is None else f"{savefig} clustering of word {word}"
         )
     return clusters
@@ -71,7 +75,7 @@ def read_vector(dataset, word):
     for ID in range(len(X_dict['tokenize'])):
         sentence_meta = X_dict['tokenize'][ID]
         for wordID in range(len(sentence_meta['wordCutResult'])):
-            
+
             if sentence_meta['wordCutResult'][wordID] == word:
                 vector = X_dict['wordVector'][ID][wordID]
                 # print(vector.shape)
@@ -80,7 +84,7 @@ def read_vector(dataset, word):
                 else:
                     X = torch.cat((X, vector.unsqueeze(0)), dim=0)
     return X
-    
+
 
 @cache.cache_result(cache_path='cache_function_cluster.pkl')
 def cluster(dataset, word, eps=25, savefig=False):
@@ -89,16 +93,16 @@ def cluster(dataset, word, eps=25, savefig=False):
     """
     X = read_vector(dataset, word)
     res = dbscan(
-        X, 
+        X,
         eps=eps,
-        savefig=savefig, 
+        savefig=savefig,
         dataset=dataset,
         word=word
     )
     num_of_clusters = len(set(res))
-    
+
     metric = num_of_clusters
-    
+
     return metric
 
 
@@ -117,7 +121,7 @@ def maximize_metric_for_eps(dataset, word, delta=10, min_interval=1, max_interva
     """
     maxx_metric = 0
     maxx_met_eps = -1
-    
+
     forLst = generate_list_with_delta(min_interval, max_interval, delta)
     # print(forLst)
     for eps in forLst:
@@ -129,11 +133,12 @@ def maximize_metric_for_eps(dataset, word, delta=10, min_interval=1, max_interva
         if maxx_metric < metric:
             maxx_metric = metric
             maxx_met_eps = eps
-            
+
     if delta > minndelta:
-        new_delta = delta/5
+        new_delta = delta / 5
         # print(f"recursive to next delta:{new_delta}")
-        res = maximize_metric_for_eps(dataset, word, new_delta, maxx_met_eps-(2*new_delta), maxx_met_eps+ 2*new_delta)
+        res = maximize_metric_for_eps(dataset, word, new_delta, maxx_met_eps - (2 * new_delta),
+                                      maxx_met_eps + 2 * new_delta)
         if res == 0:
             return maxx_metric
         else:
@@ -141,8 +146,8 @@ def maximize_metric_for_eps(dataset, word, delta=10, min_interval=1, max_interva
     else:
         # return maxx_metric, maxx_met_eps
         return maxx_metric
-    
-    
+
+
 def calc_metric_in_steps(dataset, word, delta=1, min_interval=1, max_interval=100):
     """
     平均的对某个范围内的聚类结果进行采样
@@ -150,10 +155,10 @@ def calc_metric_in_steps(dataset, word, delta=1, min_interval=1, max_interval=10
     # print('calc_metric_in_steps')
     forLst = generate_list_with_delta(min_interval, max_interval, delta)
     res = []
-    for eps in tqdm.tqdm(forLst):
+    for eps in forLst:
         metric = cluster(dataset, word, eps)
         res.append(metric)
-    print(f"res:{res}")
+    # print(f"res:{res}")
     return res
 
 
@@ -163,7 +168,7 @@ if __name__ == "__main__":
     Lex_tieba = summary_lex("tieba")
     Lex_weibo = summary_lex("PKU")
     count = 50
-    aim_word_Lst = [] # 统计一下在两个词典中出现次数都大于count的词组
+    aim_word_Lst = []  # 统计一下在两个词典中出现次数都大于count的词组
     for i in tqdm.tqdm(Lex_tieba):
         if Lex_tieba[i] > count and (i in Lex_weibo and Lex_weibo[i] > count):
             aim_word_Lst.append(i)
@@ -172,4 +177,3 @@ if __name__ == "__main__":
         best_metric, best_eps = maximize_metric_for_eps("tieba", i)
         best_metric1, best_eps1 = maximize_metric_for_eps("weibo", i)
         print(f"word:{i}\nbest_metric in tieba:{best_metric}\nbest_metric in weibo:{best_metric1}")
-            
