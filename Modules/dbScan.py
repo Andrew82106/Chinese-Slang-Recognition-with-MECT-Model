@@ -92,13 +92,17 @@ def cluster(dataset, word, eps=25, savefig=False):
     聚类接口api
     """
     X = read_vector(dataset, word)
-    res = dbscan(
-        X,
-        eps=eps,
-        savefig=savefig,
-        dataset=dataset,
-        word=word
-    )
+    try:
+        res = dbscan(
+            X,
+            eps=eps,
+            savefig=savefig,
+            dataset=dataset,
+            word=word
+        )
+    except Exception as e:
+        print(f"eps:{eps}\nX:{X}\ndataset:{dataset}\nword:{word}")
+        raise e
     num_of_clusters = len(set(res))
 
     metric = num_of_clusters

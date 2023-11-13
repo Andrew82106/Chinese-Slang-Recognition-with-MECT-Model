@@ -54,18 +54,12 @@ def compare(word, datasetLst):
 
 
 if __name__ == "__main__":
-    d = Find_many_word("wiki", "anwang", 1)
+    dtset1 = 'wiki'
+    dtset2 = 'anwang'
+    d = Find_many_word(dtset1, dtset2, 1)
     d.reverse()
     print(d)
     for i in tqdm.tqdm(d):
+        if read_vector(dtset1, i) is None or read_vector(dtset2, i) is None:
+            continue
         compare(i, ["wiki", "tieba"])
-        # print(i)
-    """
-    compare("身体", ["PKU", "tieba"])
-    compare("大学", ["PKU", "tieba"])
-    compare("运动员", ["PKU", "tieba"])
-    compare("工资", ["PKU", "tieba"])
-    compare("垃圾", ["PKU", "tieba"])
-    compare("美国", ["PKU", "tieba"])
-    compare("中国", ["PKU", "tieba"])
-    """

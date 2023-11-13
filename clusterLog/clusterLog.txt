@@ -125,3 +125,9 @@ word 适合 in dataset PKU and tieba with function 取样函数: difference is 2
 word 适合 in dataset PKU and tieba with function 最大化聚类函数: difference is 10
 word 工程师 in dataset wiki and tieba with function 取样函数: difference is 14.0
 word 工程师 in dataset wiki and tieba with function 最大化聚类函数: difference is 1
+word 工程师 in dataset wiki and tieba with function 取样函数: difference is 14.0
+word 工程师 in dataset wiki and tieba with function 最大化聚类函数: difference is 1
+word 工程师 in dataset wiki and tieba with function 取样函数: difference is 14.0
+word 工程师 in dataset wiki and tieba with function 最大化聚类函数: difference is 1
+word 工程师 in dataset wiki and tieba with function 取样函数: difference is 14.0
+word 工程师 in dataset wiki and tieba with function 最大化聚类函数: difference is 1
