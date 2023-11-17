@@ -37,5 +37,7 @@ msra_vector = os.path.join(vector, 'msra.pkl')
 PKU_vector = os.path.join(vector, 'PKU.pkl')
 anwang_vector = os.path.join(vector, 'anwang.pkl')
 wiki_vector = os.path.join(vector, 'wiki.pkl')
+
+clusterLog_path = os.path.join(rootPth, "clusterLog", "clusterLog.txt")
 if __name__ == '__main__':
     print(charinfo)
