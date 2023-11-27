@@ -336,3 +336,24 @@ CSR_MECT的巨大优势之一，是不需要打标好的数据，只需要纯文
 具体而言，需要基于MNGG数据集测试各种序列标注模型的效果，包括LR-CNN、LGN、lattice-lstm、BERT-NER和修改后的CSR_MECT模型
 
 然后看实验效果进行下一步工作。
+
+## 有个idea
+
+仔细看11月7日的图，不难发现，对于同一个word来说，在相同的eps下，如果两个数据集中这个词语使用的方式类似，那么其聚类效果在空间上的分布也是一样的
+
+比如图里面的句号，在两个数据集中聚类结果形状一样，位置也一样
+
+那么，是不是我们可以通过直接对比当前词语的向量和已知当前词语在正常数据集中的聚类结果就可以判断词语是否是暗语词汇了？
+
+
+比如：
+
+
+```python
+def checkWord(word, clusterResult):
+    for cluster in clusterResult:
+        if word in cluster:
+            return True
+        else:
+            return False
+```
