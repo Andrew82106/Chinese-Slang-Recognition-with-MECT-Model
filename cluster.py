@@ -57,15 +57,7 @@ def compare(word, datasetLst):
 if __name__ == "__main__":
     xxx = ['weibo', 'tieba', 'msra', 'PKU', 'wiki', 'anwang']
     for i in tqdm.tqdm(xxx):
-        cluster(i, "我们", savefig=True, eps=15)
-    for i in tqdm.tqdm(xxx):
-        cluster(i, "在", savefig=True, eps=15)
-    for i in tqdm.tqdm(xxx):
-        cluster(i, "的", savefig=True, eps=15)
-    for i in tqdm.tqdm(xxx):
-        cluster(i, "是", savefig=True, eps=15)
-    for i in tqdm.tqdm(xxx):
-        cluster(i, "吧", savefig=True, eps=15)
+        cluster(i, "中国", savefig=True, eps=15)
     exit()
     dtset1 = 'PKU'
     dtset2 = 'anwang'
