@@ -11,8 +11,8 @@ try:
 except:
     print("sklearnex isn't available, skip init sklearnex")
 
-
 from Utils.paths import *
+from sklearn.metrics.pairwise import pairwise_distances
 from Utils.summary_word_vector import summary_lex
 from Utils.outfitDataset import OutdatasetLst, nameToPath
 from Modules.DWT import *
@@ -50,7 +50,13 @@ def index2(metricLstA: list, metricLstB: list):
 
 def dbscan(X, eps=25, savefig=False, word=None, dataset=None):
     """
-    X: input matrix with size N x 256
+    # 进行dbscan聚类
+    Input: X: input matrix with size N x 256，即输入的词的向量集合
+    Input: eps: 即ε-邻域的epsilon值
+    Input: savefig: 是否保存聚类结果图
+    Input: word: 该聚类对应的词语
+    Input: dataset: 该聚类对应的词语所在的数据集
+    Input: clusters: 聚类结果
     """
     X = StandardScaler().fit_transform(X)
     dbscan = DBSCAN(eps=eps, min_samples=5)
@@ -61,9 +67,41 @@ def dbscan(X, eps=25, savefig=False, word=None, dataset=None):
             X,
             clusters,
             name=(savefig if word is None else f"{word}_in_{dataset}") + f"[with_eps={eps}&n={n}]",
-            title=(f"{dataset} clustering" if word is None else f"{dataset} clustering of word {word}") + f"[with_eps={eps}&n={n}]",
+            title=(
+                      f"{dataset} clustering" if word is None else f"{dataset} clustering of word {word}") + f"[with_eps={eps}&n={n}]",
         )
     return clusters
+
+
+def getCenter(clusters):
+    """
+    # 获取核心点的索引和坐标
+    input: clusters，即聚类结果
+    output: core_indices，即核心点的索引
+    output: core_points，即核心点的坐标
+    """
+    core_indices = clusters.core_sample_indices_
+    core_points = clusters[core_indices]
+
+    return dbscan, core_points
+
+
+def is_in_epsilon_neighborhood(new_vector, core_points, epsilon, metric='euclidean'):
+    """
+    # 判断新向量new_vector是否在核心点core_points的 ε-邻域内
+    input: new_vector，即新向量
+    input: core_points，即核心点
+    input: epsilon，即ε-邻域的epsilon值
+    input: metric，即距离计算的函数，默认为euclidean，即欧几里得距离
+    output: is_in_epsilon，即判断结果
+    """
+    # 计算新向量与核心点之间的距离
+    distances = pairwise_distances(core_points, [new_vector], metric=metric)
+
+    # 判断新向量是否在 ε-邻域内
+    is_in_epsilon = np.any(distances <= epsilon)
+
+    return is_in_epsilon
 
 
 def mkData():
@@ -75,6 +113,12 @@ def mkData():
 
 
 def read_vector(dataset, word):
+    """
+    # 从dataset数据集读取word词语的词向量
+    Input: dataset: 数据集的名称，比如weibo，anwang等
+    Input: word: 需要读取的词语
+    Output: X: dataset数据集中word词语的词向量集合，size为N x embeddingLength
+    """
     assert dataset in OutdatasetLst, f"dataset illegal, got {dataset}"
     with open(nameToPath[dataset], 'rb') as f:
         X_dict = pickle.load(f)
