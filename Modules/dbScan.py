@@ -3,9 +3,15 @@ import matplotlib.pyplot as plt
 from sklearn.cluster import DBSCAN
 from sklearn.preprocessing import StandardScaler
 from sklearn.datasets import make_blobs
-from sklearnex import patch_sklearn, unpatch_sklearn
 
-patch_sklearn()
+try:
+    from sklearnex import patch_sklearn, unpatch_sklearn
+
+    patch_sklearn()
+except:
+    print("sklearnex isn't available, skip init sklearnex")
+
+
 from Utils.paths import *
 from Utils.summary_word_vector import summary_lex
 from Utils.outfitDataset import OutdatasetLst, nameToPath

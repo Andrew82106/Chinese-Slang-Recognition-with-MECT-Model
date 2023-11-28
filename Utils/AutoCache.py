@@ -13,7 +13,7 @@ class Cache:
     def __init__(self):
         self.cache_path = os.path.join(cache_path, "cluster_cache")
 
-    def cache_result(self, cache_path=None):
+    def cache_result(self, cache_path=None, refresh=False):
         def decorator(func):
             cache = {}
             cache_loaded = False
@@ -34,7 +34,7 @@ class Cache:
                     key.update(str(v).encode())
                 key = key.hexdigest()
 
-                if key in cache:
+                if key in cache and refresh is False:
                     return cache[key]
                 else:
                     result = func(*args, **kwargs)
@@ -75,6 +75,7 @@ if __name__ == "__main__":
         print(f"i={i}:{expensive_computation(i)}")
     lst = [i for i in range(10)]
     lst1 = [i for i in range(11)]
+
     print(expensive_computation(lst))
     print(expensive_computation(lst1))
     print(expensive_computation(lst, 1))

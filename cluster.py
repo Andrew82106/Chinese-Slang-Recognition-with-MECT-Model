@@ -25,12 +25,13 @@ def Find_many_word(dataset1, dataset2, mes=False):
     Lex_tieba = summary_lex(dataset1)
     Lex_weibo = summary_lex(dataset2)
     count = 50
-    aim_word_Lst = [] # 统计一下在两个词典中出现次数都大于count的词组
+    aim_word_Lst = []  # 统计一下在两个词典中出现次数都大于count的词组
     for i in Lex_tieba:
         if Lex_tieba[i] > count and (i in Lex_weibo and Lex_weibo[i] > count):
             aim_word_Lst.append(i)
             if mes:
-                print(f"word {i} occurs in dataset {dataset1}:{Lex_tieba[i]} and occurs in dataset {dataset2}:{Lex_weibo[i]}")
+                print(
+                    f"word {i} occurs in dataset {dataset1}:{Lex_tieba[i]} and occurs in dataset {dataset2}:{Lex_weibo[i]}")
     # print(aim_word_Lst,len(aim_word_Lst))
     return aim_word_Lst
 
@@ -74,4 +75,3 @@ if __name__ == "__main__":
             compare(i, [dtset1, dtset2])
         except:
             pass
-
