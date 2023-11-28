@@ -72,7 +72,7 @@ parser.add_argument('--only_lexicon_in_train', default=False)
 parser.add_argument('--word_min_freq', default=1, type=int)
 
 # hyper of training
-parser.add_argument('--early_stop',default=40,type=int)
+parser.add_argument('--early_stop', default=40, type=int)
 parser.add_argument('--epoch', default=100, type=int)
 parser.add_argument('--batch', default=20, type=int)
 parser.add_argument('--optim', default='sgd', help='sgd|adam')
@@ -376,6 +376,7 @@ if args.dataset == 'weibo':
     elif args.label == 'nm':
         cache_name = 'nm' + cache_name
 
+
 # print(datasets['train'])
 
 def debugOnWin():
@@ -390,15 +391,16 @@ if "\\" in cache_name:
 
 debugOnWin()
 
-
 datasets, vocabs, embeddings = equip_chinese_ner_with_lexicon(datasets, vocabs, embeddings,
                                                               w_list, yangjie_rich_pretrain_word_path,
                                                               _refresh=refresh_data, _cache_fp=cache_name,
                                                               only_lexicon_in_train=args.only_lexicon_in_train,
-                                                            word_char_mix_embedding_path=yangjie_rich_pretrain_char_and_word_path,
+                                                              word_char_mix_embedding_path=yangjie_rich_pretrain_char_and_word_path,
                                                               number_normalized=args.number_normalized,
                                                               lattice_min_freq=args.lattice_min_freq,
                                                               only_train_min_freq=args.only_train_min_freq)
+
+
 # equip_chinese_ner_with_lexicon返回三个东西：datasets, vocabs, embeddings, 具体含义见load_data.py
 def debug_dataset(datasets):
     print(datasets['train'][0])
@@ -415,6 +417,8 @@ def debug_dataset(datasets):
     pprint.pprint(f"pos_s:{datasets['train'][0]['pos_s']}")
     pprint.pprint(f"pos_e:{datasets['train'][0]['pos_e']}")
     exit(0)
+
+
 """
 其中，datasets是一个字典，包含train和test两个键，每一个键都对应一个<class 'fastNLP.core.dataset.DataSet'>
 <class 'fastNLP.core.dataset.DataSet'>中存放：
@@ -496,22 +500,25 @@ embeddings['components'] = CNNRadicalLevelEmbedding(vocab=vocabs['lattice'], emb
                                                     dropout=args.radical_dropout, pool_method='max'
                                                     , include_word_start_end=False, min_char_freq=1)
 
+
 def debug_embeddings():
     print("embeddings")
     print(embeddings)
     for i in embeddings:
         print(i, type(embeddings[i]))
     exit(0)
+
+
 print("finish embeddings model!")
 model_old = MECTNER(embeddings['lattice'], embeddings['bigram'], embeddings['components'], args.hidden,
-                k_proj=args.k_proj, q_proj=args.q_proj, v_proj=args.v_proj, r_proj=args.r_proj,
-                label_size=len(vocabs['label']), max_seq_len=max_seq_len,
-                dropout=dropout, dataset=args.dataset, ff_size=args.ff)
+                    k_proj=args.k_proj, q_proj=args.q_proj, v_proj=args.v_proj, r_proj=args.r_proj,
+                    label_size=len(vocabs['label']), max_seq_len=max_seq_len,
+                    dropout=dropout, dataset=args.dataset, ff_size=args.ff)
 
 model_pro = CSR_MECTNER(embeddings['lattice'], embeddings['bigram'], embeddings['components'], args.hidden,
-                k_proj=args.k_proj, q_proj=args.q_proj, v_proj=args.v_proj, r_proj=args.r_proj,
-                label_size=len(vocabs['label']), max_seq_len=max_seq_len,
-                dropout=dropout, dataset=args.dataset, ff_size=args.ff)
+                        k_proj=args.k_proj, q_proj=args.q_proj, v_proj=args.v_proj, r_proj=args.r_proj,
+                        label_size=len(vocabs['label']), max_seq_len=max_seq_len,
+                        dropout=dropout, dataset=args.dataset, ff_size=args.ff)
 
 model = model_pro
 
@@ -576,7 +583,6 @@ clip_callback = GradientClipCallback(clip_type='value', clip_value=5)
 
 callbacks = [evaluate_callback, lrschedule_callback, clip_callback, WarmupCallback(warmup=args.warmup)]
 
-
 if args.status == 'train':
     print("start training")
     # fastnlp Trainer 文档：https://fastnlp.readthedocs.io/zh/stable/_modules/fastNLP/core/trainer.html
@@ -593,7 +599,7 @@ if args.status == 'train':
                       save_path="/root/autodl-tmp/Chinese-Slang-Recognition-with-MECT-Model/model")
 
     trainer.train()
-    
+
 elif args.status == 'run':
     print("INFO:: Load Model")
     model_path = '/root/autodl-tmp/Chinese-Slang-Recognition-with-MECT-Model/model/best_CSR_MECTNER_f_msra1.0'
@@ -602,10 +608,10 @@ elif args.status == 'run':
     from fastNLP.core.predictor import Predictor
     import random
     import time
+
     random.seed(time.time())
-    
-    
-    predictor = Predictor(model)   # 这里的model是加载权重之后的model
+
+    predictor = Predictor(model)  # 这里的model是加载权重之后的model
     print(">>>>>>>成功加载模型<<<<<<<")
     text = datasets  # 文本
     print("变量 'text'的内容展示:")
@@ -613,14 +619,13 @@ elif args.status == 'run':
         print(str(i) + ":", end=" ")
         print(text[i].field_arrays.keys())
 
-    
     print(f"debug::{len(text['test'])}")
-    sentenceID = random.randint(0, len(text['test'])-1)
-    sentence = text['test'][sentenceID-1:sentenceID]
+    sentenceID = random.randint(0, len(text['test']) - 1)
+    sentence = text['test'][sentenceID - 1:sentenceID]
     print(f">>>>>>>待测试句为第{sentenceID}句，内容如下：<<<<<<<\n{sentence}")
     test_label_list = predictor.predict(sentence)  # 预测结果
-    test_raw_char = sentence['raw_chars']     # 原始文字
-    
+    test_raw_char = sentence['raw_chars']  # 原始文字
+
     print(">>>>>>>待测试句原始文字和长度：<<<<<<<")
     for i in test_raw_char:
         print(f"sentence:{i}\n length:{len(i)}")
@@ -653,74 +658,79 @@ elif args.status == 'generate':
     from fastNLP.core.predictor import Predictor
     import random
     import time
+
     random.seed(time.time())
-    
+
     # datasets1 = copy.deepcopy(datasets)
-    predictor = Predictor(model)   # 这里的model是加载权重之后的model
+    predictor = Predictor(model)  # 这里的model是加载权重之后的model
     print(">>>>>>>成功加载模型<<<<<<<")
-    
+
     if args.extra_datasets != 'None':
         raw_dataset_cache_name1 = os.path.join('cache', args.extra_datasets +
-                                      '_trainClip{}'.format(args.train_clip)
-                                      + 'bgminfreq_{}'.format(args.bigram_min_freq)
-                                      + 'char_min_freq_{}'.format(args.char_min_freq)
-                                      + 'word_min_freq_{}'.format(args.word_min_freq)
-                                      + 'only_train_min_freq{}'.format(args.only_train_min_freq)
-                                      + 'number_norm{}'.format(args.number_normalized)
-                                      + 'load_dataset_seed{}'.format(load_dataset_seed)
-                                      )
+                                               '_trainClip{}'.format(args.train_clip)
+                                               + 'bgminfreq_{}'.format(args.bigram_min_freq)
+                                               + 'char_min_freq_{}'.format(args.char_min_freq)
+                                               + 'word_min_freq_{}'.format(args.word_min_freq)
+                                               + 'only_train_min_freq{}'.format(args.only_train_min_freq)
+                                               + 'number_norm{}'.format(args.number_normalized)
+                                               + 'load_dataset_seed{}'.format(load_dataset_seed)
+                                               )
         cache_name1 = os.path.join('cache', (args.extra_datasets + '_lattice' + '_only_train:{}' +
-                                    '_trainClip{}' + '_norm_num{}'
-                                    + 'char_min_freq{}' + 'bigram_min_freq{}' + 'word_min_freq{}' + 'only_train_min_freq{}'
-                                    + 'number_norm{}' + 'lexicon_{}' + 'load_dataset_seed{}')
-                          .format(args.only_lexicon_in_train,
-                                  args.train_clip, args.number_normalized, args.char_min_freq,
-                                  args.bigram_min_freq, args.word_min_freq, args.only_train_min_freq,
-                                  args.number_normalized, args.lexicon_name, load_dataset_seed))
+                                             '_trainClip{}' + '_norm_num{}'
+                                             + 'char_min_freq{}' + 'bigram_min_freq{}' + 'word_min_freq{}' + 'only_train_min_freq{}'
+                                             + 'number_norm{}' + 'lexicon_{}' + 'load_dataset_seed{}')
+                                   .format(args.only_lexicon_in_train,
+                                           args.train_clip, args.number_normalized, args.char_min_freq,
+                                           args.bigram_min_freq, args.word_min_freq, args.only_train_min_freq,
+                                           args.number_normalized, args.lexicon_name, load_dataset_seed))
         if args.extra_datasets == 'tieba':
             datasets, vocabs, embeddings = load_tieba(tieba_path, yangjie_rich_pretrain_unigram_path,
-                                                 yangjie_rich_pretrain_bigram_path,
-                                                 _refresh=refresh_data, index_token=False, train_clip=args.train_clip,
-                                                 _cache_fp=raw_dataset_cache_name1,
-                                                 char_min_freq=args.char_min_freq,
-                                                 bigram_min_freq=args.bigram_min_freq,
-                                                 only_train_min_freq=args.only_train_min_freq
-                                                 )
+                                                      yangjie_rich_pretrain_bigram_path,
+                                                      _refresh=refresh_data, index_token=False,
+                                                      train_clip=args.train_clip,
+                                                      _cache_fp=raw_dataset_cache_name1,
+                                                      char_min_freq=args.char_min_freq,
+                                                      bigram_min_freq=args.bigram_min_freq,
+                                                      only_train_min_freq=args.only_train_min_freq
+                                                      )
         elif args.extra_datasets == 'PKU':
-             datasets, vocabs, embeddings = load_PKU(PKU_path, yangjie_rich_pretrain_unigram_path,
-                                                 yangjie_rich_pretrain_bigram_path,
-                                                 _refresh=refresh_data, index_token=False, train_clip=args.train_clip,
-                                                 _cache_fp=raw_dataset_cache_name1,
-                                                 char_min_freq=args.char_min_freq,
-                                                 bigram_min_freq=args.bigram_min_freq,
-                                                 only_train_min_freq=args.only_train_min_freq
-                                                 )
+            datasets, vocabs, embeddings = load_PKU(PKU_path, yangjie_rich_pretrain_unigram_path,
+                                                    yangjie_rich_pretrain_bigram_path,
+                                                    _refresh=refresh_data, index_token=False,
+                                                    train_clip=args.train_clip,
+                                                    _cache_fp=raw_dataset_cache_name1,
+                                                    char_min_freq=args.char_min_freq,
+                                                    bigram_min_freq=args.bigram_min_freq,
+                                                    only_train_min_freq=args.only_train_min_freq
+                                                    )
         elif args.extra_datasets == 'wiki':
-             datasets, vocabs, embeddings = load_wiki(wiki_path, yangjie_rich_pretrain_unigram_path,
-                                                 yangjie_rich_pretrain_bigram_path,
-                                                 _refresh=refresh_data, index_token=False, train_clip=args.train_clip,
-                                                 _cache_fp=raw_dataset_cache_name1,
-                                                 char_min_freq=args.char_min_freq,
-                                                 bigram_min_freq=args.bigram_min_freq,
-                                                 only_train_min_freq=args.only_train_min_freq
-                                                 )
+            datasets, vocabs, embeddings = load_wiki(wiki_path, yangjie_rich_pretrain_unigram_path,
+                                                     yangjie_rich_pretrain_bigram_path,
+                                                     _refresh=refresh_data, index_token=False,
+                                                     train_clip=args.train_clip,
+                                                     _cache_fp=raw_dataset_cache_name1,
+                                                     char_min_freq=args.char_min_freq,
+                                                     bigram_min_freq=args.bigram_min_freq,
+                                                     only_train_min_freq=args.only_train_min_freq
+                                                     )
         elif args.extra_datasets == 'anwang':
-             datasets, vocabs, embeddings = load_anwang(anwang_path, yangjie_rich_pretrain_unigram_path,
-                                                 yangjie_rich_pretrain_bigram_path,
-                                                 _refresh=refresh_data, index_token=False, train_clip=args.train_clip,
-                                                 _cache_fp=raw_dataset_cache_name1,
-                                                 char_min_freq=args.char_min_freq,
-                                                 bigram_min_freq=args.bigram_min_freq,
-                                                 only_train_min_freq=args.only_train_min_freq
-                                                 )
+            datasets, vocabs, embeddings = load_anwang(anwang_path, yangjie_rich_pretrain_unigram_path,
+                                                       yangjie_rich_pretrain_bigram_path,
+                                                       _refresh=refresh_data, index_token=False,
+                                                       train_clip=args.train_clip,
+                                                       _cache_fp=raw_dataset_cache_name1,
+                                                       char_min_freq=args.char_min_freq,
+                                                       bigram_min_freq=args.bigram_min_freq,
+                                                       only_train_min_freq=args.only_train_min_freq
+                                                       )
         datasets, vocabs, embeddings = equip_chinese_ner_with_lexicon(datasets, vocabs, embeddings,
-                                                              w_list, yangjie_rich_pretrain_word_path,
-                                                              _refresh=refresh_data, _cache_fp=cache_name1,
-                                                              only_lexicon_in_train=args.only_lexicon_in_train,
-                                                            word_char_mix_embedding_path=yangjie_rich_pretrain_char_and_word_path,
-                                                              number_normalized=args.number_normalized,
-                                                              lattice_min_freq=args.lattice_min_freq,
-                                                              only_train_min_freq=args.only_train_min_freq)
+                                                                      w_list, yangjie_rich_pretrain_word_path,
+                                                                      _refresh=refresh_data, _cache_fp=cache_name1,
+                                                                      only_lexicon_in_train=args.only_lexicon_in_train,
+                                                                      word_char_mix_embedding_path=yangjie_rich_pretrain_char_and_word_path,
+                                                                      number_normalized=args.number_normalized,
+                                                                      lattice_min_freq=args.lattice_min_freq,
+                                                                      only_train_min_freq=args.only_train_min_freq)
         text = datasets  # 文本
         print(">>>>>>>成功加载外入数据集<<<<<<<")
         # print(text)
@@ -728,7 +738,7 @@ elif args.status == 'generate':
     else:
         text = datasets  # 文本
     # text = datasets
-    sentenceID = random.randint(0, len(text['test'])-1)
+    sentenceID = random.randint(0, len(text['test']) - 1)
     CharacterToWord = CTW()
     tokenizer = ChineseTokenizer()
     save_path = os.path.join(rootPth, "datasets/pickle_data")
@@ -743,7 +753,7 @@ elif args.status == 'generate':
         except:
             pass
         """
-        sentence = text['test'][i:i+1]
+        sentence = text['test'][i:i + 1]
         sentence.set_target("target")
         sentence.set_input("bigrams")
         sentence.set_input("seq_len")
@@ -756,7 +766,7 @@ elif args.status == 'generate':
             fai += 1
             continue
         suc += 1
-        test_raw_char = sentence['raw_chars']     # 原始文字
+        test_raw_char = sentence['raw_chars']  # 原始文字
         # print(f"test_raw_char:{test_raw_char[0]}")
         sentence = ""
         for i in test_raw_char[0]:
@@ -767,10 +777,7 @@ elif args.status == 'generate':
         res['tokenize'].append(tokenize)
         res['wordVector'].append(wordVector)
     print(f"suc rate:{100 * suc / (suc + fai)}%")
-        
+
     file_name = f"{args.dataset if args.extra_datasets == 'None' else args.extra_datasets}.pkl"
     write_to_pickle(os.path.join(save_path, file_name), res)
     print(f"successfully save to {os.path.join(save_path, file_name)}")
-    
-        
-        

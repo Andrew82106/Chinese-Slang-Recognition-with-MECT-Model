@@ -7,7 +7,6 @@ NER = os.path.join(rootPth, "datasets/NER")
 vector = os.path.join(rootPth, "datasets/pickle_data")
 cache_path = os.path.join(rootPth, "cache")
 
-
 yangjie_rich_pretrain_unigram_path = os.path.join(embeddings, 'gigaword_chn.all.a2b.uni.ite50.vec')
 yangjie_rich_pretrain_bigram_path = os.path.join(embeddings, 'gigaword_chn.all.a2b.bi.ite50.vec')
 yangjie_rich_pretrain_word_path = os.path.join(embeddings, 'ctb.50d.vec')
@@ -29,7 +28,6 @@ tieba_path = os.path.join(NER, 'tieba')
 PKU_path = os.path.join(NER, 'PKU')
 wiki_path = os.path.join(NER, 'wiki')
 anwang_path = os.path.join(NER, 'anwang')
-
 
 tieba_vector = os.path.join(vector, 'tieba.pkl')
 weibo_vector = os.path.join(vector, 'weibo.pkl')

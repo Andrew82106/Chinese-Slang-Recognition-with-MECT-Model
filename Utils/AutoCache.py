@@ -8,6 +8,7 @@ import pickle
 import hashlib
 import time
 
+
 class Cache:
     def __init__(self):
         self.cache_path = os.path.join(cache_path, "cluster_cache")
@@ -47,26 +48,27 @@ class Cache:
         return decorator
 
     def save_cache(self, cache, cache_path):
-        with open(os.path.join(self.cache_path,cache_path), 'wb') as file:
+        with open(os.path.join(self.cache_path, cache_path), 'wb') as file:
             pickle.dump(cache, file)
 
     def load_cache(self, cache, cache_path):
-        if os.path.exists(os.path.join(self.cache_path,cache_path)):
-            with open(os.path.join(self.cache_path,cache_path), 'rb') as file:
+        if os.path.exists(os.path.join(self.cache_path, cache_path)):
+            with open(os.path.join(self.cache_path, cache_path), 'rb') as file:
                 loaded_cache = pickle.load(file)
                 cache.update(loaded_cache)
 
 
-
 if __name__ == "__main__":
     cache = Cache()
+
 
     @cache.cache_result(cache_path='cache.pkl')
     def expensive_computation(n, kkk=0):
         print("Performing expensive computation...")
         time.sleep(2)
         return n * 2
-    
+
+
     for i in range(1, 100, 2):
         print(f"i={i}:{expensive_computation(i)}")
     for i in range(1, 100, 1):
