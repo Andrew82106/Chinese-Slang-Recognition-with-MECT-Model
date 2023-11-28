@@ -55,12 +55,13 @@ def dbscan(X, eps=25, savefig=False, word=None, dataset=None):
     X = StandardScaler().fit_transform(X)
     dbscan = DBSCAN(eps=eps, min_samples=5)
     clusters = dbscan.fit_predict(X)
+    n = len(set(clusters))
     if savefig:
         saveFig(
             X,
             clusters,
-            name=savefig if word is None else f"{word} in {savefig}",
-            title=f"{savefig} clustering" if word is None else f"{savefig} clustering of word {word}"
+            name=(savefig if word is None else f"{word}_in_{dataset}") + f"[with_eps={eps}&n={n}]",
+            title=(f"{dataset} clustering" if word is None else f"{dataset} clustering of word {word}") + f"[with_eps={eps}&n={n}]",
         )
     return clusters
 
@@ -92,7 +93,7 @@ def read_vector(dataset, word):
     return X
 
 
-@cache.cache_result(cache_path='cache_function_cluster.pkl')
+@cache.cache_result(cache_path='cache_function_cluster.pkl', refresh=1)
 def cluster(dataset, word, eps=25, savefig=False):
     """
     聚类接口api
@@ -175,6 +176,7 @@ def calc_metric_in_steps(dataset, word, delta=1, min_interval=1, max_interval=10
 if __name__ == "__main__":
     # best_metric, best_eps = maximize_metric_for_eps("tieba", "你")
     # print(f"best_eps:{best_eps}, best_metric:{best_metric}")
+
     Lex_tieba = summary_lex("tieba")
     Lex_weibo = summary_lex("PKU")
     count = 50
