@@ -7,7 +7,7 @@
 - 2023.8.23 开始尝试对英文词汇添加词根拆分功能。运行中英混搭数据集命令：
 
 ```bash
-python main.py --dataset demo
+python debug1.py --dataset demo
 ```
 
 - 2023.9.3 调试复盘
@@ -138,7 +138,7 @@ recent
 call
 last):
 File
-"/root/autodl-tmp/Chinese-Slang-Recognition-with-MECT-Model/main.py", line
+"/root/autodl-tmp/Chinese-Slang-Recognition-with-MECT-Model/debug1.py", line
 701, in < module >
 test_label_list = predictor.predict(sentence)  # 预测结果
 File
@@ -406,3 +406,98 @@ def is_in_epsilon_neighborhood(new_vector, core_points, epsilon, metric='euclide
 
     return is_in_epsilon
 ```
+
+# 12.1日工作总结
+
+找到了dbscan的document：[DBSCAN](https://scikit-learn.org/stable/modules/clustering.html#dbscan)
+
+找到一个可视化dbscan的：[可视化dbscan](https://www.naftaliharris.com/blog/visualizing-dbscan-clustering/)
+
+然后对dbscan的相关模块进行了调试：
+
+首先我们担心模块不能正确聚类，或者不能找到核心点
+
+于是我们在debug.py中设计了模块进行实验
+
+具体来讲，我们设置了如下的点：
+
+```python
+clusterA = [
+        [0, 0],
+        [1, 0],
+        [1, 1],
+        [0, 1],
+        [1, 2]
+    ]
+clusterB = [
+        [10, 10],
+        [11, 10],
+        [11, 11],
+        [10, 11]
+    ]
+clusterC = [
+        [-10, -10],
+        [-11, -10],
+        [-11, -11],
+        [-10, -11]
+    ]
+```
+
+然后设定``eps=1.42, min_samples=4``，对核心点和非核心点进行画图，实验结果如下：
+
+![img.png](md_cache/img.png)
+
+同时代码中输出核心点坐标如下：
+
+```text
+tensor([[  0,   0],
+        [  1,   0],
+        [  1,   1],
+        [  0,   1],
+        [ 10,  10],
+        [ 11,  10],
+        [ 11,  11],
+        [ 10,  11],
+        [-10, -10],
+        [-11, -10],
+        [-11, -11],
+        [-10, -11]]) 12
+```
+
+也就是说[1,2]这个点没被识别成核心点，说明代码能够成功聚类并且返回核心点坐标
+
+然后第二个实验是具体的拿一个词语出来进行聚类，统计聚类结果的核心点和离群点数量，然后用距离公式算具体的离群点数量，看两个对得上不
+
+一开始结果是对不上的，后面排查后发现是因为在聚类的时候对坐标做了一个标准化，但是在计算距离的时候没有标准化，这就导致了问题
+
+改了后结果如下：
+
+```text
+聚类结果离群点数：161
+基于距离公式计算的离群点数：161
+聚类结果聚类数量：2
+```
+
+看了下标准化库的注释：
+
+```text
+Standardize features by removing the mean and scaling to unit variance.
+
+    The standard score of a sample `x` is calculated as:
+
+        z = (x - u) / s
+
+    where `u` is the mean of the training samples or zero if `with_mean=False`,
+    and `s` is the standard deviation of the training samples or one if
+    `with_std=False`.
+```
+
+感觉问题不大
+
+第三个实验是用轮廓系数对聚类结果进行测试，然后看看有没有办法尽量调参调到最好的那个轮廓系数
+
+代码层面是用silhouette_score()计算所有点的平均轮廓系数
+
+聚类结果的轮廓系数的取值在[-1,1]之间，值越大，说明同类样本相距约近，不同样本相距越远，则聚类效果越好
+
+现在的想法是先多做几次实验，看看不同的数据集中不同的词语在不同的参数取值下的轮廓系数表现如何

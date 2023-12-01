@@ -1,5 +1,5 @@
-import numpy as np
 import matplotlib.pyplot as plt
+from sklearn.metrics import silhouette_score
 from sklearn.cluster import DBSCAN
 from sklearn.preprocessing import StandardScaler
 from sklearn.datasets import make_blobs
@@ -31,7 +31,11 @@ def saveFig(X, clusters, name="your_plot_name", xlabel='Feature 1', ylabel='Feat
     plt.title(title)
     plt.xlabel(xlabel)
     plt.ylabel(ylabel)
-    plt.savefig(f'cluster_result/{name}.png')
+    try:
+        plt.savefig(f'cluster_result/{name}.png')
+    except:
+        plt.savefig(f'../cluster_result/{name}.png')
+    plt.show()
 
 
 def index1(metricA: int, metricB: int):
@@ -48,7 +52,7 @@ def index2(metricLstA: list, metricLstB: list):
     return naive_DTW(metricLstA, metricLstB)
 
 
-def dbscan(X, eps=25, savefig=False, word=None, dataset=None):
+def dbscan(X, metric, min_samples, eps=25, savefig=False, word=None, dataset=None):
     """
     # 进行dbscan聚类
     Input: X: input matrix with size N x 256，即输入的词的向量集合
@@ -59,34 +63,46 @@ def dbscan(X, eps=25, savefig=False, word=None, dataset=None):
     Input: clusters: 聚类结果
     """
     X = StandardScaler().fit_transform(X)
-    dbscan = DBSCAN(eps=eps, min_samples=5)
+    dbscan = DBSCAN(eps=eps, min_samples=min_samples, metric=metric)
     clusters = dbscan.fit_predict(X)
     n = len(set(clusters))
     if savefig:
         saveFig(
             X,
             clusters,
-            name=(savefig if word is None else f"{word}_in_{dataset}") + f"[with_eps={eps}&n={n}]",
+            name=(savefig if word is None else f"{word}_in_{dataset}") + f"[with_eps={eps}&n={n}&min_samples={min_samples}]",
             title=(
-                      f"{dataset} clustering" if word is None else f"{dataset} clustering of word {word}") + f"[with_eps={eps}&n={n}]",
+                      f"{dataset} clustering" if word is None else f"{dataset} clustering of word {word}") + f"[with_eps={eps}&n={n}&min_samples={min_samples}]",
         )
-    return clusters
+    """
+    if not GETRES:
+        return clusters
+    else:
+        return dbscan
+    """
+    return {'cluster result': clusters, 'dbscan result': dbscan}
 
 
-def getCenter(clusters):
+def getCenter(clusters, X):
     """
     # 获取核心点的索引和坐标
     input: clusters，即聚类结果
     output: core_indices，即核心点的索引
     output: core_points，即核心点的坐标
     """
+    XX = StandardScaler().fit_transform(X)
     core_indices = clusters.core_sample_indices_
-    core_points = clusters[core_indices]
+    core_points = XX[core_indices]
+    """
+    from https://scikit-learn.org/stable/modules/generated/sklearn.cluster.DBSCAN.html:
+    components_:ndarray of shape (n_core_samples, n_features)
+        Copy of each core sample found by training.
+    """
+    # core_points = clusters.components_
+    return core_points
 
-    return dbscan, core_points
 
-
-def is_in_epsilon_neighborhood(new_vector, core_points, epsilon, metric='euclidean'):
+def is_in_epsilon_neighborhood(new_vector, core_points, epsilon, metric):
     """
     # 判断新向量new_vector是否在核心点core_points的 ε-邻域内
     input: new_vector，即新向量
@@ -94,8 +110,11 @@ def is_in_epsilon_neighborhood(new_vector, core_points, epsilon, metric='euclide
     input: epsilon，即ε-邻域的epsilon值
     input: metric，即距离计算的函数，默认为euclidean，即欧几里得距离
     output: is_in_epsilon，即判断结果
+    note: 传入的new_vector一定要是经过了StandardScaler进行标准化后的才行
     """
     # 计算新向量与核心点之间的距离
+    if not isinstance(new_vector, np.ndarray):
+        new_vector = new_vector.numpy()
     distances = pairwise_distances(core_points, [new_vector], metric=metric)
 
     # 判断新向量是否在 ε-邻域内
@@ -138,7 +157,7 @@ def read_vector(dataset, word):
 
 
 @cache.cache_result(cache_path='cache_function_cluster.pkl', refresh=1)
-def cluster(dataset, word, eps=25, savefig=False):
+def cluster(dataset, word, eps=25, savefig=False, metric='euclidean', min_samples=5):
     """
     聚类接口api
     """
@@ -146,19 +165,24 @@ def cluster(dataset, word, eps=25, savefig=False):
     try:
         res = dbscan(
             X,
+            metric=metric,
             eps=eps,
             savefig=savefig,
             dataset=dataset,
-            word=word
+            word=word,
+            min_samples=min_samples
         )
+        # {'cluster result': clusters, 'dbscan result': dbscan}
     except Exception as e:
         print(f"eps:{eps}\nX:{X}\ndataset:{dataset}\nword:{word}")
         raise e
-    num_of_clusters = len(set(res))
+    num_of_clusters = len(set(res['cluster result']))
 
-    metric = num_of_clusters
-
-    return metric
+    return {
+        "num_of_clusters": num_of_clusters,
+        "result class instance": res['dbscan result'],
+        "cluster result": res['cluster result']
+    }
 
 
 def generate_list_with_delta(min_interval, max_interval, delta):
@@ -183,7 +207,14 @@ def maximize_metric_for_eps(dataset, word, delta=10, min_interval=1, max_interva
         if eps <= 0:
             continue
         # print(f"eps:{eps} ", end="")
-        metric = cluster(dataset, word, eps)
+        """
+        return {
+            "num_of_clusters": num_of_clusters,
+            "result class instance": res['dbscan result'],
+            "cluster result": res['cluster result']
+        }
+        """
+        metric = cluster(dataset, word, eps)['num_of_clusters']
         # print(f"metric:{metric}")
         if maxx_metric < metric:
             maxx_metric = metric
@@ -211,7 +242,14 @@ def calc_metric_in_steps(dataset, word, delta=1, min_interval=1, max_interval=10
     forLst = generate_list_with_delta(min_interval, max_interval, delta)
     res = []
     for eps in forLst:
-        metric = cluster(dataset, word, eps)
+        """
+                return {
+                    "num_of_clusters": num_of_clusters,
+                    "result class instance": res['dbscan result'],
+                    "cluster result": res['cluster result']
+                }
+        """
+        metric = cluster(dataset, word, eps)['num_of_clusters']
         res.append(metric)
     # print(f"res:{res}")
     return res
@@ -220,7 +258,14 @@ def calc_metric_in_steps(dataset, word, delta=1, min_interval=1, max_interval=10
 if __name__ == "__main__":
     # best_metric, best_eps = maximize_metric_for_eps("tieba", "你")
     # print(f"best_eps:{best_eps}, best_metric:{best_metric}")
-
+    """
+                    return {
+                        "num_of_clusters": num_of_clusters,
+                        "result class instance": res['dbscan result'],
+                        "cluster result": res['cluster result']
+                    }
+    """
+    """
     Lex_tieba = summary_lex("tieba")
     Lex_weibo = summary_lex("PKU")
     count = 50
@@ -233,3 +278,5 @@ if __name__ == "__main__":
         best_metric, best_eps = maximize_metric_for_eps("tieba", i)
         best_metric1, best_eps1 = maximize_metric_for_eps("weibo", i)
         print(f"word:{i}\nbest_metric in tieba:{best_metric}\nbest_metric in weibo:{best_metric1}")
+    """
+    pass

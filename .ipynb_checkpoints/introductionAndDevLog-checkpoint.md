@@ -7,7 +7,7 @@
 - 2023.8.23 开始尝试对英文词汇添加词根拆分功能。运行中英混搭数据集命令：
 
 ```bash
-python main.py --dataset demo
+python debug1.py --dataset demo
 ```
 
 - 2023.9.3 调试复盘
@@ -133,7 +133,7 @@ if self.training:
  同时，如果外接数据集过大的话，确实会出现词表溢出的情况，比如下面：
  ```py
  Traceback (most recent call last):
-  File "/root/autodl-tmp/Chinese-Slang-Recognition-with-MECT-Model/main.py", line 701, in <module>
+  File "/root/autodl-tmp/Chinese-Slang-Recognition-with-MECT-Model/debug1.py", line 701, in <module>
     test_label_list = predictor.predict(sentence)  # 预测结果
   File "/root/miniconda3/envs/normalpython/lib/python3.9/site-packages/fastNLP/core/predictor.py", line 64, in predict
     prediction = predict_func(**refined_batch_x)
