@@ -156,7 +156,7 @@ def read_vector(dataset, word):
     return X
 
 
-@cache.cache_result(cache_path='cache_function_cluster.pkl', refresh=1)
+@cache.cache_result(cache_path='cache_function_cluster.pkl', refresh=0)
 def cluster(dataset, word, eps=25, savefig=False, metric='euclidean', min_samples=5):
     """
     聚类接口api

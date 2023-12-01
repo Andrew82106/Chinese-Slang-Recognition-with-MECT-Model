@@ -111,8 +111,8 @@ def debug3_1(dataset, word, eps=15, minsample=4, metric='euclidean'):
 
 def debug3():
     start = 14
-    end = 26
-    delta = 0.5
+    end = 29
+    delta = 1
     datasetLst = ['wiki', 'PKU', 'anwang', 'tieba']
     wordLst = ['我们', '你们', '中国', '工作']
     df = {'eps': [], 'minsample': [], 'metric': [], '轮廓系数': [], 'word': [], 'dataset': []}
@@ -132,7 +132,7 @@ def debug3():
                 df['word'].append(word)
                 df['dataset'].append(dataset_)
                 eps += delta
-    pd.DataFrame(df).to_csv("./lab.csv")
+            pd.DataFrame(df).to_csv("./lab.csv")
 
 
 if __name__ == '__main__':
