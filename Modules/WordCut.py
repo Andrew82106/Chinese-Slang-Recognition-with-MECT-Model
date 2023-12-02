@@ -1,9 +1,14 @@
 import jieba
 
+
 class ChineseTokenizer:
-    def tokenize(self, sentence):
+
+    def basicCut(self, sentence):
         seg_list = jieba.cut(sentence)
-        seg_list = list(seg_list)
+        return list(seg_list)
+
+    def tokenize(self, sentence):
+        seg_list = self.basicCut(sentence)
         word_groups = []
         word_cut_result = []
         start = 0

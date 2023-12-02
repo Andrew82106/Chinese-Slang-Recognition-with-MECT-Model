@@ -1,7 +1,10 @@
 import os
+import sys
 
-# rootPth = "/Users/andrewlee/Desktop/Projects/Chinese-Slang-Recognition-with-MECT-Model"
-rootPth = "B:\Chinese-Slang-Recognition-with-MECT-Model"
+if sys.platform == 'darwin':
+    rootPth = "/Users/andrewlee/Desktop/Projects/Chinese-Slang-Recognition-with-MECT-Model"
+else:
+    rootPth = "B:\Chinese-Slang-Recognition-with-MECT-Model"
 embeddings = os.path.join(rootPth, "datasets/embeddings")
 charinfo = os.path.join(rootPth, "datasets/charinfo")
 NER = os.path.join(rootPth, "datasets/NER")
@@ -29,6 +32,7 @@ tieba_path = os.path.join(NER, 'tieba')
 PKU_path = os.path.join(NER, 'PKU')
 wiki_path = os.path.join(NER, 'wiki')
 anwang_path = os.path.join(NER, 'anwang')
+test_path = os.path.join(NER, 'test')
 
 tieba_vector = os.path.join(vector, 'tieba.pkl')
 weibo_vector = os.path.join(vector, 'weibo.pkl')

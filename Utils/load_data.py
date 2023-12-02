@@ -378,6 +378,82 @@ def load_demo(path, char_embedding_path=None, bigram_embedding_path=None, index_
     return datasets, vocabs, embeddings
 
 
+@cache_results(_cache_fp='cache/test', _refresh=True)
+def load_test(path, char_embedding_path=None, bigram_embedding_path=None, index_token=True, train_clip=False,
+              char_min_freq=1, bigram_min_freq=1, only_train_min_freq=0):
+    train_path = os.path.join(path, 'input.bio')
+    test_path = os.path.join(path, 'input.bio')
+    print(f"train_path:{train_path}")
+
+    loader = ConllLoader(['chars', 'target'])
+    train_bundle = loader.load(train_path)  # 这一句有invalid instance的情况出现
+    test_bundle = loader.load(test_path)
+
+    # fastNLP.io.loader.conll  ConllLoader：读取打标数据中的chars和target，调用load方法后返回的是一个包含句子和其标注的数据结构
+    datasets = dict()
+    datasets['train'] = train_bundle.datasets['train']
+    datasets['test'] = test_bundle.datasets['train']
+    # 将train和test中的fastNLP.core.DataSet提取出来放入dataset中（主要是只有这部分是有用的）
+
+    datasets['train'].apply_field(get_bigrams, field_name='chars', new_field_name='bigrams')
+    datasets['test'].apply_field(get_bigrams, field_name='chars', new_field_name='bigrams')
+
+    # apply_field方法：将DataSet中的每个instance中的名为 `field_name` 的field传给func，并获取它的返回值，放在名为`new_field_name`的field下。
+    """
+    get_bigrams函数：将输入的词语成对输出
+    get_bigrams("hello")
+    >>>['he', 'el', 'll', 'lo', 'o<end>']
+    """
+    # 因此这两句的意思就是将原来的datasets中的chars列的内容成对输出，结果放在同一instance的bigrams列下
+    datasets['train'].add_seq_len('chars')
+    datasets['test'].add_seq_len('chars')
+    # add_seq_len方法：将使用len()直接对field_name中每个元素作用，将其结果作为seqence length, 并放入seq_len这个field。
+    # 这两句就是统计句子长度用的
+    char_vocab = Vocabulary()
+    bigram_vocab = Vocabulary()
+    label_vocab = Vocabulary()
+    print(datasets.keys())
+    print(len(datasets['test']))
+    print(len(datasets['train']))
+
+    char_vocab.from_dataset(datasets['train'], field_name='chars',
+                            no_create_entry_dataset=[datasets['test']])
+    bigram_vocab.from_dataset(datasets['train'], field_name='bigrams',
+                              no_create_entry_dataset=[datasets['test']])
+    label_vocab.from_dataset(datasets['train'], field_name='target')
+    # from_dataset方法：使用dataset的对应field中词构建词典:
+    # 因此上面这几句就是将datasets中的chars，bigrams，target三个field中的内容提取出来生成对应的Vocabulary对象char_vocab，bigram_vocab，label_vocab
+    if index_token:
+        char_vocab.index_dataset(datasets['train'], datasets['test'],
+                                 field_name='chars', new_field_name='chars')
+        bigram_vocab.index_dataset(datasets['train'], datasets['test'],
+                                   field_name='bigrams', new_field_name='bigrams')
+        label_vocab.index_dataset(datasets['train'], datasets['test'],
+                                  field_name='target', new_field_name='target')
+        # index_dataset：将DataSet中对应field的词转为数字，Example::
+
+    vocabs = {}
+    vocabs['char'] = char_vocab
+    vocabs['label'] = label_vocab
+    vocabs['bigram'] = bigram_vocab
+    vocabs['label'] = label_vocab  # 不太明白这句话的意义在哪里，这不是重复的嘛
+    # 这里就将所有的Vocabulary对象集合起来放在vocabs这个字典里面，方便后续调用
+    # tips：fastNLP.core.vocabulary对象：用于构建, 存储和使用 str 到 int 的一一映射
+    embeddings = {}
+    if char_embedding_path is not None:
+        char_embedding = StaticEmbedding(char_vocab, char_embedding_path, word_dropout=0.01,
+                                         min_freq=char_min_freq, only_train_min_freq=only_train_min_freq)
+        embeddings['char'] = char_embedding
+
+    if bigram_embedding_path is not None:
+        bigram_embedding = StaticEmbedding(bigram_vocab, bigram_embedding_path, word_dropout=0.01,
+                                           min_freq=bigram_min_freq, only_train_min_freq=only_train_min_freq)
+        embeddings['bigram'] = bigram_embedding
+    # StaticEmbedding函数就简单理解为将词语转化为向量，维度为50维
+    # 因此上面两部分就对单个字符char和双字符bigram进行向量化，然后放入embeddings这个字典中了
+    return datasets, vocabs, embeddings
+
+
 @cache_results(_cache_fp='cache/tieba', _refresh=True)
 def load_tieba(path, char_embedding_path=None, bigram_embedding_path=None, index_token=True, train_clip=False,
                     char_min_freq=1, bigram_min_freq=1, only_train_min_freq=0):

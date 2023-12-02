@@ -1,8 +1,10 @@
 import matplotlib.pyplot as plt
+from matplotlib.font_manager import FontProperties
+font = FontProperties(fname="/System/Library/Fonts/PingFang.ttc")
 import pandas as pd
 import tqdm
 
-from dbScan import *
+from dbScan import read_vector, torch, dbscan, getCenter, cluster, StandardScaler, is_in_epsilon_neighborhood, silhouette_score
 
 
 def read_vector0(dataset, word):
@@ -135,7 +137,24 @@ def debug3():
             pd.DataFrame(df).to_csv("./lab.csv")
 
 
+def drawResultDebug3():
+    df = pd.read_csv("./lab.csv")
+    datasetLst = ['wiki', 'PKU', 'anwang', 'tieba']
+    wordLst = ['我们', '你们', '中国', '工作']
+    for word in wordLst:
+        for dataset in datasetLst:
+            df1 = df[(df['dataset'] == dataset) & (df['word'] == word)]
+            X = df1['eps']
+            Y = df1['轮廓系数']
+            plt.plot(X, Y)
+    plt.xlabel('eps', fontproperties=font)
+    plt.ylabel('轮廓系数', fontproperties=font)
+    plt.title(f"不同数据集不同词语的轮廓系数汇总", fontproperties=font)
+    plt.show()
+
+
 if __name__ == '__main__':
     # xx = debug1("wiki", "123", savefig=1, eps=1.42, min_samples=4)
     # print(xx)
-    debug3()
+    # debug3()
+    drawResultDebug3()

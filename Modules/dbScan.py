@@ -3,7 +3,7 @@ from sklearn.metrics import silhouette_score
 from sklearn.cluster import DBSCAN
 from sklearn.preprocessing import StandardScaler
 from sklearn.datasets import make_blobs
-
+from Modules.WordCut import ChineseTokenizer
 try:
     from sklearnex import patch_sklearn, unpatch_sklearn
 
@@ -253,6 +253,11 @@ def calc_metric_in_steps(dataset, word, delta=1, min_interval=1, max_interval=10
         res.append(metric)
     # print(f"res:{res}")
     return res
+
+
+def calcSentence(SentenceIn: str, baseDatabase='wiki'):
+    cutResult = ChineseTokenizer().basicCut(SentenceIn)
+
 
 
 if __name__ == "__main__":
