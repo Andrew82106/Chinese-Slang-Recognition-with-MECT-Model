@@ -5,8 +5,11 @@ from sklearn.preprocessing import StandardScaler
 from sklearn.datasets import make_blobs
 from Modules.WordCut import ChineseTokenizer
 try:
+    from ConvWordToVecWithMECT import preprocess
+except:
+    from ..ConvWordToVecWithMECT import preprocess
+try:
     from sklearnex import patch_sklearn, unpatch_sklearn
-
     patch_sklearn()
 except:
     print("sklearnex isn't available, skip init sklearnex")
@@ -70,7 +73,8 @@ def dbscan(X, metric, min_samples, eps=25, savefig=False, word=None, dataset=Non
         saveFig(
             X,
             clusters,
-            name=(savefig if word is None else f"{word}_in_{dataset}") + f"[with_eps={eps}&n={n}&min_samples={min_samples}]",
+            name=(
+                     savefig if word is None else f"{word}_in_{dataset}") + f"[with_eps={eps}&n={n}&min_samples={min_samples}]",
             title=(
                       f"{dataset} clustering" if word is None else f"{dataset} clustering of word {word}") + f"[with_eps={eps}&n={n}&min_samples={min_samples}]",
         )
@@ -83,16 +87,19 @@ def dbscan(X, metric, min_samples, eps=25, savefig=False, word=None, dataset=Non
     return {'cluster result': clusters, 'dbscan result': dbscan}
 
 
-def getCenter(clusters, X):
+def getCenter(clusters, X=None):
     """
     # 获取核心点的索引和坐标
     input: clusters，即聚类结果
     output: core_indices，即核心点的索引
     output: core_points，即核心点的坐标
     """
-    XX = StandardScaler().fit_transform(X)
-    core_indices = clusters.core_sample_indices_
-    core_points = XX[core_indices]
+    if X is not None:
+        XX = StandardScaler().fit_transform(X)
+        core_indices = clusters.core_sample_indices_
+        core_points = XX[core_indices]
+    else:
+        core_points = clusters.components_
     """
     from https://scikit-learn.org/stable/modules/generated/sklearn.cluster.DBSCAN.html:
     components_:ndarray of shape (n_core_samples, n_features)
@@ -156,7 +163,7 @@ def read_vector(dataset, word):
     return X
 
 
-@cache.cache_result(cache_path='cache_function_cluster.pkl', refresh=0)
+@cache.cache_result(cache_path='cache_function_cluster.pkl')
 def cluster(dataset, word, eps=25, savefig=False, metric='euclidean', min_samples=5):
     """
     聚类接口api
@@ -255,12 +262,34 @@ def calc_metric_in_steps(dataset, word, delta=1, min_interval=1, max_interval=10
     return res
 
 
-def calcSentence(SentenceIn: str, baseDatabase='wiki'):
-    cutResult = ChineseTokenizer().basicCut(SentenceIn)
-
+def calcSentence(baseDatabase='wiki', eps=18, metric='euclidean', min_samples=4):
+    cutResult = preprocess()
+    tokenizeRes = cutResult['tokenize']
+    wordVector = cutResult['wordVector']
+    res = []
+    with open("./runningLog.txt", "w", encoding='utf-8') as f:
+        for ID in range(len(tokenizeRes)):
+            for wordID in range(len(tokenizeRes[ID]['wordCutResult'])):
+                word = tokenizeRes[ID]['wordCutResult'][wordID]
+                Vector = wordVector[ID][wordID]
+                print(f"INFO: clustering word:{word}")
+                f.write(f"INFO: clustering word:{word}\n")
+                clustera = cluster(baseDatabase, word, savefig=False, eps=eps, metric=metric, min_samples=min_samples)
+                classify = clustera['cluster result']
+                count_N1 = sum([1 if i == -1 else 0 for i in classify])
+                print(f"聚类结果离群点数：{count_N1}")
+                f.write(f"聚类结果离群点数：{count_N1}\n")
+                center = getCenter(clustera['result class instance'])
+                res.append(
+                    [word, is_in_epsilon_neighborhood(Vector, center, epsilon=eps, metric=metric)]
+                )
+                print(f"res:{res}")
+                f.write(f"res:{res}\n")
+    print(cutResult)
 
 
 if __name__ == "__main__":
+    calcSentence()
     # best_metric, best_eps = maximize_metric_for_eps("tieba", "你")
     # print(f"best_eps:{best_eps}, best_metric:{best_metric}")
     """

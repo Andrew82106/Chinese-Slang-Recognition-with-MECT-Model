@@ -66,7 +66,8 @@ def debug2():
     metric = 'euclidean'
     clustera = cluster(dataset, word, savefig=False, eps=eps, metric=metric)
     X = read_vector(dataset, word)
-    center = getCenter(clustera['result class instance'], X)
+    # center = getCenter(clustera['result class instance'], X)
+    center = getCenter(clustera['result class instance'])
     classify = clustera['cluster result']
     count_N1 = sum([1 if i == -1 else 0 for i in classify])
     Count_N1 = 0
@@ -157,4 +158,5 @@ if __name__ == '__main__':
     # xx = debug1("wiki", "123", savefig=1, eps=1.42, min_samples=4)
     # print(xx)
     # debug3()
-    drawResultDebug3()
+    # drawResultDebug3()
+    debug2()
