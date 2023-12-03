@@ -512,7 +512,8 @@ def preprocess(outdatasetPath=test_path):
     callbacks = [evaluate_callback, lrschedule_callback, clip_callback, WarmupCallback(warmup=args.warmup)]
 
     print("INFO:: Load Model")
-    model_path = '/Users/andrewlee/Desktop/Projects/Chinese-Slang-Recognition-with-MECT-Model/model/best_CSR_MECTNER_f_msra1.0'
+    model_path = os.path.join(rootPth, 'model/best_CSR_MECTNER_f_msra1.0')
+    # model_path = '/Users/andrewlee/Desktop/Projects/Chinese-Slang-Recognition-with-MECT-Model/model/best_CSR_MECTNER_f_msra1.0'
     states = torch.load(model_path).state_dict()
     model.load_state_dict(states)
     from fastNLP.core.predictor import Predictor

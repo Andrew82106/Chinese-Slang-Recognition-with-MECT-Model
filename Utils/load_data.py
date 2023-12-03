@@ -705,7 +705,7 @@ def load_wiki(path, char_embedding_path=None, bigram_embedding_path=None, index_
 
 @cache_results(_cache_fp='cache/load_yangjie_rich_pretrain_word_list', _refresh=False)
 def load_yangjie_rich_pretrain_word_list(embedding_path, drop_characters=True):
-    f = open(embedding_path, 'r')
+    f = open(embedding_path, 'r', encoding='utf-8')
     lines = f.readlines()
     w_list = []
     for line in lines:

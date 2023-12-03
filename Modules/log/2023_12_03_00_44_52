@@ -1,0 +1,3 @@
+2023/12/03 00:45:00 - StaticEmbedding - [INFO] - Found 4755 out of 4838 words in the pre-training embedding.
+2023/12/03 00:45:16 - StaticEmbedding - [INFO] - Found 285342 out of 312288 words in the pre-training embedding.
+2023/12/03 00:45:19 - utils - [INFO] - Save cache to cache\msra_trainClipTruebgminfreq_1char_min_freq_1word_min_freq_1only_train_min_freqTruenumber_norm0load_dataset_seed100.

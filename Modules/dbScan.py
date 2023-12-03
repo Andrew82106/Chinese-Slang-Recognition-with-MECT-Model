@@ -270,21 +270,31 @@ def calcSentence(baseDatabase='wiki', eps=18, metric='euclidean', min_samples=4)
     with open("./runningLog.txt", "w", encoding='utf-8') as f:
         for ID in range(len(tokenizeRes)):
             for wordID in range(len(tokenizeRes[ID]['wordCutResult'])):
-                word = tokenizeRes[ID]['wordCutResult'][wordID]
-                Vector = wordVector[ID][wordID]
-                print(f"INFO: clustering word:{word}")
-                f.write(f"INFO: clustering word:{word}\n")
-                clustera = cluster(baseDatabase, word, savefig=False, eps=eps, metric=metric, min_samples=min_samples)
-                classify = clustera['cluster result']
-                count_N1 = sum([1 if i == -1 else 0 for i in classify])
-                print(f"聚类结果离群点数：{count_N1}")
-                f.write(f"聚类结果离群点数：{count_N1}\n")
-                center = getCenter(clustera['result class instance'])
-                res.append(
-                    [word, is_in_epsilon_neighborhood(Vector, center, epsilon=eps, metric=metric)]
-                )
-                print(f"res:{res}")
-                f.write(f"res:{res}\n")
+                try:
+                    word = tokenizeRes[ID]['wordCutResult'][wordID]
+                    Vector = wordVector[ID][wordID]
+                    print(f"INFO: clustering word:{word}")
+                    f.write(f"INFO: clustering word:{word}\n")
+                    clustera = cluster(baseDatabase, word, savefig=False, eps=eps, metric=metric, min_samples=min_samples)
+                    classify = clustera['cluster result']
+                    count_N1 = sum([1 if i == -1 else 0 for i in classify])
+                    print(f"聚类结果离群点数：{count_N1}")
+                    f.write(f"聚类结果离群点数：{count_N1}\n")
+                    print(f"聚类结果聚类数量：{clustera['num_of_clusters']}")
+                    f.write(f"聚类结果聚类数量：{clustera['num_of_clusters']}")
+                    center = getCenter(clustera['result class instance'])
+                    res.append(
+                        [word, is_in_epsilon_neighborhood(Vector, center, epsilon=eps, metric=metric)]
+                    )
+                    print(f"res:{res}")
+                    f.write(f"res:{res}\n")
+                except:
+                    print(f"INFO: clustering word {word} with error")
+                    res.append(
+                        [word, 404]
+                    )
+        f.write("finalResult:" + str(res))
+
     print(cutResult)
 
 
