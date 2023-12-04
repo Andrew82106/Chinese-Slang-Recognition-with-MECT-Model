@@ -4,12 +4,14 @@ from sklearn.cluster import DBSCAN
 from sklearn.preprocessing import StandardScaler
 from sklearn.datasets import make_blobs
 from Modules.WordCut import ChineseTokenizer
+
 try:
     from ConvWordToVecWithMECT import preprocess
 except:
     from ..ConvWordToVecWithMECT import preprocess
 try:
     from sklearnex import patch_sklearn, unpatch_sklearn
+
     patch_sklearn()
 except:
     print("sklearnex isn't available, skip init sklearnex")
@@ -275,7 +277,8 @@ def calcSentence(baseDatabase='wiki', eps=18, metric='euclidean', min_samples=4)
                     Vector = wordVector[ID][wordID]
                     print(f"INFO: clustering word:{word}")
                     f.write(f"INFO: clustering word:{word}\n")
-                    clustera = cluster(baseDatabase, word, savefig=False, eps=eps, metric=metric, min_samples=min_samples)
+                    clustera = cluster(baseDatabase, word, savefig=False, eps=eps, metric=metric,
+                                       min_samples=min_samples)
                     classify = clustera['cluster result']
                     count_N1 = sum([1 if i == -1 else 0 for i in classify])
                     print(f"聚类结果离群点数：{count_N1}")

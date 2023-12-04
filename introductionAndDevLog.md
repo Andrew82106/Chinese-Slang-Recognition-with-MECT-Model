@@ -517,3 +517,18 @@ Standardize features by removing the mean and scaling to unit variance.
 # 12.2日工作总结
 
 完成了字向量转词向量的接口的初步构建
+
+# 12.4日工作总结
+
+完成了聚类评测算法的构建，最后跑出来的结果非常shi：
+
+```text
+Evaluate data in 0.05 seconds!
+[tester] 
+SpanFPreRecMetric: f=0.056696, pre=0.036524, rec=0.126638
+label_acc: acc=0.882294
+```
+
+其实看到模型输出来的数据就知道这个f值肯定特别shi
+
+一堆404一堆False，词典小加上误判率高，F1值低是必然的

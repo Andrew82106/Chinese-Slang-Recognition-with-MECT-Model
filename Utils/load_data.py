@@ -336,9 +336,9 @@ def load_demo(path, char_embedding_path=None, bigram_embedding_path=None, index_
     char_vocab = Vocabulary()
     bigram_vocab = Vocabulary()
     label_vocab = Vocabulary()
-    print(datasets.keys())
-    print(len(datasets['test']))
-    print(len(datasets['train']))
+    # print(datasets.keys())
+    # print(len(datasets['test']))
+    # print(len(datasets['train']))
 
     char_vocab.from_dataset(datasets['train'], field_name='chars',
                             no_create_entry_dataset=[datasets['test']])
@@ -356,11 +356,7 @@ def load_demo(path, char_embedding_path=None, bigram_embedding_path=None, index_
                                   field_name='target', new_field_name='target')
         # index_dataset：将DataSet中对应field的词转为数字，Example::
 
-    vocabs = {}
-    vocabs['char'] = char_vocab
-    vocabs['label'] = label_vocab
-    vocabs['bigram'] = bigram_vocab
-    vocabs['label'] = label_vocab  # 不太明白这句话的意义在哪里，这不是重复的嘛
+    vocabs = {'char': char_vocab, 'label': label_vocab, 'bigram': bigram_vocab}
     # 这里就将所有的Vocabulary对象集合起来放在vocabs这个字典里面，方便后续调用
     # tips：fastNLP.core.vocabulary对象：用于构建, 存储和使用 str 到 int 的一一映射
     embeddings = {}
@@ -412,9 +408,9 @@ def load_test(path, char_embedding_path=None, bigram_embedding_path=None, index_
     char_vocab = Vocabulary()
     bigram_vocab = Vocabulary()
     label_vocab = Vocabulary()
-    print(datasets.keys())
-    print(len(datasets['test']))
-    print(len(datasets['train']))
+    # print(datasets.keys())
+    # print(len(datasets['test']))
+    # print(len(datasets['train']))
 
     char_vocab.from_dataset(datasets['train'], field_name='chars',
                             no_create_entry_dataset=[datasets['test']])
@@ -974,7 +970,7 @@ def equip_chinese_ner_with_lexicon(datasets, vocabs, embeddings, w_list, word_em
     vocabs['lattice'].index_dataset(*(datasets.values()),
                                     field_name='lattice', new_field_name='lattice')
 
-    return datasets, vocabs, embeddings
+
     """
     当这段代码被执行时，`datasets`、`vocabs` 和 `embeddings` 这三个变量会被填充以帮助构建和处理数据集、词汇表和嵌入向量。下面是它们的具体内容和作用：
 
@@ -986,3 +982,4 @@ def equip_chinese_ner_with_lexicon(datasets, vocabs, embeddings, w_list, word_em
 
 这些变量的填充内容是代码执行过程中生成的，它们的作用是帮助整个数据处理和模型训练过程能够顺利进行，同时为模型提供处理文本数据所需的必要信息。
     """
+    return datasets, vocabs, embeddings
