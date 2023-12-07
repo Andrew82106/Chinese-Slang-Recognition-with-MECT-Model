@@ -615,3 +615,13 @@ Reshape your data either using array.reshape(-1, 1) if your data has a single fe
 
 这下就好办些了，先debug一下然后看看结果
 
+第二种情况的原因很简单，就是聚类结果为1的时候不会返回核心点坐标的。这个时候我们就直接把所有的点都当做核心点就可以了。
+
+那么现在我们把更新后的代码拿回去再跑一遍看看识别率之类的有没有提高
+
+毕竟现在统计出来的404词汇占比：
+
+```text
+print(f'404词汇占总词汇的{100*len(ListOf404)/len(AllWordList)}%')
+> 404词汇占总词汇的48.60276585598474%
+```

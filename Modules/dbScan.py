@@ -194,7 +194,8 @@ def cluster(dataset, word, eps=25, savefig=False, metric='euclidean', min_sample
     return {
         "num_of_clusters": num_of_clusters,
         "result class instance": res['dbscan result'],
-        "cluster result": res['cluster result']
+        "cluster result": res['cluster result'],
+        'cluster_members': X
     }
 
 
@@ -268,7 +269,7 @@ def calc_metric_in_steps(dataset, word, delta=1, min_interval=1, max_interval=10
     return res
 
 
-def calcSentence(baseDatabase='PKU', eps=18, metric='euclidean', min_samples=4):
+def calcSentence(baseDatabase='wiki', eps=18, metric='euclidean', min_samples=4):
     cutResult = preprocess()
     # 这里cutResult存的是待标记数据集的向量化结果
     tokenizeRes = cutResult['tokenize']
@@ -283,7 +284,8 @@ def calcSentence(baseDatabase='PKU', eps=18, metric='euclidean', min_samples=4):
                     # 拿到word和对应的Vector
                     print(f"INFO: clustering word:{word}")
                     f.write(f"INFO: clustering word:{word}\n")
-
+                    if word in '，':
+                        continue
                     clustera = cluster(baseDatabase, word, savefig=False, eps=eps, metric=metric,
                                        min_samples=min_samples)
                     print("success running cluster function")
@@ -296,6 +298,9 @@ def calcSentence(baseDatabase='PKU', eps=18, metric='euclidean', min_samples=4):
                     print(f"聚类结果聚类数量：{clustera['num_of_clusters']}")
                     f.write(f"聚类结果聚类数量：{clustera['num_of_clusters']}")
                     center = getCenter(clustera['result class instance'])
+                    if clustera['num_of_clusters'] == 1:
+                        center = clustera['cluster_members']
+
                     res.append(
                         [word, is_in_epsilon_neighborhood(Vector, center, epsilon=eps, metric=metric)]
                     )
