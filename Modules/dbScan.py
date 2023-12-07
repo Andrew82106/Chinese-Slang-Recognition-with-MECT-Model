@@ -140,12 +140,16 @@ def mkData():
     return X
 
 
+@cache.cache_result(cache_path='read_vector.pkl')
 def read_vector(dataset, word):
     """
     # 从dataset数据集读取word词语的词向量
     Input: dataset: 数据集的名称，比如weibo，anwang等
     Input: word: 需要读取的词语
     Output: X: dataset数据集中word词语的词向量集合，size为N x embeddingLength
+
+    其实这个cluster的缓存存的不太合理，最好的方式其实是直接去索引最后的结果而不是每次去遍历
+    但其实还好，这个函数可以加一个缓存就会快很多，我就不改这个的逻辑了
     """
     assert dataset in OutdatasetLst, f"dataset illegal, got {dataset}"
     with open(nameToPath[dataset], 'rb') as f:
@@ -154,7 +158,6 @@ def read_vector(dataset, word):
     for ID in range(len(X_dict['tokenize'])):
         sentence_meta = X_dict['tokenize'][ID]
         for wordID in range(len(sentence_meta['wordCutResult'])):
-
             if sentence_meta['wordCutResult'][wordID] == word:
                 vector = X_dict['wordVector'][ID][wordID]
                 # print(vector.shape)
@@ -169,6 +172,7 @@ def read_vector(dataset, word):
 def cluster(dataset, word, eps=25, savefig=False, metric='euclidean', min_samples=5):
     """
     聚类接口api
+    从dataset中对word进行聚类
     """
     X = read_vector(dataset, word)
     try:
@@ -264,8 +268,9 @@ def calc_metric_in_steps(dataset, word, delta=1, min_interval=1, max_interval=10
     return res
 
 
-def calcSentence(baseDatabase='wiki', eps=18, metric='euclidean', min_samples=4):
+def calcSentence(baseDatabase='PKU', eps=18, metric='euclidean', min_samples=4):
     cutResult = preprocess()
+    # 这里cutResult存的是待标记数据集的向量化结果
     tokenizeRes = cutResult['tokenize']
     wordVector = cutResult['wordVector']
     res = []
@@ -275,10 +280,14 @@ def calcSentence(baseDatabase='wiki', eps=18, metric='euclidean', min_samples=4)
                 try:
                     word = tokenizeRes[ID]['wordCutResult'][wordID]
                     Vector = wordVector[ID][wordID]
+                    # 拿到word和对应的Vector
                     print(f"INFO: clustering word:{word}")
                     f.write(f"INFO: clustering word:{word}\n")
+
                     clustera = cluster(baseDatabase, word, savefig=False, eps=eps, metric=metric,
                                        min_samples=min_samples)
+                    # 计算出聚类结果
+
                     classify = clustera['cluster result']
                     count_N1 = sum([1 if i == -1 else 0 for i in classify])
                     print(f"聚类结果离群点数：{count_N1}")
@@ -291,14 +300,16 @@ def calcSentence(baseDatabase='wiki', eps=18, metric='euclidean', min_samples=4)
                     )
                     print(f"res:{res}")
                     f.write(f"res:{res}\n")
-                except:
-                    print(f"INFO: clustering word {word} with error")
+                except Exception as e:
+                    print(f"INFO: clustering word {word} with error {e}")
                     res.append(
                         [word, 404]
                     )
         f.write("finalResult:" + str(res))
 
-    print(cutResult)
+    with open("./runningLog.txt", "w", encoding='utf-8') as f:
+        f.write(str(res))
+    # print(cutResult)
 
 
 if __name__ == "__main__":

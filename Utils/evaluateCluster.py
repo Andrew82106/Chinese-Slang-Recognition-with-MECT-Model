@@ -12,7 +12,8 @@ class EmptyModel(nn.Module):
         super().__init__()
         self.dataset = dataset
 
-    def forward(self, preds):
+    @staticmethod
+    def forward(preds):
         return {'pred': preds}
 
 

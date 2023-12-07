@@ -157,6 +157,9 @@ args = parser.parse_args()
 
 @cache.cache_result(cache_path='preprocess.pkl')
 def preprocess(outdatasetPath=test_path):
+    """
+    该函数使用了MECT4CNER，将outdatasetPath中的文本变成向量组，作为返回结果
+    """
     if args.ff_dropout_2 < 0:
         args.ff_dropout_2 = args.ff_dropout
 
