@@ -286,6 +286,7 @@ def calcSentence(baseDatabase='PKU', eps=18, metric='euclidean', min_samples=4):
 
                     clustera = cluster(baseDatabase, word, savefig=False, eps=eps, metric=metric,
                                        min_samples=min_samples)
+                    print("success running cluster function")
                     # 计算出聚类结果
 
                     classify = clustera['cluster result']

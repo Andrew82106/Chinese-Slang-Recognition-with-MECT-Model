@@ -589,3 +589,29 @@ tieba_vector:14935
 这样看来，用PKU作为基础词表其实更好
 
 那么现在要做的，就是使用PKU做基础词表，同时记录下聚类结果为404的词语的原因，然后根据聚类结果进行下一步操作。
+
+在PC上跑了一会儿，一共发现两处可能导致404的地方：
+
+第一种是这样的：
+```text
+INFO: clustering word:抛锚
+success running cluster function
+聚类结果离群点数：4
+聚类结果聚类数量：1
+INFO: clustering word 抛锚 with error Found array with 0 sample(s) (shape=(0, 320)) while a minimum of 1 is required by check_pairwise_arrays.
+```
+
+第二种则是这样的：
+```text
+INFO: clustering word:鬼恐
+eps:18
+X:None
+dataset:PKU
+word:鬼恐
+INFO: clustering word 鬼恐 with error Expected 2D array, got scalar array instead:
+array=nan.
+Reshape your data either using array.reshape(-1, 1) if your data has a single feature or array.reshape(1, -1) if it contains a single sample.
+```
+
+这下就好办些了，先debug一下然后看看结果
+
