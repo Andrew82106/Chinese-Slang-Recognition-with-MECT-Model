@@ -347,9 +347,9 @@ s	O
 
 本	O
 届	O
-首	O
-回	O
-合	O
+首	B-CANT
+回	I-CANT
+合	I-CANT
 客	O
 场	O
 再	O
@@ -368,10 +368,10 @@ C	O
 克	O
 v	O
 s	O
-北	O
-爱	O
-尔	O
-兰	O
+北	B-CANT
+爱	I-CANT
+尔	I-CANT
+兰	I-CANT
 3	O
 1	O
 。	O
@@ -383,10 +383,10 @@ s	O
 捷	O
 克	O
 和	O
-北	O
-爱	O
-尔	O
-兰	O
+北	B-CANT
+爱	I-CANT
+尔	I-CANT
+兰	I-CANT
 彻	O
 底	O
 失	O
@@ -395,11 +395,11 @@ s	O
 会	O
 。	O
 
-两	O
-队	O
-首	O
-回	O
-合	O
+两	B-CANT
+队	I-CANT
+首	B-CANT
+回	I-CANT
+合	I-CANT
 0	O
 -	O
 0	O
@@ -409,8 +409,8 @@ s	O
 和	O
 。	O
 
-两	O
-队	O
+两	B-CANT
+队	I-CANT
 战	O
 意	O
 不	O
@@ -461,10 +461,10 @@ s	O
 赛	O
 还	O
 有	O
-功	O
-亏	O
-一	O
-篑	O
+功	B-CANT
+亏	I-CANT
+一	I-CANT
+篑	I-CANT
 之	O
 虞	O
 。	O
@@ -478,11 +478,11 @@ R	O
 0	O
 7	O
 D	O
-列	O
-支	O
-敦	O
-士	O
-登	O
+列	B-CANT
+支	I-CANT
+敦	I-CANT
+士	I-CANT
+登	I-CANT
 v	O
 s	O
 威	O
@@ -498,11 +498,11 @@ s	O
 年	O
 友	O
 赛	O
-列	O
-支	O
-敦	O
-士	O
-登	O
+列	B-CANT
+支	I-CANT
+敦	I-CANT
+士	I-CANT
+登	I-CANT
 客	O
 场	O
 0	O
@@ -519,11 +519,11 @@ s	O
 一	B-CANT
 支	I-CANT
 打	O
-列	O
-支	O
-敦	O
-士	O
-登	O
+列	B-CANT
+支	I-CANT
+敦	I-CANT
+士	I-CANT
+登	I-CANT
 的	O
 球	B-CANT
 队	I-CANT
@@ -586,9 +586,9 @@ s	O
 局	O
 。	O
 
-首	O
-回	O
-合	O
+首	B-CANT
+回	I-CANT
+合	I-CANT
 客	O
 场	O
 3	O
@@ -665,9 +665,9 @@ s	O
 鬼	O
 。	O
 
-首	O
-回	O
-合	O
+首	B-CANT
+回	I-CANT
+合	I-CANT
 主	O
 场	O
 2	O
@@ -692,9 +692,9 @@ s	O
 1	O
 0	O
 F	O
-安	O
-道	O
-尔	O
+安	B-CANT
+道	I-CANT
+尔	I-CANT
 v	O
 s	O
 乌	B-CANT
@@ -761,10 +761,10 @@ s	O
 胜	O
 。	O
 
-科	O
-尔	O
-多	O
-瓦	O
+科	B-CANT
+尔	I-CANT
+多	I-CANT
+瓦	I-CANT
 近	O
 获	O
 两	O
@@ -950,10 +950,10 @@ s	O
 
 0	O
 4	O
-巴	O
-塞	O
-罗	O
-那	O
+巴	B-CANT
+塞	I-CANT
+罗	I-CANT
+那	I-CANT
 B	O
 队	O
 v	O
@@ -968,10 +968,10 @@ s	O
 升	O
 班	O
 马	O
-巴	O
-塞	O
-罗	O
-那	O
+巴	B-CANT
+塞	I-CANT
+罗	I-CANT
+那	I-CANT
 B	O
 队	O
 4	O
@@ -1010,8 +1010,8 @@ s	O
 上	O
 赛	O
 季	O
-两	O
-队	O
+两	B-CANT
+队	I-CANT
 交	O
 手	O
 两	O
@@ -1210,8 +1210,8 @@ s	O
 负	O
 。	O
 
-两	O
-队	O
+两	B-CANT
+队	I-CANT
 近	O
 三	B-CANT
 次	I-CANT
@@ -1370,8 +1370,8 @@ s	O
 尼	O
 恩	O
 斯	O
-竞	O
-技	O
+竞	B-CANT
+技	I-CANT
 3	O
 1	O
 。	O
@@ -1481,10 +1481,10 @@ s	O
 斯	O
 v	O
 s	O
-维	O
-多	O
-利	O
-亚	O
+维	B-CANT
+多	I-CANT
+利	I-CANT
+亚	I-CANT
 3	O
 0	O
 。	O
@@ -1661,13 +1661,13 @@ s	O
 负	O
 战	O
 绩	O
-凡	O
-人	O
+凡	B-CANT
+人	I-CANT
 歌	O
 。	O
 
-两	O
-队	O
+两	B-CANT
+队	I-CANT
 近	O
 三	B-CANT
 次	I-CANT
@@ -1726,9 +1726,9 @@ s	O
 升	O
 班	O
 马	O
-首	O
-回	O
-合	O
+首	B-CANT
+回	I-CANT
+合	I-CANT
 交	O
 手	O
 1	O
@@ -1753,9 +1753,9 @@ s	O
 进	O
 球	O
 彩	O
-销	O
-售	O
-量	O
+销	B-CANT
+售	I-CANT
+量	I-CANT
 为	O
 ：	O
 2	O
@@ -2021,9 +2021,9 @@ S	O
 0	O
 。	O
 
-巴	O
-拉	O
-圭	O
+巴	B-CANT
+拉	I-CANT
+圭	I-CANT
 虽	O
 然	O
 出	O
@@ -2155,9 +2155,9 @@ S	O
 国	O
 巨	O
 奖	O
-第	O
-三	O
-位	O
+第	B-CANT
+三	I-CANT
+位	I-CANT
 。	O
 
 彩	O
@@ -2293,10 +2293,10 @@ S	O
 算	O
 开	B-CANT
 展	I-CANT
-民	O
-意	O
-调	O
-查	O
+民	B-CANT
+意	I-CANT
+调	I-CANT
+查	I-CANT
 。	O
 
 “	O
@@ -2333,9 +2333,9 @@ S	O
 电	B-CANT
 视	I-CANT
 台	I-CANT
-打	O
-电	O
-话	O
+打	B-CANT
+电	I-CANT
+话	I-CANT
 要	O
 感	O
 谢	O
@@ -2377,9 +2377,9 @@ S	O
 给	O
 老	O
 妈	O
-打	O
-电	O
-话	O
+打	B-CANT
+电	I-CANT
+话	I-CANT
 报	O
 喜	O
 。	O
@@ -2460,9 +2460,9 @@ S	O
 的	O
 男	O
 生	O
-打	O
-电	O
-话	O
+打	B-CANT
+电	I-CANT
+话	I-CANT
 。	O
 
 还	B-CANT
@@ -2470,9 +2470,9 @@ S	O
 太	O
 早	O
 ，	O
-看	O
-电	O
-视	O
+看	B-CANT
+电	I-CANT
+视	I-CANT
 。	O
 
 结	O
@@ -2629,8 +2629,8 @@ S	O
 问	O
 是	B-CANT
 否	I-CANT
-愿	O
-意	O
+愿	B-CANT
+意	I-CANT
 捐	O
 赠	O
 。	O
@@ -2713,10 +2713,10 @@ S	O
 真	O
 没	O
 有	O
-职	O
-业	O
-道	O
-德	O
+职	B-CANT
+业	I-CANT
+道	I-CANT
+德	I-CANT
 。	O
 
 在	O
@@ -2798,9 +2798,9 @@ A	O
 留	O
 在	O
 了	O
-慕	O
-尼	O
-黑	O
+慕	B-CANT
+尼	I-CANT
+黑	I-CANT
 。	O
 
 门	O
@@ -3046,10 +3046,10 @@ A	O
 淀	O
 支	O
 队	O
-数	O
-据	O
-处	O
-理	O
+数	B-CANT
+据	I-CANT
+处	I-CANT
+理	I-CANT
 。	O
 
 小	O
@@ -3211,8 +3211,8 @@ T	O
 现	O
 金	O
 后	O
-逃	O
-跑	O
+逃	B-CANT
+跑	I-CANT
 了	O
 。	O
 
@@ -3386,9 +3386,9 @@ T	O
 仁	O
 医	O
 院	O
-女	O
-医	O
-生	O
+女	B-CANT
+医	I-CANT
+生	I-CANT
 被	O
 砍	O
 续	O
@@ -3514,9 +3514,9 @@ T	O
 ，	O
 位	B-CANT
 于	I-CANT
-伏	O
-牛	O
-山	O
+伏	B-CANT
+牛	I-CANT
+山	I-CANT
 深	O
 处	O
 。	O
@@ -3599,9 +3599,9 @@ T	O
 。	O
 
 这	O
-架	O
-飞	O
-机	O
+架	B-CANT
+飞	I-CANT
+机	I-CANT
 还	O
 有	O
 3	O
@@ -3612,8 +3612,8 @@ T	O
 。	O
 
 【	O
-讲	O
-述	O
+讲	B-CANT
+述	I-CANT
 】	O
 。	O
 
@@ -3911,10 +3911,10 @@ T	O
 】	O
 。	O
 
-专	O
-业	O
-人	O
-士	O
+专	B-CANT
+业	I-CANT
+人	I-CANT
+士	I-CANT
 称	O
 “	O
 吊	O
@@ -4075,10 +4075,10 @@ T	O
 。	O
 
 “	O
-从	O
-那	O
-以	O
-后	O
+从	B-CANT
+那	I-CANT
+以	I-CANT
+后	I-CANT
 ，	O
 他	O
 就	O
@@ -4290,8 +4290,8 @@ T	O
 奔	O
 驰	O
 车	O
-上	O
-街	O
+上	B-CANT
+街	I-CANT
 无	O
 效	O
 频	O
@@ -4405,10 +4405,10 @@ T	O
 小	O
 雨	O
 的	O
-保	O
-安	O
-人	O
-员	O
+保	B-CANT
+安	I-CANT
+人	I-CANT
+员	I-CANT
 。	O
 
 警	O
@@ -4607,8 +4607,8 @@ T	O
 民	O
 楼	O
 下	O
-早	O
-已	O
+早	B-CANT
+已	I-CANT
 满	O
 地	O
 狼	O
@@ -4617,10 +4617,10 @@ T	O
 到	O
 处	O
 是	O
-家	O
-用	O
-电	O
-器	O
+家	B-CANT
+用	I-CANT
+电	I-CANT
+器	I-CANT
 的	O
 碎	O
 片	O
@@ -4719,10 +4719,10 @@ T	O
 际	I-CANT
 上	I-CANT
 ，	O
-在	O
-此	O
-之	O
-前	O
+在	B-CANT
+此	I-CANT
+之	I-CANT
+前	I-CANT
 ，	O
 一	O
 家	O
@@ -4775,10 +4775,10 @@ T	O
 伤	O
 。	O
 
-深	O
-圳	O
-特	O
-区	O
+深	B-CANT
+圳	I-CANT
+特	I-CANT
+区	I-CANT
 报	O
 记	O
 者	O
@@ -4894,10 +4894,10 @@ T	O
 来	I-CANT
 有	O
 点	O
-不	O
-可	O
-思	O
-议	O
+不	B-CANT
+可	I-CANT
+思	I-CANT
+议	I-CANT
 。	O
 
 男	B-CANT
@@ -4969,8 +4969,8 @@ T	O
 习	I-CANT
 成	O
 本	O
-结	O
-识	O
+结	B-CANT
+识	I-CANT
 朋	O
 友	O
 。	O
@@ -5011,10 +5011,10 @@ T	O
 白	O
 领	O
 间	O
-流	O
-行	O
-起	O
-来	O
+流	B-CANT
+行	I-CANT
+起	I-CANT
+来	I-CANT
 。	O
 
 从	O
@@ -5216,9 +5216,9 @@ s	O
 ，	O
 是	O
 骑	O
-三	O
-轮	O
-车	O
+三	B-CANT
+轮	I-CANT
+车	I-CANT
 不	O
 小	O
 心	O
@@ -5562,10 +5562,10 @@ s	O
 由	O
 群	B-CANT
 众	I-CANT
-投	O
-票	O
-决	O
-定	O
+投	B-CANT
+票	I-CANT
+决	I-CANT
+定	I-CANT
 ，	O
 投	O
 票	O
@@ -5846,8 +5846,8 @@ s	O
 在	O
 老	O
 家	O
-打	O
-工	O
+打	B-CANT
+工	I-CANT
 ，	O
 收	B-CANT
 入	I-CANT
@@ -6019,10 +6019,10 @@ s	O
 ，	O
 产	O
 后	O
-健	O
-康	O
-状	O
-况	O
+健	B-CANT
+康	I-CANT
+状	I-CANT
+况	I-CANT
 良	B-CANT
 好	I-CANT
 。	O
@@ -6041,10 +6041,10 @@ s	O
 。	O
 
 县	O
-人	O
-大	O
-代	O
-表	O
+人	B-CANT
+大	I-CANT
+代	I-CANT
+表	I-CANT
 酒	O
 后	O
 开	O
@@ -6207,10 +6207,10 @@ s	O
 据	I-CANT
 ：	O
 县	O
-人	O
-大	O
-代	O
-表	O
+人	B-CANT
+大	I-CANT
+代	I-CANT
+表	I-CANT
 酒	O
 后	O
 撞	O
@@ -6474,9 +6474,9 @@ s	O
 秘	O
 女	B-CANT
 子	I-CANT
-打	O
-电	O
-话	O
+打	B-CANT
+电	I-CANT
+话	I-CANT
 索	O
 要	O
 6	O
@@ -6618,10 +6618,10 @@ s	O
 语	O
 ，	O
 他	O
-努	O
-力	O
-学	O
-习	O
+努	B-CANT
+力	I-CANT
+学	I-CANT
+习	I-CANT
 是	O
 “	O
 为	O
@@ -6780,10 +6780,10 @@ s	O
 叶	O
 华	O
 蓉	O
-非	O
-常	O
-高	O
-兴	O
+非	B-CANT
+常	I-CANT
+高	I-CANT
+兴	I-CANT
 。	O
 
 “	O
@@ -6965,8 +6965,8 @@ s	O
 语	O
 ：	O
 “	O
-队	O
-长	O
+队	B-CANT
+长	I-CANT
 ，	O
 我	B-CANT
 们	I-CANT
@@ -7314,8 +7314,8 @@ s	O
 的	O
 王	O
 伟	O
-立	O
-刻	O
+立	B-CANT
+刻	I-CANT
 通	O
 知	O
 自	B-CANT
@@ -7366,8 +7366,8 @@ s	O
 并	O
 表	O
 示	O
-愿	O
-意	O
+愿	B-CANT
+意	I-CANT
 赔	O
 偿	O
 。	O
@@ -7641,9 +7641,9 @@ s	O
 找	O
 三	O
 个	O
-第	O
-三	O
-者	O
+第	B-CANT
+三	I-CANT
+者	I-CANT
 称	O
 择	O
 优	O
@@ -7666,8 +7666,8 @@ s	O
 到	O
 导	O
 报	O
-讲	O
-述	O
+讲	B-CANT
+述	I-CANT
 自	B-CANT
 己	I-CANT
 的	O
@@ -7825,9 +7825,9 @@ s	O
 情	O
 ，	O
 我	O
-没	O
-什	O
-么	O
+没	B-CANT
+什	I-CANT
+么	I-CANT
 亏	O
 欠	O
 她	O
@@ -7841,8 +7841,8 @@ s	O
 为	O
 ，	O
 不	O
-犯	O
-法	O
+犯	B-CANT
+法	I-CANT
 ，	O
 顶	O
 多	O
@@ -8124,10 +8124,10 @@ s	O
 。	O
 
 从	O
-衣	O
-食	O
-住	O
-行	O
+衣	B-CANT
+食	I-CANT
+住	I-CANT
+行	I-CANT
 到	O
 性	O
 格	O
@@ -8404,9 +8404,9 @@ M	O
 帝	O
 啊	O
 ！	O
-为	O
-什	O
-么	O
+为	B-CANT
+什	I-CANT
+么	I-CANT
 ？	O
 ”	O
 。	O
@@ -8691,8 +8691,8 @@ M	O
 对	O
 生	O
 活	O
-现	O
-状	O
+现	B-CANT
+状	I-CANT
 感	O
 到	O
 不	O
@@ -8831,10 +8831,10 @@ M	O
 网	O
 站	O
 以	O
-电	O
-话	O
-号	O
-码	O
+电	B-CANT
+话	I-CANT
+号	I-CANT
+码	I-CANT
 答	O
 复	O
 网	O
@@ -8855,10 +8855,10 @@ M	O
 ，	O
 砖	O
 称	O
-当	O
-地	O
-政	O
-府	O
+当	B-CANT
+地	I-CANT
+政	I-CANT
+府	I-CANT
 开	B-CANT
 通	I-CANT
 网	O
@@ -9268,10 +9268,10 @@ M	O
 
 当	O
 地	O
-司	O
-法	O
-机	O
-关	O
+司	B-CANT
+法	I-CANT
+机	I-CANT
+关	I-CANT
 介	B-CANT
 入	I-CANT
 数	B-CANT
@@ -9318,8 +9318,8 @@ M	O
 
 民	O
 警	O
-立	O
-刻	O
+立	B-CANT
+刻	I-CANT
 赶	O
 到	O
 报	O
@@ -9331,8 +9331,8 @@ M	O
 
 报	O
 警	O
-人	O
-住	O
+人	B-CANT
+住	I-CANT
 在	O
 某	O
 小	O
@@ -9362,10 +9362,10 @@ M	O
 友	O
 感	O
 到	O
-不	O
-可	O
-思	O
-议	O
+不	B-CANT
+可	I-CANT
+思	I-CANT
+议	I-CANT
 。	O
 
 于	O
@@ -9497,10 +9497,10 @@ M	O
 
 被	O
 告	O
-保	O
-险	O
-公	O
-司	O
+保	B-CANT
+险	I-CANT
+公	I-CANT
+司	I-CANT
 认	O
 为	O
 ，	O
@@ -9511,10 +9511,10 @@ M	O
 单	O
 纯	O
 的	O
-交	O
-通	O
-事	O
-故	O
+交	B-CANT
+通	I-CANT
+事	I-CANT
+故	I-CANT
 。	O
 
 根	O
@@ -9523,9 +9523,9 @@ M	O
 路	O
 交	O
 通	O
-安	O
-全	O
-法	O
+安	B-CANT
+全	I-CANT
+法	I-CANT
 的	O
 无	O
 责	O
@@ -9546,10 +9546,10 @@ M	O
 宏	O
 伟	O
 和	O
-保	O
-险	O
-公	O
-司	O
+保	B-CANT
+险	I-CANT
+公	I-CANT
+司	I-CANT
 均	O
 表	O
 示	O
@@ -9649,9 +9649,9 @@ M	O
 我	O
 也	O
 是	O
-受	O
-害	O
-者	O
+受	B-CANT
+害	I-CANT
+者	I-CANT
 。	O
 
 赵	O
@@ -9691,9 +9691,9 @@ M	O
 报	O
 ：	O
 他	O
-为	O
-什	O
-么	O
+为	B-CANT
+什	I-CANT
+么	I-CANT
 去	O
 偷	O
 车	O
@@ -9708,9 +9708,9 @@ M	O
 不	O
 通	O
 他	O
-为	O
-什	O
-么	O
+为	B-CANT
+什	I-CANT
+么	I-CANT
 偷	O
 车	O
 。	O
@@ -9724,9 +9724,9 @@ M	O
 夫	O
 是	O
 个	O
-什	O
-么	O
-样	O
+什	B-CANT
+么	I-CANT
+样	I-CANT
 的	O
 人	O
 ？	O
@@ -9764,10 +9764,10 @@ M	O
 人	O
 。	O
 
-美	O
-籍	O
-华	O
-人	O
+美	B-CANT
+籍	I-CANT
+华	I-CANT
+人	I-CANT
 向	O
 昆	O
 明	O
@@ -10098,10 +10098,10 @@ T	O
 
 深	O
 圳	O
-儿	O
-童	O
-医	O
-院	O
+儿	B-CANT
+童	I-CANT
+医	I-CANT
+院	I-CANT
 ：	O
 。	O
 
@@ -10291,8 +10291,8 @@ T	O
 体	O
 ，	O
 高	O
-三	O
-层	O
+三	B-CANT
+层	I-CANT
 。	O
 
 但	O
@@ -10377,9 +10377,9 @@ T	O
 
 首	B-CANT
 个	I-CANT
-大	O
-学	O
-生	O
+大	B-CANT
+学	I-CANT
+生	I-CANT
 山	B-CANT
 地	I-CANT
 救	O
@@ -10457,8 +10457,8 @@ T	O
 高	O
 中	O
 生	O
-打	O
-工	O
+打	B-CANT
+工	I-CANT
 摔	O
 成	O
 瘫	O
@@ -10474,8 +10474,8 @@ T	O
 高	O
 中	O
 生	O
-打	O
-工	O
+打	B-CANT
+工	I-CANT
 摔	O
 成	O
 瘫	O
@@ -10736,10 +10736,10 @@ T	O
 姓	O
 郭	O
 的	O
-工	O
-作	O
-人	O
-员	O
+工	B-CANT
+作	I-CANT
+人	I-CANT
+员	I-CANT
 。	O
 
 ”	O
@@ -11111,9 +11111,9 @@ T	O
 忠	O
 利	O
 在	O
-吉	O
-林	O
-市	O
+吉	B-CANT
+林	I-CANT
+市	I-CANT
 落	O
 网	O
 。	O
@@ -11126,8 +11126,8 @@ T	O
 发	O
 现	O
 其	O
-随	O
-身	O
+随	B-CANT
+身	I-CANT
 携	O
 爆	B-CANT
 炸	I-CANT
@@ -11298,8 +11298,8 @@ T	O
 ，	O
 剃	O
 头	O
-逃	O
-亡	O
+逃	B-CANT
+亡	I-CANT
 。	O
 
 离	B-CANT
@@ -11440,8 +11440,8 @@ T	O
 
 庭	O
 审	O
-现	O
-场	O
+现	B-CANT
+场	I-CANT
 。	O
 
 刘	O
@@ -11825,8 +11825,8 @@ T	O
 力	O
 栋	O
 在	O
-逃	O
-跑	O
+逃	B-CANT
+跑	I-CANT
 时	O
 被	O
 小	O
@@ -12058,9 +12058,9 @@ T	O
 。	O
 
 “	O
-心	O
-连	O
-心	O
+心	B-CANT
+连	I-CANT
+心	I-CANT
 警	O
 民	O
 爱	O
@@ -12168,10 +12168,10 @@ T	O
 小	O
 区	O
 中	O
-流	O
-传	O
-开	O
-来	O
+流	B-CANT
+传	I-CANT
+开	I-CANT
+来	I-CANT
 。	O
 
 去	O
@@ -12281,9 +12281,9 @@ T	O
 经	O
 交	O
 送	O
-公	O
-安	O
-部	O
+公	B-CANT
+安	I-CANT
+部	I-CANT
 做	O
 进	B-CANT
 一	I-CANT
@@ -12450,9 +12450,9 @@ T	O
 吉	B-CANT
 林	I-CANT
 省	I-CANT
-吉	O
-林	O
-市	O
+吉	B-CANT
+林	I-CANT
+市	I-CANT
 人	O
 。	O
 
@@ -12466,9 +12466,9 @@ T	O
 日	O
 ，	O
 在	O
-吉	O
-林	O
-市	O
+吉	B-CANT
+林	I-CANT
+市	I-CANT
 看	O
 守	O
 所	O
@@ -12567,8 +12567,8 @@ T	O
 宫	O
 等	O
 地	O
-打	O
-工	O
+打	B-CANT
+工	I-CANT
 。	O
 
 以	B-CANT
@@ -12627,9 +12627,9 @@ T	O
 京	O
 报	O
 ：	O
-有	O
-没	O
-有	O
+有	B-CANT
+没	I-CANT
+有	I-CANT
 想	O
 过	O
 被	O
@@ -12654,8 +12654,8 @@ T	O
 忐	O
 忑	O
 ，	O
-心	O
-情	O
+心	B-CANT
+情	I-CANT
 很	O
 复	O
 杂	O
@@ -13494,8 +13494,8 @@ k	O
 ，	O
 那	O
 种	O
-心	O
-情	O
+心	B-CANT
+情	I-CANT
 更	O
 复	O
 杂	O
@@ -13568,8 +13568,8 @@ k	O
 我	O
 比	O
 对	O
-姐	O
-姐	O
+姐	B-CANT
+姐	I-CANT
 都	O
 好	O
 。	O
@@ -13795,9 +13795,9 @@ k	O
 没	O
 踏	O
 上	O
-吉	O
-林	O
-市	O
+吉	B-CANT
+林	I-CANT
+市	I-CANT
 一	O
 步	O
 ？	O
@@ -13951,9 +13951,9 @@ k	O
 刚	O
 ：	O
 我	O
-为	O
-什	O
-么	O
+为	B-CANT
+什	I-CANT
+么	I-CANT
 去	O
 杭	B-CANT
 州	I-CANT
@@ -14104,9 +14104,9 @@ k	O
 京	O
 报	O
 ：	O
-为	O
-什	O
-么	O
+为	B-CANT
+什	I-CANT
+么	I-CANT
 改	B-CANT
 名	I-CANT
 刘	O
@@ -14494,8 +14494,8 @@ k	O
 表	B-CANT
 现	I-CANT
 得	O
-自	O
-信	O
+自	B-CANT
+信	I-CANT
 。	O
 
 这	B-CANT
@@ -14742,9 +14742,9 @@ k	O
 争	O
 手	O
 痕	O
-经	O
-营	O
-权	O
+经	B-CANT
+营	I-CANT
+权	I-CANT
 开	O
 枪	O
 射	O
@@ -15440,10 +15440,10 @@ T	O
 学	I-CANT
 读	O
 书	O
-更	O
-是	O
-如	O
-此	O
+更	B-CANT
+是	I-CANT
+如	I-CANT
+此	I-CANT
 。	O
 
 ”	O
@@ -15586,9 +15586,9 @@ T	O
 一	O
 看	O
 ，	O
-第	O
-一	O
-首	O
+第	B-CANT
+一	I-CANT
+首	I-CANT
 就	O
 是	O
 北	O
@@ -15984,9 +15984,9 @@ k	O
 ：	O
 死	B-CANT
 者	I-CANT
-打	O
-电	O
-话	O
+打	B-CANT
+电	I-CANT
+话	I-CANT
 时	O
 遭	O
 一	O
@@ -16110,10 +16110,10 @@ k	O
 时	O
 陷	O
 入	O
-胶	O
-着	O
-状	O
-态	O
+胶	B-CANT
+着	I-CANT
+状	I-CANT
+态	I-CANT
 。	O
 
 突	O
@@ -16175,9 +16175,9 @@ k	O
 两	B-CANT
 人	I-CANT
 又	O
-打	O
-电	O
-话	O
+打	B-CANT
+电	I-CANT
+话	I-CANT
 继	O
 续	O
 争	O
@@ -16232,9 +16232,9 @@ k	O
 ，	O
 杨	O
 某	O
-打	O
-电	O
-话	O
+打	B-CANT
+电	I-CANT
+话	I-CANT
 约	O
 刘	O
 小	O
@@ -16329,8 +16329,8 @@ k	O
 的	O
 肿	O
 胀	O
-症	O
-状	O
+症	B-CANT
+状	I-CANT
 已	O
 经	O
 得	B-CANT
@@ -16587,10 +16587,10 @@ k	O
 信	O
 阳	O
 市	O
-各	O
-级	O
-党	O
-委	O
+各	B-CANT
+级	I-CANT
+党	I-CANT
+委	I-CANT
 、	O
 政	O
 府	O
@@ -16811,8 +16811,8 @@ k	O
 朱	O
 先	O
 生	O
-放	O
-松	O
+放	B-CANT
+松	I-CANT
 了	O
 警	O
 惕	O
@@ -17527,10 +17527,10 @@ D	O
 獗	O
 超	O
 市	O
-迫	O
-不	O
-得	O
-已	O
+迫	B-CANT
+不	I-CANT
+得	I-CANT
+已	I-CANT
 。	O
 
 3	O
@@ -18052,9 +18052,9 @@ N	O
 近	O
 十	O
 天	O
-达	O
-到	O
-高	O
-潮	O
+达	B-CANT
+到	I-CANT
+高	I-CANT
+潮	I-CANT
 。	O
 

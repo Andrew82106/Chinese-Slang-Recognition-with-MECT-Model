@@ -187,7 +187,7 @@ def cluster(dataset, word, eps=25, savefig=False, metric='euclidean', min_sample
         )
         # {'cluster result': clusters, 'dbscan result': dbscan}
     except Exception as e:
-        print(f"eps:{eps}\nX:{X}\ndataset:{dataset}\nword:{word}")
+        # print(f"eps:{eps}\nX:{X}\ndataset:{dataset}\nword:{word}")
         raise e
     num_of_clusters = len(set(res['cluster result']))
 
@@ -276,26 +276,24 @@ def calcSentence(baseDatabase='wiki', eps=18, metric='euclidean', min_samples=4)
     wordVector = cutResult['wordVector']
     res = []
     with open("./runningLog.txt", "w", encoding='utf-8') as f:
-        for ID in range(len(tokenizeRes)):
+        for ID in tqdm.tqdm(range(len(tokenizeRes)), desc='processing'):
             for wordID in range(len(tokenizeRes[ID]['wordCutResult'])):
                 try:
                     word = tokenizeRes[ID]['wordCutResult'][wordID]
                     Vector = wordVector[ID][wordID]
                     # 拿到word和对应的Vector
-                    print(f"INFO: clustering word:{word}")
+                    # print(f"INFO: clustering word:{word}")
                     f.write(f"INFO: clustering word:{word}\n")
-                    if word in '，':
-                        continue
                     clustera = cluster(baseDatabase, word, savefig=False, eps=eps, metric=metric,
                                        min_samples=min_samples)
-                    print("success running cluster function")
+                    # print("success running cluster function")
                     # 计算出聚类结果
 
                     classify = clustera['cluster result']
                     count_N1 = sum([1 if i == -1 else 0 for i in classify])
-                    print(f"聚类结果离群点数：{count_N1}")
+                    # print(f"聚类结果离群点数：{count_N1}")
                     f.write(f"聚类结果离群点数：{count_N1}\n")
-                    print(f"聚类结果聚类数量：{clustera['num_of_clusters']}")
+                    # print(f"聚类结果聚类数量：{clustera['num_of_clusters']}")
                     f.write(f"聚类结果聚类数量：{clustera['num_of_clusters']}")
                     center = getCenter(clustera['result class instance'])
                     if clustera['num_of_clusters'] == 1:
@@ -304,10 +302,11 @@ def calcSentence(baseDatabase='wiki', eps=18, metric='euclidean', min_samples=4)
                     res.append(
                         [word, is_in_epsilon_neighborhood(Vector, center, epsilon=eps, metric=metric)]
                     )
-                    print(f"res:{res}")
+                   #  print(f"res:{res}")
                     f.write(f"res:{res}\n")
                 except Exception as e:
-                    print(f"INFO: clustering word {word} with error {e}")
+                    # print(f"INFO: clustering word {word} with error {e}")
+                    f.write(f"INFO: clustering word {word} with error {e}")
                     res.append(
                         [word, 404]
                     )
