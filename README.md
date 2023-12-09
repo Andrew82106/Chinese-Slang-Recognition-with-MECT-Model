@@ -28,9 +28,14 @@ python debug1.py --dataset weibo --status generate --device cpu
 python debug1.py --dataset weibo --status generate --device cpu --extra_datasets tieba
 ```
 
-## stage4: dbscan聚类分析
-
+## stage4: dbscan聚类分
 
 ```py
 python cluster.py
+```
+
+## stage5: 生成文本解析结果
+
+```py
+python Modules/dbScan.py
 ```
