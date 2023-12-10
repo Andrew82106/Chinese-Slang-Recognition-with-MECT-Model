@@ -277,4 +277,9 @@ def main(word):
 
 if __name__ == '__main__':
     for i in tqdm.tqdm(wordList, desc='处理词语中'):
+        with open("./LLM_dataGenerate.txt", "r", encoding='utf-8') as f:
+            cont = f.read()
+            if cont.count(str(i)):
+                print(f"word:{i} count:{cont.count(str(i))}")
+                continue
         main(i)
