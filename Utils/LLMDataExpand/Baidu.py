@@ -1,6 +1,7 @@
 import requests
 import tqdm
 import json
+import pprint
 
 wordList = ['不败', '曼联', '6', '英超', '胜率', '70', '不给力', '深盘', '下盘', '不给力', '客场', '胜率', '英超',
             '平手', '正路', '四支', '舵手', '曼城', '丝袜', '墨镜', '热刺', '狼队', '足球彩票', '11092', '14', '初盘',
@@ -276,10 +277,19 @@ def main(word):
 
 
 if __name__ == '__main__':
+    res = []
+    summaryDict = {}
     for i in tqdm.tqdm(wordList, desc='处理词语中'):
         with open("./LLM_dataGenerate.txt", "r", encoding='utf-8') as f:
             cont = f.read()
-            if cont.count(str(i)):
-                print(f"word:{i} count:{cont.count(str(i))}")
+            if cont.count(str(i)) not in summaryDict:
+                summaryDict[cont.count(str(i))] = 0
+            summaryDict[cont.count(str(i))] += 1
+            if cont.count(str(i)) >= 15:
+                # print(f"word:{i} count:{cont.count(str(i))}")
+                res.append(int(cont.count(str(i))))
                 continue
-        main(i)
+            print(f'word: {i} count:{cont.count(str(i))} processing')
+        # main(i)
+    print(sum(res)/len(res), min(res), max(res))
+    pprint.pprint(summaryDict)
