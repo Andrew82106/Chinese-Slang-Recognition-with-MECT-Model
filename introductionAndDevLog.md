@@ -78,7 +78,6 @@ else:
 # 11.6 日工作总结
 
 - 完成了CSR_MECTNER模型的结构调整，将输出定向到了seq_output变量中，研究了seq_output变量的形状
-
 - 确定了接下来的思路：
 
 首先使用任意方法A进行词向量合成，然后使用dbscan进行聚类，观察不同的数据集对于同一个词语效果是否有区别，以此来判断算法效果
@@ -88,7 +87,6 @@ else:
 # 11.7 日工作总结
 
 - 构建了字向量到词向量的模块``CharacterToWord.py``，后续可以将提升后的模型接入该类中
-
 - 构建贴吧数据集
 
 这里需要注意的一点是，贴吧数据集不需要做标记，也就是所有的字的标记都是O。这样的话直接用这个数据集套上已有的模型，就可以直接输出词向量，可以认为这个词向量是基于已有的MECT4CNER模型的拟合的模型构建的。
@@ -98,14 +96,14 @@ state dict，否则的话模型size不匹配，应该得想个别的办法弄弄
 
 尝试用微博训练出来的模型去跑贴吧的数据集，然后发现报这个错：
 
- ```py
- TypeError: forward()
+```py
+TypeError: forward()
 missing
 4
 required
 positional
 arguments: 'bigrams', 'seq_len', 'lex_num', and 'target'
- ```
+```
 
 一开始以为是表的问题，试了试原数据集，发现又能跑动，然后就估计是原数据表和新数据表的内容不一样
 
@@ -121,8 +119,9 @@ arguments: 'bigrams', 'seq_len', 'lex_num', and 'target'
 
 然后调试了一下贴吧数据集的表的信息：
 
+
 | field_names | chars | target | bigrams | seq_len | lexicons | raw_chars | lex_num | lex_s | lex_e | lattice | pos_s | pos_e |
-|-------------|-------|--------|---------|---------|----------|-----------|---------|-------|-------|---------|-------|-------|
+| ----------- | ----- | ------ | ------- | ------- | -------- | --------- | ------- | ----- | ----- | ------- | ----- | ----- |
 | is_input    | False | False  | False   | False   | False    | False     | False   | False | False | True    | True  | True  |
 | is_target   | False | False  | False   | False   | False    | False     | False   | False | False | False   | False | False |
 | ignore_type |       |        |         |         |          |           |         |       |       | False   | False | False |
@@ -132,8 +131,8 @@ arguments: 'bigrams', 'seq_len', 'lex_num', and 'target'
 
 同时，如果外接数据集过大的话，确实会出现词表溢出的情况，比如下面：
 
- ```py
- Traceback(most
+```py
+Traceback(most
 recent
 call
 last):
@@ -162,7 +161,7 @@ IndexError: index
 of
 bounds
 for dimension 0 with size 42889
- ```
+```
 
 现在测得，对于贴吧数据集，使用微博的MECT模型，句子数量在5k是可以满足词表大小的，此时词表大小只有12396左右，微博MECT模型词表大小有42889
 
@@ -179,7 +178,6 @@ for dimension 0 with size 42889
 对项目进行一些修补，同时训练了新的模型：
 
 - 给服务器安装了字体，让聚类的结果能够以完整的中文图片展示
-
 - 修改了字向量转化为词向量的处理逻辑，将词汇表中所有可行的词语都进行转换
 
 这个工作的思路是，对于已有的句子，不能转化的就跳过，能转化的就转换。最后算出来的结果，发现只有7%的句子可以被转换，落实到数据上是达到了214443句，比之前的句子稍微多一些
@@ -302,7 +300,6 @@ PKU语料库汇总起来确实大，能够达到1个多G的pkl，和tieba语料�
 
 # 11.27日工作总结
 
-
 总结一下这几天做的事情和现在的思路
 
 首先，构建了[MNGG数据集](https://github.com/Andrew82106/MNGG_Dataset)
@@ -345,9 +342,7 @@ CSR_MECT的巨大优势之一，是不需要打标好的数据，只需要纯文
 
 那么，是不是我们可以通过直接对比当前词语的向量和已知当前词语在正常数据集中的聚类结果就可以判断词语是否是暗语词汇了？
 
-
 比如：
-
 
 ```python
 def checkWord(word, clusterResult):
@@ -593,6 +588,7 @@ tieba_vector:14935
 在PC上跑了一会儿，一共发现两处可能导致404的地方：
 
 第一种是这样的：
+
 ```text
 INFO: clustering word:抛锚
 success running cluster function
@@ -602,6 +598,7 @@ INFO: clustering word 抛锚 with error Found array with 0 sample(s) (shape=(0, 
 ```
 
 第二种则是这样的：
+
 ```text
 INFO: clustering word:鬼恐
 eps:18
@@ -671,3 +668,16 @@ Embedding-V1是基于百度文心大模型技术的文本表示模型，将文�
 
 这10个词语必然是暗语词汇。。。。
 
+# 12.12日工作总结
+
+数据增强后的新wiki数据集跑出来了
+
+现在的结果和之前的结果对比如下：
+
+
+| 数据集      | 数据集的词汇表大小 | 所以词语占比                        |
+|----------|-----------|-------------------------------|
+| old wiki | 42970     | 所有10485个词语，3145是不在wiki中的，占29% |
+| new wiki | 47262     | 所有10485个词语，184是不在wiki中的，占1%   |
+
+接下来就是处理新数据

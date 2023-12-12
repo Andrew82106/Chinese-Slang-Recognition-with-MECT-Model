@@ -6,7 +6,7 @@ def Convert():
         cont = cont.replace(f"{i}. ", "")
     with open("./LLM_dataGenerate.bio", 'w', encoding='utf-8') as f:
         for i in cont:
-            if len(i) == 0:
+            if len(i.replace(" ", "")) == 0:
                 continue
             f.write(f"{i} O\n")
             if i in '.。':
