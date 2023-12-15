@@ -1,0 +1,15 @@
+2023/12/15 23:29:51 - StaticEmbedding - [INFO] - Found 4755 out of 4838 words in the pre-training embedding.
+2023/12/15 23:30:09 - StaticEmbedding - [INFO] - Found 285342 out of 312288 words in the pre-training embedding.
+2023/12/15 23:30:13 - utils - [INFO] - Save cache to cache/msra_trainClipTruebgminfreq_1char_min_freq_1word_min_freq_1only_train_min_freqTruenumber_norm0load_dataset_seed100.
+2023/12/15 23:30:15 - utils - [INFO] - Save cache to cache/yj.
+2023/12/15 23:30:38 - StaticEmbedding - [INFO] - Found 698668 out of 698670 words in the pre-training embedding.
+2023/12/15 23:30:47 - StaticEmbedding - [INFO] - Found 114939 out of 115022 words in the pre-training embedding.
+2023/12/15 23:30:56 - utils - [INFO] - Save cache to cache/msra_lattice_only_trainFalse_trainClipTrue_norm_num0char_min_freq1bigram_min_freq1word_min_freq1only_train_min_freqTruenumber_norm0lexicon_yjload_dataset_seed100.
+2023/12/15 23:30:56 - CNNRadicalLevelEmbedding - [INFO] - Start constructing character vocabulary.
+2023/12/15 23:30:56 - CNNRadicalLevelEmbedding - [INFO] - In total, there are 1200 distinct characters.
+2023/12/15 23:30:59 - StaticEmbedding - [INFO] - Found 1814 out of 1823 words in the pre-training embedding.
+2023/12/15 23:31:12 - StaticEmbedding - [INFO] - Found 9211 out of 10155 words in the pre-training embedding.
+2023/12/15 23:31:12 - utils - [INFO] - Save cache to cache/test_trainClipTruebgminfreq_1char_min_freq_1word_min_freq_1only_train_min_freqTruenumber_norm0load_dataset_seed100.
+2023/12/15 23:31:27 - StaticEmbedding - [INFO] - Found 698668 out of 698670 words in the pre-training embedding.
+2023/12/15 23:31:34 - StaticEmbedding - [INFO] - Found 6384 out of 6393 words in the pre-training embedding.
+2023/12/15 23:31:35 - utils - [INFO] - Save cache to cache/test_lattice_only_train:False_trainClipTrue_norm_num0char_min_freq1bigram_min_freq1word_min_freq1only_train_min_freqTruenumber_norm0lexicon_yjload_dataset_seed100.

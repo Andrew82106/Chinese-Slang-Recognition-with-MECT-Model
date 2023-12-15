@@ -742,7 +742,7 @@ elif args.status == 'generate':
     CharacterToWord = CTW()
     tokenizer = ChineseTokenizer()
     save_path = os.path.join(rootPth, "datasets/pickle_data")
-    res = {"tokenize": [], "wordVector": []}
+    res = {"tokenize": [], "wordVector": [], 'fastIndexWord': {}}
     suc = 0
     fai = 0
     for i in tqdm.tqdm(range(len(text['test'])), desc="将字向量转化为词向量"):
@@ -776,6 +776,13 @@ elif args.status == 'generate':
         wordVector = CharacterToWord.run(mect4cner_out_vector, tokenize['wordGroupsID'])
         res['tokenize'].append(tokenize)
         res['wordVector'].append(wordVector)
+        for Index in range(len(res['tokenize'][-1]['wordCutResult'])):
+            word = res['tokenize'][-1]['wordCutResult'][Index]
+            Vec = res['wordVector'][-1][Index]
+            if word not in res['fastIndexWord']:
+                res['fastIndexWord'][word] = Vec.unsqueeze(0)
+            else:
+                res['fastIndexWord'][word] = torch.cat((res['fastIndexWord'][word], Vec.unsqueeze(0)), dim=0)
     print(f"suc rate:{100 * suc / (suc + fai)}%")
 
     file_name = f"{args.dataset if args.extra_datasets == 'None' else args.extra_datasets}.pkl"

@@ -154,6 +154,7 @@ def read_vector(dataset, word):
     assert dataset in OutdatasetLst, f"dataset illegal, got {dataset}"
     with open(nameToPath[dataset], 'rb') as f:
         X_dict = pickle.load(f)
+    """
     X = None
     for ID in range(len(X_dict['tokenize'])):
         sentence_meta = X_dict['tokenize'][ID]
@@ -166,6 +167,8 @@ def read_vector(dataset, word):
                 else:
                     X = torch.cat((X, vector.unsqueeze(0)), dim=0)
     return X
+    """
+    return X_dict['fastIndexWord'][word]
 
 
 @cache.cache_result(cache_path='cache_function_cluster.pkl')
