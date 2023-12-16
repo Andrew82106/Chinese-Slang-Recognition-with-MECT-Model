@@ -1,10 +1,8 @@
 import matplotlib.pyplot as plt
-from sklearn.metrics import silhouette_score
 from sklearn.cluster import DBSCAN
 from sklearn.preprocessing import StandardScaler
 from sklearn.datasets import make_blobs
 
-# from Modules.WordCut import ChineseTokenizer
 
 try:
     import sys
@@ -15,7 +13,6 @@ except:
     from ..ConvWordToVecWithMECT import preprocess
 try:
     from sklearnex import patch_sklearn, unpatch_sklearn
-
     patch_sklearn()
 except:
     print("sklearnex isn't available, skip init sklearnex")
@@ -190,7 +187,7 @@ def cluster(dataset, word, eps=25, savefig=False, metric='euclidean', min_sample
     从dataset中对word进行聚类
     """
     X = read_vector(dataset, word)
-    # print("load vec")
+    print("load vec")
     try:
         res = dbscan(
             X,
@@ -304,7 +301,7 @@ def calcSentence(baseDatabase='wiki', eps=18, metric='euclidean', min_samples=4)
                     f.write(f"INFO: clustering word:{word}\n")
                     clustera = cluster(baseDatabase, word, savefig=False, eps=eps, metric=metric,
                                        min_samples=min_samples)
-                    # print("success running cluster function")
+                    print("success running cluster function")
                     # 计算出聚类结果
 
                     classify = clustera['cluster result']
@@ -323,7 +320,7 @@ def calcSentence(baseDatabase='wiki', eps=18, metric='euclidean', min_samples=4)
                     #  print(f"res:{res}")
                     f.write(f"res:{res}\n")
                 except Exception as e:
-                    # print(f"INFO: clustering word {word} with error {e}")
+                    print(f"INFO: clustering word {word} with error {e}")
                     f.write(f"INFO: clustering word {word} with error {e}")
                     res.append(
                         [word, 404]
