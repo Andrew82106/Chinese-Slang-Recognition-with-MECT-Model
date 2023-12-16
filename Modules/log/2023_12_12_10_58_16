@@ -1,0 +1,13 @@
+2023/12/12 10:58:26 - StaticEmbedding - [INFO] - Found 4755 out of 4838 words in the pre-training embedding.
+2023/12/12 10:58:44 - StaticEmbedding - [INFO] - Found 285342 out of 312288 words in the pre-training embedding.
+2023/12/12 10:58:46 - utils - [INFO] - Save cache to cache\msra_trainClipTruebgminfreq_1char_min_freq_1word_min_freq_1only_train_min_freqTruenumber_norm0load_dataset_seed100.
+2023/12/12 10:58:46 - utils - [INFO] - Read cache from cache/yj.
+2023/12/12 10:58:50 - utils - [INFO] - Read cache from B:\Chinese-Slang-Recognition-with-MECT-Model\cache\msra_lattice_only_trainFalse_trainClipTrue_norm_num0char_min_freq1bigram_min_freq1word_min_freq1only_train_min_freqTruenumber_norm0lexicon_yjload_dataset_seed100.
+2023/12/12 10:58:50 - CNNRadicalLevelEmbedding - [INFO] - Start constructing character vocabulary.
+2023/12/12 10:58:50 - CNNRadicalLevelEmbedding - [INFO] - In total, there are 1200 distinct characters.
+2023/12/12 10:58:52 - StaticEmbedding - [INFO] - Found 1814 out of 1823 words in the pre-training embedding.
+2023/12/12 10:59:05 - StaticEmbedding - [INFO] - Found 9211 out of 10155 words in the pre-training embedding.
+2023/12/12 10:59:05 - utils - [INFO] - Save cache to cache\test_trainClipTruebgminfreq_1char_min_freq_1word_min_freq_1only_train_min_freqTruenumber_norm0load_dataset_seed100.
+2023/12/12 10:59:20 - StaticEmbedding - [INFO] - Found 698668 out of 698670 words in the pre-training embedding.
+2023/12/12 10:59:25 - StaticEmbedding - [INFO] - Found 6384 out of 6393 words in the pre-training embedding.
+2023/12/12 10:59:26 - utils - [INFO] - Save cache to cache\test_lattice_only_train:False_trainClipTrue_norm_num0char_min_freq1bigram_min_freq1word_min_freq1only_train_min_freqTruenumber_norm0lexicon_yjload_dataset_seed100.

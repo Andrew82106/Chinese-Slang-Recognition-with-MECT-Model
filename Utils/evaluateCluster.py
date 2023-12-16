@@ -55,8 +55,12 @@ def evaluateDBScanMetric(resultFilePath="../Modules/runningLog.txt"):
     global vocabs
     new_Path = convertRunningLog(resultFilePath)
     loader = ConllLoader(['chars', 'target'])
-    train_bundle = loader.load(
-        "/Users/andrewlee/Desktop/Projects/Chinese-Slang-Recognition-with-MECT-Model/datasets/NER/test/input.bio")
+    try:
+        train_bundle = loader.load(
+            "/Users/andrewlee/Desktop/Projects/Chinese-Slang-Recognition-with-MECT-Model/datasets/NER/test/input.bio")
+    except:
+        train_bundle = loader.load(
+            "B:\Chinese-Slang-Recognition-with-MECT-Model\datasets\NER\test\input.bio")
     test_bundle = loader.load(new_Path)
 
     datasets = dict()

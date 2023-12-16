@@ -3,9 +3,13 @@ from sklearn.metrics import silhouette_score
 from sklearn.cluster import DBSCAN
 from sklearn.preprocessing import StandardScaler
 from sklearn.datasets import make_blobs
-from Modules.WordCut import ChineseTokenizer
+
+# from Modules.WordCut import ChineseTokenizer
 
 try:
+    import sys
+
+    sys.path.append('B:\Chinese-Slang-Recognition-with-MECT-Model')
     from ConvWordToVecWithMECT import preprocess
 except:
     from ..ConvWordToVecWithMECT import preprocess
@@ -29,6 +33,8 @@ from Utils.AutoCache import Cache
 cache = Cache()
 plt.rcParams['font.sans-serif'] = ['SimHei']  # Show Chinese label
 plt.rcParams['axes.unicode_minus'] = False  # These two lines need to be set manually
+
+X_dict = None
 
 
 def saveFig(X, clusters, name="your_plot_name", xlabel='Feature 1', ylabel='Feature 2', title='DBSCAN Clustering'):
@@ -152,11 +158,17 @@ def read_vector(dataset, word):
     但其实还好，这个函数可以加一个缓存就会快很多，我就不改这个的逻辑了
     """
     assert dataset in OutdatasetLst, f"dataset illegal, got {dataset}"
-    with open(nameToPath[dataset], 'rb') as f:
-        X_dict = pickle.load(f)
+    global X_dict
+    if X_dict is None:
+        with open(nameToPath[dataset], 'rb') as f:
+            print("initing x dict")
+            X_dict = pickle.load(f)
+            print("finish loading x dict")
     """
     X = None
     for ID in range(len(X_dict['tokenize'])):
+    
+    
         sentence_meta = X_dict['tokenize'][ID]
         for wordID in range(len(sentence_meta['wordCutResult'])):
             if sentence_meta['wordCutResult'][wordID] == word:
@@ -178,6 +190,7 @@ def cluster(dataset, word, eps=25, savefig=False, metric='euclidean', min_sample
     从dataset中对word进行聚类
     """
     X = read_vector(dataset, word)
+    # print("load vec")
     try:
         res = dbscan(
             X,
@@ -273,6 +286,8 @@ def calc_metric_in_steps(dataset, word, delta=1, min_interval=1, max_interval=10
 
 
 def calcSentence(baseDatabase='wiki', eps=18, metric='euclidean', min_samples=4):
+    print("starting cutting Result")
+    # exit(0)
     cutResult = preprocess()
     # 这里cutResult存的是待标记数据集的向量化结果
     tokenizeRes = cutResult['tokenize']
@@ -305,7 +320,7 @@ def calcSentence(baseDatabase='wiki', eps=18, metric='euclidean', min_samples=4)
                     res.append(
                         [word, is_in_epsilon_neighborhood(Vector, center, epsilon=eps, metric=metric)]
                     )
-                   #  print(f"res:{res}")
+                    #  print(f"res:{res}")
                     f.write(f"res:{res}\n")
                 except Exception as e:
                     # print(f"INFO: clustering word {word} with error {e}")
@@ -345,4 +360,3 @@ if __name__ == "__main__":
         best_metric1, best_eps1 = maximize_metric_for_eps("weibo", i)
         print(f"word:{i}\nbest_metric in tieba:{best_metric}\nbest_metric in weibo:{best_metric1}")
     """
-    pass
