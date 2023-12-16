@@ -1,0 +1,1 @@
+[['但是', False], ['，', True], ['至今', True], ['不败', True], ['并', True], ['不能', False], ['说明', True], ['曼联', False]]

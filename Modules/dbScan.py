@@ -2,7 +2,8 @@ import matplotlib.pyplot as plt
 from sklearn.cluster import DBSCAN
 from sklearn.preprocessing import StandardScaler
 from sklearn.datasets import make_blobs
-
+import time
+from datetime import datetime
 
 try:
     import sys
@@ -13,6 +14,7 @@ except:
     from ..ConvWordToVecWithMECT import preprocess
 try:
     from sklearnex import patch_sklearn, unpatch_sklearn
+
     patch_sklearn()
 except:
     print("sklearnex isn't available, skip init sklearnex")
@@ -32,6 +34,24 @@ plt.rcParams['font.sans-serif'] = ['SimHei']  # Show Chinese label
 plt.rcParams['axes.unicode_minus'] = False  # These two lines need to be set manually
 
 X_dict = None
+
+
+def writeLog(Content, init=False):
+    if init:
+        with open("./runningLog.txt", "w", encoding='utf-8') as f:
+            f.write('')
+    with open("./runningLog.txt", "a", encoding='utf-8') as f:
+        f.write("\n" + Content)
+
+
+def writeResult(Content):
+    with open("./Result.txt", "w", encoding='utf-8') as f:
+        f.write(Content)
+
+
+def debugInfo(Content, show=0):
+    if show:
+        print(f"TIME:{datetime.now().strftime('%Y-%m-%d %H:%M:%S')} INFO: {Content}")
 
 
 def saveFig(X, clusters, name="your_plot_name", xlabel='Feature 1', ylabel='Feature 2', title='DBSCAN Clustering'):
@@ -143,7 +163,15 @@ def mkData():
     return X
 
 
-@cache.cache_result(cache_path='read_vector.pkl')
+def initVector(dataset):
+    global X_dict
+    with open(nameToPath[dataset], 'rb') as f:
+        print("initing x dict")
+        X_dict = pickle.load(f)
+        print("finish loading x dict")
+        time.sleep(0.5)
+
+
 def read_vector(dataset, word):
     """
     # 从dataset数据集读取word词语的词向量
@@ -155,28 +183,8 @@ def read_vector(dataset, word):
     但其实还好，这个函数可以加一个缓存就会快很多，我就不改这个的逻辑了
     """
     assert dataset in OutdatasetLst, f"dataset illegal, got {dataset}"
-    global X_dict
     if X_dict is None:
-        with open(nameToPath[dataset], 'rb') as f:
-            print("initing x dict")
-            X_dict = pickle.load(f)
-            print("finish loading x dict")
-    """
-    X = None
-    for ID in range(len(X_dict['tokenize'])):
-    
-    
-        sentence_meta = X_dict['tokenize'][ID]
-        for wordID in range(len(sentence_meta['wordCutResult'])):
-            if sentence_meta['wordCutResult'][wordID] == word:
-                vector = X_dict['wordVector'][ID][wordID]
-                # print(vector.shape)
-                if X is None:
-                    X = vector.unsqueeze(0)
-                else:
-                    X = torch.cat((X, vector.unsqueeze(0)), dim=0)
-    return X
-    """
+        initVector(dataset)
     return X_dict['fastIndexWord'][word]
 
 
@@ -187,7 +195,7 @@ def cluster(dataset, word, eps=25, savefig=False, metric='euclidean', min_sample
     从dataset中对word进行聚类
     """
     X = read_vector(dataset, word)
-    print("load vec")
+    debugInfo(f"load vec of word {word}")
     try:
         res = dbscan(
             X,
@@ -284,51 +292,56 @@ def calc_metric_in_steps(dataset, word, delta=1, min_interval=1, max_interval=10
 
 def calcSentence(baseDatabase='wiki', eps=18, metric='euclidean', min_samples=4):
     print("starting cutting Result")
-    # exit(0)
+    writeLog("", init=1)
     cutResult = preprocess()
     # 这里cutResult存的是待标记数据集的向量化结果
     tokenizeRes = cutResult['tokenize']
     wordVector = cutResult['wordVector']
     res = []
-    with open("./runningLog.txt", "w", encoding='utf-8') as f:
-        for ID in tqdm.tqdm(range(len(tokenizeRes)), desc='processing'):
-            for wordID in range(len(tokenizeRes[ID]['wordCutResult'])):
-                try:
-                    word = tokenizeRes[ID]['wordCutResult'][wordID]
-                    Vector = wordVector[ID][wordID]
-                    # 拿到word和对应的Vector
-                    # print(f"INFO: clustering word:{word}")
-                    f.write(f"INFO: clustering word:{word}\n")
-                    clustera = cluster(baseDatabase, word, savefig=False, eps=eps, metric=metric,
-                                       min_samples=min_samples)
-                    print("success running cluster function")
-                    # 计算出聚类结果
+    initVector(baseDatabase)
+    for ID in tqdm.tqdm(range(len(tokenizeRes)), desc='processing'):
+        # for wordID in range(len(tokenizeRes[ID]['wordCutResult'])):
+        for wordID in tqdm.tqdm(range(len(tokenizeRes[ID]['wordCutResult'])), desc=f'running sentence with ID:{ID}'):
+            try:
+                word = tokenizeRes[ID]['wordCutResult'][wordID]
+                if word in ".,!。，":
+                    res.append([word, True])
+                    writeResult(str(res))
+                    continue
+                Vector = wordVector[ID][wordID]
+                # 拿到word和对应的Vector
+                debugInfo(f'clustering word:{word}')
+                writeLog(f"TIME:{datetime.now().strftime('%Y-%m-%d %H:%M:%S')} INFO: clustering word:{word}\n")
+                clustera = cluster(baseDatabase, word, savefig=False, eps=eps, metric=metric,
+                                   min_samples=min_samples)
+                debugInfo(f'success running cluster function with word {word}')
+                writeLog(
+                    f"TIME:{datetime.now().strftime('%Y-%m-%d %H:%M:%S')} success running cluster function with word {word}")
+                # 计算出聚类结果
 
-                    classify = clustera['cluster result']
-                    count_N1 = sum([1 if i == -1 else 0 for i in classify])
-                    # print(f"聚类结果离群点数：{count_N1}")
-                    f.write(f"聚类结果离群点数：{count_N1}\n")
-                    # print(f"聚类结果聚类数量：{clustera['num_of_clusters']}")
-                    f.write(f"聚类结果聚类数量：{clustera['num_of_clusters']}")
-                    center = getCenter(clustera['result class instance'])
-                    if clustera['num_of_clusters'] == 1:
-                        center = clustera['cluster_members']
+                classify = clustera['cluster result']
+                count_N1 = sum([1 if i == -1 else 0 for i in classify])
+                # print(f"聚类结果离群点数：{count_N1}")
+                writeLog(f"聚类结果离群点数：{count_N1}\n")
+                # print(f"聚类结果聚类数量：{clustera['num_of_clusters']}")
+                writeLog(f"聚类结果聚类数量：{clustera['num_of_clusters']}")
+                center = getCenter(clustera['result class instance'])
+                if clustera['num_of_clusters'] == 1:
+                    center = clustera['cluster_members']
 
-                    res.append(
-                        [word, is_in_epsilon_neighborhood(Vector, center, epsilon=eps, metric=metric)]
-                    )
-                    #  print(f"res:{res}")
-                    f.write(f"res:{res}\n")
-                except Exception as e:
-                    print(f"INFO: clustering word {word} with error {e}")
-                    f.write(f"INFO: clustering word {word} with error {e}")
-                    res.append(
-                        [word, 404]
-                    )
-        f.write("finalResult:" + str(res))
-
-    with open("./runningLog.txt", "w", encoding='utf-8') as f:
-        f.write(str(res))
+                res.append(
+                    [word, is_in_epsilon_neighborhood(Vector, center, epsilon=eps, metric=metric)]
+                )
+                debugInfo(f" append {word} in res")
+                writeResult(f"{res}")
+            except Exception as e:
+                debugInfo(f"clustering word {word} with error {e}")
+                writeLog(f"INFO: clustering word {word} with error {e}")
+                res.append(
+                    [word, 404]
+                )
+                writeResult(f"{res}")
+    writeResult(f"{res}")
     # print(cutResult)
 
 
