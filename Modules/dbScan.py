@@ -335,7 +335,7 @@ def calcSentence(baseDatabase='wiki', eps=18, metric='euclidean', min_samples=4)
                 debugInfo(f" append {word} in res")
                 writeResult(f"{res}")
             except Exception as e:
-                debugInfo(f"clustering word {word} with error {e}")
+                debugInfo(f"clustering word {word} with error {e}", show=1)
                 writeLog(f"INFO: clustering word {word} with error {e}")
                 res.append(
                     [word, 404]
