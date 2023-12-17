@@ -712,3 +712,10 @@ label_acc: acc=0.695467
 [word vector evaluation](https://zhuanlan.zhihu.com/p/156828242)
 
 现在需要研究一下这个问题，也就是需要保证词向量是有道理的才行。
+
+发现了评测机制的一个小问题，就是把404搞成非暗语了。404应该搞成暗语。这样的话值会高一些，但也没高多少
+
+```text
+SpanFPreRecMetric: f=0.0408, pre=0.222707, rec=0.022457
+label_acc: acc=0.679607
+```

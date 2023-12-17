@@ -27,6 +27,8 @@ def convertRunningLog(resultFilePath="../Modules/runningLog.txt"):
             for pairs in resultLst:
                 word = pairs[0]
                 label = pairs[1]
+                if label == 404:
+                    label = False
                 for i in range(len(word)):
                     f.write(f"{word[i]}\t{'O' if label else ('B-CANT' if i == 0 else 'I-CANT')}\n")
                 if word == '。':
