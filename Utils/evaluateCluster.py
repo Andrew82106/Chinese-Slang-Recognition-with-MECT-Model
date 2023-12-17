@@ -20,7 +20,7 @@ class EmptyModel(nn.Module):
 def convertRunningLog(resultFilePath="../Modules/runningLog.txt"):
     with open(resultFilePath, "r", encoding='utf-8') as f:
         result = f.read()
-    newFilePath = resultFilePath.replace("runningLog.txt", "resultLog.bio")
+    newFilePath = resultFilePath.replace("Result.txt", "resultLog.bio")
     try:
         resultLst = eval(result)
         with open(newFilePath, "w", encoding='utf-8') as f:
@@ -31,27 +31,13 @@ def convertRunningLog(resultFilePath="../Modules/runningLog.txt"):
                     f.write(f"{word[i]}\t{'O' if label else ('B-CANT' if i == 0 else 'I-CANT')}\n")
                 if word == '。':
                     f.write("\n")
-    except:
-        resultLst = result.split("], [")
-        with open(newFilePath, "w", encoding='utf-8') as f:
-            for pairs in resultLst:
-                pairs = pairs.replace("[[", "").replace("]]", "").replace("'", "").replace(" ", "")
-                pairs = pairs.split(",")
-                assert len(pairs) == 2, f"unexpected length:{len(pairs)} and content is {pairs}"
-                word = pairs[0]
-                try:
-                    label = ~(eval(pairs[1]))
-                except Exception as e:
-                    print(pairs)
-                    raise e
-                for i in range(len(word)):
-                    f.write(f"{word[i]}\t{'O' if not label else ('B-CANT' if i == 0 else 'I-CANT')}\n")
-                if word == '。':
-                    f.write("\n")
+        print(f"Success modified file {newFilePath}")
+    except Exception as e:
+        raise Exception(f"{e}")
     return newFilePath
 
 
-def evaluateDBScanMetric(resultFilePath="../Modules/runningLog.txt"):
+def evaluateDBScanMetric(resultFilePath="../Modules/Result.txt"):
     global vocabs
     new_Path = convertRunningLog(resultFilePath)
     loader = ConllLoader(['chars', 'target'])
@@ -59,8 +45,7 @@ def evaluateDBScanMetric(resultFilePath="../Modules/runningLog.txt"):
         train_bundle = loader.load(
             "/Users/andrewlee/Desktop/Projects/Chinese-Slang-Recognition-with-MECT-Model/datasets/NER/test/input.bio")
     except:
-        train_bundle = loader.load(
-            "B:\Chinese-Slang-Recognition-with-MECT-Model\datasets\NER\test\input.bio")
+        train_bundle = loader.load("B:\\Chinese-Slang-Recognition-with-MECT-Model\\datasets\\NER\\test\\input.bio")
     test_bundle = loader.load(new_Path)
 
     datasets = dict()
