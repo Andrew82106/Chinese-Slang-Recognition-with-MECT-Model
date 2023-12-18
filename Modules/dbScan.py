@@ -7,8 +7,8 @@ from datetime import datetime
 
 try:
     import sys
-
     sys.path.append('B:\Chinese-Slang-Recognition-with-MECT-Model')
+    sys.path.append('/home/ubuntu/Project/Chinese-Slang-Recognition-with-MECT-Model')
     from ConvWordToVecWithMECT import preprocess
 except:
     from ..ConvWordToVecWithMECT import preprocess

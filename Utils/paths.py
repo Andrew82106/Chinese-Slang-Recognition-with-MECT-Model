@@ -3,6 +3,8 @@ import sys
 
 if sys.platform == 'darwin':
     rootPth = "/Users/andrewlee/Desktop/Projects/Chinese-Slang-Recognition-with-MECT-Model"
+elif sys.platform == 'linux':
+    rootPth = "/home/ubuntu/Project/Chinese-Slang-Recognition-with-MECT-Model"
 else:
     rootPth = "B:\Chinese-Slang-Recognition-with-MECT-Model"
 embeddings = os.path.join(rootPth, "datasets/embeddings")
