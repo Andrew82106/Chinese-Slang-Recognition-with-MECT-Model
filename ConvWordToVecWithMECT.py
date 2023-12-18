@@ -9,7 +9,7 @@ from Utils.utils import norm_static_embedding, MyFitlogCallback, print_info, get
 from model import MECTNER, CSR_MECTNER
 from Modules.CharacterToWord import CTW
 from Modules.WordCut import ChineseTokenizer
-from Utils.ToAndFromPickle import write_to_pickle
+from Utils.ToAndFromPickle import *
 from Utils.AutoCache import Cache
 
 
@@ -515,7 +515,7 @@ def preprocess(outdatasetPath=test_path):
     callbacks = [evaluate_callback, lrschedule_callback, clip_callback, WarmupCallback(warmup=args.warmup)]
 
     print("INFO:: Load Model")
-    model_path = os.path.join(rootPth, 'model/best_CSR_MECTNER_f_msra1.0')
+    model_path = os.path.join(rootPth, 'model/best_CSR_MECTNER_f_msra')
     # model_path = '/Users/andrewlee/Desktop/Projects/Chinese-Slang-Recognition-with-MECT-Model/model/best_CSR_MECTNER_f_msra1.0'
     states = torch.load(model_path).state_dict()
     model.load_state_dict(states)
@@ -568,7 +568,8 @@ def preprocess(outdatasetPath=test_path):
     CharacterToWord = CTW()
     tokenizer = ChineseTokenizer()
     save_path = os.path.join(rootPth, "datasets/pickle_data")
-    res = {"tokenize": [], "wordVector": []}
+    file_name = f"{args.dataset if args.extra_datasets == 'None' else args.extra_datasets}.pkl"
+    write_to_pickle(os.path.join(save_path, file_name), {"tokenize": [], "wordVector": []})
     suc = 0
     fai = 0
     for i in tqdm.tqdm(range(len(text['test'])), desc="将字向量转化为词向量"):
@@ -603,14 +604,14 @@ def preprocess(outdatasetPath=test_path):
 
         tokenize = tokenizer.tokenize(sentence)
         wordVector = CharacterToWord.run(mect4cner_out_vector, tokenize['wordGroupsID'])
-        res['tokenize'].append(tokenize)
-        res['wordVector'].append(wordVector)
+        # res['tokenize'].append(tokenize)
+        # res['wordVector'].append(wordVector)
+        append_tokenize_to_pickle(os.path.join(save_path, file_name), tokenize)
+        append_wordVector_to_pickle(os.path.join(save_path, file_name), wordVector)
     print(f"suc rate:{100 * suc / (suc + fai)}%")
-
-    file_name = f"{args.dataset if args.extra_datasets == 'None' else args.extra_datasets}.pkl"
-    write_to_pickle(os.path.join(save_path, file_name), res)
+    # write_to_pickle(os.path.join(save_path, file_name), load_from_pickle(os.path.join(save_path, file_name)))
     print(f"successfully save to {os.path.join(save_path, file_name)}")
-    return res
+    return load_from_pickle(os.path.join(save_path, file_name))
 
 
 if __name__ == '__main__':
