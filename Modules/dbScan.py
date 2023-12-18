@@ -291,6 +291,7 @@ def calc_metric_in_steps(dataset, word, delta=1, min_interval=1, max_interval=10
 
 
 def calcSentence(baseDatabase='wiki', eps=18, metric='euclidean', min_samples=4):
+    word = ''
     print("starting cutting Result")
     writeLog("", init=1)
     cutResult = preprocess()
