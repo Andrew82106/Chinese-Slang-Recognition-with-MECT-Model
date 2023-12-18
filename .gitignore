@@ -1,12 +1,9 @@
 /.idea
-/datasets/NER
-/datasets/embeddings
-/datasets/charinfo
+/datasets/*
 /cache
 /datasets/scp
 /log
-/model
-/datasets/pickle_data
+/model/*
 **/.DS_Store
 /Utils/cache
 /Modules/cache
