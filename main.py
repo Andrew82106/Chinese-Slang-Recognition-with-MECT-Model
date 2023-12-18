@@ -602,7 +602,7 @@ if args.status == 'train':
 
 elif args.status == 'run':
     print("INFO:: Load Model")
-    model_path = '/root/autodl-tmp/Chinese-Slang-Recognition-with-MECT-Model/model/best_CSR_MECTNER_f_msra1.0'
+    model_path = '/Users/andrewlee/Desktop/Projects/Chinese-Slang-Recognition-with-MECT-Model/model/best_CSR_MECTNER_f_msra1.0'
     states = torch.load(model_path).state_dict()
     model.load_state_dict(states)
     from fastNLP.core.predictor import Predictor
@@ -641,6 +641,8 @@ elif args.status == 'run':
         print(f">>>>>>>预测结果pred值长度：<<<<<<<\n{len(test_label_list['pred'][0][0])}")
         print(f">>>>>>>预测结果fusion值：<<<<<<<\n{test_label_list['fusion'][0][0]}")
         print(f">>>>>>>预测结果fusion值长度：<<<<<<<\n{len(test_label_list['fusion'][0][0])}")
+        print(f">>>>>>>预测结果char_encoded值：<<<<<<<\n{test_label_list['char_encoded'][0][0]}")
+        print(f">>>>>>>预测结果char_encoded值长度：<<<<<<<\n{len(test_label_list['char_encoded'][0][0])}")
         print(f">>>>>>>seq_output：<<<<<<<\n{test_label_list['seq_output']}")
         print(f">>>>>>>seq_output shape：<<<<<<<\n{test_label_list['seq_output'][0].shape}")
     except Exception as e:
@@ -771,7 +773,10 @@ elif args.status == 'generate':
         sentence = ""
         for i in test_raw_char[0]:
             sentence += i
-        mect4cner_out_vector = test_label_list['seq_output']
+
+        # HERE
+        mect4cner_out_vector = test_label_list['char_encoded']
+
         tokenize = tokenizer.tokenize(sentence)
         wordVector = CharacterToWord.run(mect4cner_out_vector, tokenize['wordGroupsID'])
         res['tokenize'].append(tokenize)

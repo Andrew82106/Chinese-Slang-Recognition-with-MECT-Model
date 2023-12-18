@@ -256,7 +256,6 @@ class CSR_MECTNER(nn.Module):
         char_mask = seq_len_to_mask(seq_len, max_len=max_seq_len_and_lex_num).bool()
         char = lattice.masked_fill_(~char_mask, 0)
         # 使用 seq_len_to_mask 函数生成掩码 char_mask，并根据生成的掩码来更新 lattice 张量。
-        
         components_embed = self.components_embed(char)
         components_embed.masked_fill_(~(char_mask).unsqueeze(-1), 0)
         components_embed = self.components_proj(components_embed)
@@ -336,7 +335,7 @@ class CSR_MECTNER(nn.Module):
                 'pred': pred, 
                 'fusion': fusion, 
                 'radical_encoded': radical_encoded, 
-                'char_encoded': char_encoded,
+                'char_encoded': char_encoded[:, :max_seq_len, :],
                 'seq_output': seq_output
                 
             }
