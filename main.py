@@ -771,8 +771,8 @@ elif args.status == 'generate':
         test_raw_char = sentence['raw_chars']  # 原始文字
         # print(f"test_raw_char:{test_raw_char[0]}")
         sentence = ""
-        for i in test_raw_char[0]:
-            sentence += i
+        for i_ in test_raw_char[0]:
+            sentence += i_
 
         # HERE
         mect4cner_out_vector = test_label_list['char_encoded']

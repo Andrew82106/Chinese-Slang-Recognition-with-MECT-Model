@@ -11,7 +11,7 @@ class CTW(nn.Module):
     def __init__(self):
         super().__init__()
         self.algo = 0
-        self.embeddings_size = [256, 320]
+        self.embeddings_size = [256, 320, 160]
 
     def seq(self, TensorInput):
         while TensorInput.shape != torch.squeeze(TensorInput, 0).shape:
