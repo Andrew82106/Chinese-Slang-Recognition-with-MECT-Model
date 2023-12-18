@@ -1,1 +1,45 @@
 
+
+TIME:2023-12-18 17:03:53 INFO: clustering word:但是
+
+TIME:2023-12-18 17:03:53 success running cluster function with word 但是
+聚类结果离群点数：1
+
+聚类结果聚类数量：2
+TIME:2023-12-18 17:03:53 INFO: clustering word:至今
+
+TIME:2023-12-18 17:03:53 success running cluster function with word 至今
+聚类结果离群点数：0
+
+聚类结果聚类数量：1
+TIME:2023-12-18 17:03:53 INFO: clustering word:不败
+
+TIME:2023-12-18 17:03:53 success running cluster function with word 不败
+聚类结果离群点数：4
+
+聚类结果聚类数量：3
+TIME:2023-12-18 17:03:53 INFO: clustering word:并
+
+TIME:2023-12-18 17:03:53 success running cluster function with word 并
+聚类结果离群点数：0
+
+聚类结果聚类数量：1
+TIME:2023-12-18 17:03:53 INFO: clustering word:不能
+
+TIME:2023-12-18 17:03:53 success running cluster function with word 不能
+聚类结果离群点数：0
+
+聚类结果聚类数量：1
+TIME:2023-12-18 17:03:53 INFO: clustering word:说明
+
+TIME:2023-12-18 17:03:53 success running cluster function with word 说明
+聚类结果离群点数：4
+
+聚类结果聚类数量：2
+TIME:2023-12-18 17:03:53 INFO: clustering word:曼联
+
+TIME:2023-12-18 17:03:53 success running cluster function with word 曼联
+聚类结果离群点数：1
+
+聚类结果聚类数量：2
+TIME:2023-12-18 17:03:53 INFO: clustering word:的
