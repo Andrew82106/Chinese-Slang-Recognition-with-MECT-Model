@@ -64,6 +64,7 @@ def calcSentence(baseDatabase='wiki', eps=18, metric='euclidean', min_samples=4)
     tokenizeRes = cutResult['tokenize']
     wordVector = cutResult['wordVector']
     res = []
+    word = ""
     initVector(baseDatabase)
     for ID in tqdm.tqdm(range(len(tokenizeRes)), desc='processing'):
         # for wordID in range(len(tokenizeRes[ID]['wordCutResult'])):
