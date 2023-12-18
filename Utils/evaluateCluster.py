@@ -17,7 +17,7 @@ class EmptyModel(nn.Module):
         return {'pred': preds}
 
 
-def convertRunningLog(resultFilePath="../Modules/runningLog.txt"):
+def convertRunningLog(resultFilePath="../runningLog.txt"):
     with open(resultFilePath, "r", encoding='utf-8') as f:
         result = f.read()
     newFilePath = resultFilePath.replace("Result.txt", "resultLog.bio")
@@ -39,7 +39,7 @@ def convertRunningLog(resultFilePath="../Modules/runningLog.txt"):
     return newFilePath
 
 
-def evaluateDBScanMetric(resultFilePath="../Modules/Result.txt"):
+def evaluateDBScanMetric(resultFilePath="../Result.txt"):
     global vocabs
     new_Path = convertRunningLog(resultFilePath)
     loader = ConllLoader(['chars', 'target'])
@@ -47,7 +47,11 @@ def evaluateDBScanMetric(resultFilePath="../Modules/Result.txt"):
         train_bundle = loader.load(
             "/Users/andrewlee/Desktop/Projects/Chinese-Slang-Recognition-with-MECT-Model/datasets/NER/test/input.bio")
     except:
-        train_bundle = loader.load("B:\\Chinese-Slang-Recognition-with-MECT-Model\\datasets\\NER\\test\\input.bio")
+        try:
+            train_bundle = loader.load(
+                "/home/ubuntu/Project/Chinese-Slang-Recognition-with-MECT-Model/datasets/NER/test/input.bio")
+        except:
+            train_bundle = loader.load("B:\\Chinese-Slang-Recognition-with-MECT-Model\\datasets\\NER\\test\\input.bio")
     test_bundle = loader.load(new_Path)
 
     datasets = dict()

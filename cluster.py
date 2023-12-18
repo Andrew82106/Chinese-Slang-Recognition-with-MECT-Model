@@ -67,8 +67,8 @@ def calcSentence(baseDatabase='wiki', eps=18, metric='euclidean', min_samples=4)
     word = ""
     initVector(baseDatabase)
     for ID in tqdm.tqdm(range(len(tokenizeRes)), desc='processing'):
-        # for wordID in range(len(tokenizeRes[ID]['wordCutResult'])):
-        for wordID in tqdm.tqdm(range(len(tokenizeRes[ID]['wordCutResult'])), desc=f'running sentence with ID:{ID}'):
+        for wordID in range(len(tokenizeRes[ID]['wordCutResult'])):
+        # for wordID in tqdm.tqdm(range(len(tokenizeRes[ID]['wordCutResult'])), desc=f'running sentence with ID:{ID}'):
             try:
                 word = tokenizeRes[ID]['wordCutResult'][wordID]
                 if word in ".,!。，":

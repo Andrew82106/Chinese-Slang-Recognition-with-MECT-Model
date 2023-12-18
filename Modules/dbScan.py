@@ -180,7 +180,11 @@ def read_vector(dataset, word):
     assert dataset in OutdatasetLst, f"dataset illegal, got {dataset}"
     if X_dict is None:
         initVector(dataset)
-    return X_dict['fastIndexWord'][word]
+    R = X_dict['fastIndexWord'][word]
+    if len(R) > 10000:
+        print(f"debug: length={len(R)}")
+        R = R[: 10000]
+    return R
 
 
 @cache.cache_result(cache_path='cache_function_cluster.pkl')
