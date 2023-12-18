@@ -597,7 +597,10 @@ def preprocess(outdatasetPath=test_path):
         sentence = ""
         for i in test_raw_char[0]:
             sentence += i
-        mect4cner_out_vector = test_label_list['seq_output']
+
+        # HERE
+        mect4cner_out_vector = test_label_list['char_encoded']
+
         tokenize = tokenizer.tokenize(sentence)
         wordVector = CharacterToWord.run(mect4cner_out_vector, tokenize['wordGroupsID'])
         res['tokenize'].append(tokenize)
