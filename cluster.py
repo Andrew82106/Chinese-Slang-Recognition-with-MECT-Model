@@ -1,4 +1,6 @@
 from Modules.dbScan import *
+from Utils.summary_word_vector import summary_lex
+from ConvWordToVecWithMECT import preprocess
 import tqdm
 import os
 
@@ -54,28 +56,66 @@ def compare(word, datasetLst):
                     f.write(str(log) + "\n")
 
 
+def calcSentence(baseDatabase='wiki', eps=18, metric='euclidean', min_samples=4):
+    print("starting cutting Result")
+    writeLog("", init=1)
+    cutResult = preprocess()
+    # 这里cutResult存的是待标记数据集的向量化结果
+    tokenizeRes = cutResult['tokenize']
+    wordVector = cutResult['wordVector']
+    res = []
+    initVector(baseDatabase)
+    for ID in tqdm.tqdm(range(len(tokenizeRes)), desc='processing'):
+        # for wordID in range(len(tokenizeRes[ID]['wordCutResult'])):
+        for wordID in tqdm.tqdm(range(len(tokenizeRes[ID]['wordCutResult'])), desc=f'running sentence with ID:{ID}'):
+            try:
+                word = tokenizeRes[ID]['wordCutResult'][wordID]
+                if word in ".,!。，":
+                    res.append([word, True])
+                    writeResult(str(res))
+                    continue
+                Vector = wordVector[ID][wordID]
+                # 拿到word和对应的Vector
+                debugInfo(f'clustering word:{word}')
+                writeLog(f"TIME:{datetime.now().strftime('%Y-%m-%d %H:%M:%S')} INFO: clustering word:{word}\n")
+                clustera = cluster(baseDatabase, word, savefig=False, eps=eps, metric=metric,
+                                   min_samples=min_samples)
+                debugInfo(f'success running cluster function with word {word}')
+                writeLog(
+                    f"TIME:{datetime.now().strftime('%Y-%m-%d %H:%M:%S')} success running cluster function with word {word}")
+                # 计算出聚类结果
+
+                classify = clustera['cluster result']
+                count_N1 = sum([1 if i == -1 else 0 for i in classify])
+                # print(f"聚类结果离群点数：{count_N1}")
+                writeLog(f"聚类结果离群点数：{count_N1}\n")
+                # print(f"聚类结果聚类数量：{clustera['num_of_clusters']}")
+                writeLog(f"聚类结果聚类数量：{clustera['num_of_clusters']}")
+                center = getCenter(clustera['result class instance'])
+                if clustera['num_of_clusters'] == 1:
+                    center = clustera['cluster_members']
+
+                res.append(
+                    [word, is_in_epsilon_neighborhood(Vector, center, epsilon=eps, metric=metric)]
+                )
+                debugInfo(f" append {word} in res")
+                writeResult(f"{res}")
+            except Exception as e:
+                debugInfo(f"clustering word {word} with error {e}", show=1)
+                writeLog(f"INFO: clustering word {word} with error {e}")
+                res.append(
+                    [word, 404]
+                )
+                writeResult(f"{res}")
+    writeResult(f"{res}")
+    # print(cutResult)
+
+
 if __name__ == "__main__":
+    calcSentence()
+    """
     xxx = ['weibo', 'tieba', 'msra', 'PKU', 'wiki', 'anwang']
     for i in tqdm.tqdm(xxx):
         cluster(i, "中国", savefig=True, eps=15)
     exit()
-    dtset1 = 'PKU'
-    dtset2 = 'anwang'
-    d = Find_many_word(dtset1, dtset2, 1)
-    d.reverse()
-    print(d)
-    chosenLst = [
-        "妈妈", '身体', '江西', '员工', '活动',
-        '领导', '人民', '北京', '提供', '日本',
-        '集团', '学习', '图片', '统一', '作品',
-        '按', '约', '搞', '业务', '泰国', '交流',
-        '联系', '需求', '交易', '女', '独立', '爱', '资料', '网络'
-
-    ]
-    for i in tqdm.tqdm(chosenLst):
-        if read_vector(dtset1, i) is None or read_vector(dtset2, i) is None:
-            continue
-        try:
-            compare(i, [dtset1, dtset2])
-        except:
-            pass
+    """

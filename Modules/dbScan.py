@@ -4,29 +4,24 @@ from sklearn.preprocessing import StandardScaler
 from sklearn.datasets import make_blobs
 import time
 from datetime import datetime
-
+import numpy as np
+"""
 try:
-    import sys
-    sys.path.append('B:\Chinese-Slang-Recognition-with-MECT-Model')
-    sys.path.append('/home/ubuntu/Project/Chinese-Slang-Recognition-with-MECT-Model')
     from ConvWordToVecWithMECT import preprocess
 except:
     from ..ConvWordToVecWithMECT import preprocess
+"""
 try:
     from sklearnex import patch_sklearn, unpatch_sklearn
-
     patch_sklearn()
 except:
     print("sklearnex isn't available, skip init sklearnex")
 
 from Utils.paths import *
 from sklearn.metrics.pairwise import pairwise_distances
-from Utils.summary_word_vector import summary_lex
 from Utils.outfitDataset import OutdatasetLst, nameToPath
 from Modules.DWT import *
-import tqdm
 import pickle
-import torch
 from Utils.AutoCache import Cache
 
 cache = Cache()
@@ -289,7 +284,7 @@ def calc_metric_in_steps(dataset, word, delta=1, min_interval=1, max_interval=10
     # print(f"res:{res}")
     return res
 
-
+"""
 def calcSentence(baseDatabase='wiki', eps=18, metric='euclidean', min_samples=4):
     print("starting cutting Result")
     writeLog("", init=1)
@@ -343,10 +338,10 @@ def calcSentence(baseDatabase='wiki', eps=18, metric='euclidean', min_samples=4)
                 writeResult(f"{res}")
     writeResult(f"{res}")
     # print(cutResult)
-
+"""
 
 if __name__ == "__main__":
-    calcSentence()
+    # calcSentence()
     # best_metric, best_eps = maximize_metric_for_eps("tieba", "你")
     # print(f"best_eps:{best_eps}, best_metric:{best_metric}")
     """

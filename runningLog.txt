@@ -1,52 +1,52 @@
 
 
-TIME:2023-12-18 15:10:07 INFO: clustering word:但是
+TIME:2023-12-18 15:33:06 INFO: clustering word:但是
 
-TIME:2023-12-18 15:10:07 success running cluster function with word 但是
+TIME:2023-12-18 15:33:06 success running cluster function with word 但是
 聚类结果离群点数：60
 
 聚类结果聚类数量：2
 INFO: clustering word 但是 with error Incompatible dimension for X and Y matrices: X.shape[1] == 320 while Y.shape[1] == 160
-TIME:2023-12-18 15:10:07 INFO: clustering word:至今
+TIME:2023-12-18 15:33:06 INFO: clustering word:至今
 
-TIME:2023-12-18 15:10:08 success running cluster function with word 至今
+TIME:2023-12-18 15:33:06 success running cluster function with word 至今
 聚类结果离群点数：23
 
 聚类结果聚类数量：3
 INFO: clustering word 至今 with error Incompatible dimension for X and Y matrices: X.shape[1] == 320 while Y.shape[1] == 160
-TIME:2023-12-18 15:10:08 INFO: clustering word:不败
+TIME:2023-12-18 15:33:06 INFO: clustering word:不败
 
-TIME:2023-12-18 15:10:08 success running cluster function with word 不败
+TIME:2023-12-18 15:33:06 success running cluster function with word 不败
 聚类结果离群点数：17
 
 聚类结果聚类数量：4
 INFO: clustering word 不败 with error Incompatible dimension for X and Y matrices: X.shape[1] == 320 while Y.shape[1] == 160
-TIME:2023-12-18 15:10:08 INFO: clustering word:并
+TIME:2023-12-18 15:33:06 INFO: clustering word:并
 
-TIME:2023-12-18 15:10:08 success running cluster function with word 并
+TIME:2023-12-18 15:33:06 success running cluster function with word 并
 聚类结果离群点数：127
 
 聚类结果聚类数量：3
 INFO: clustering word 并 with error Incompatible dimension for X and Y matrices: X.shape[1] == 320 while Y.shape[1] == 160
-TIME:2023-12-18 15:10:08 INFO: clustering word:不能
+TIME:2023-12-18 15:33:06 INFO: clustering word:不能
 
-TIME:2023-12-18 15:10:08 success running cluster function with word 不能
+TIME:2023-12-18 15:33:06 success running cluster function with word 不能
 聚类结果离群点数：102
 
 聚类结果聚类数量：2
 INFO: clustering word 不能 with error Incompatible dimension for X and Y matrices: X.shape[1] == 320 while Y.shape[1] == 160
-TIME:2023-12-18 15:10:08 INFO: clustering word:说明
+TIME:2023-12-18 15:33:06 INFO: clustering word:说明
 
-TIME:2023-12-18 15:10:08 success running cluster function with word 说明
+TIME:2023-12-18 15:33:06 success running cluster function with word 说明
 聚类结果离群点数：21
 
 聚类结果聚类数量：2
 INFO: clustering word 说明 with error Incompatible dimension for X and Y matrices: X.shape[1] == 320 while Y.shape[1] == 160
-TIME:2023-12-18 15:10:08 INFO: clustering word:曼联
+TIME:2023-12-18 15:33:06 INFO: clustering word:曼联
 
-TIME:2023-12-18 15:10:08 success running cluster function with word 曼联
+TIME:2023-12-18 15:33:06 success running cluster function with word 曼联
 聚类结果离群点数：11
 
 聚类结果聚类数量：2
 INFO: clustering word 曼联 with error Incompatible dimension for X and Y matrices: X.shape[1] == 320 while Y.shape[1] == 160
-TIME:2023-12-18 15:10:08 INFO: clustering word:的
+TIME:2023-12-18 15:33:06 INFO: clustering word:的

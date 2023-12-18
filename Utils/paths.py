@@ -7,6 +7,7 @@ elif sys.platform == 'linux':
     rootPth = "/home/ubuntu/Project/Chinese-Slang-Recognition-with-MECT-Model"
 else:
     rootPth = "B:\Chinese-Slang-Recognition-with-MECT-Model"
+
 embeddings = os.path.join(rootPth, "datasets/embeddings")
 charinfo = os.path.join(rootPth, "datasets/charinfo")
 NER = os.path.join(rootPth, "datasets/NER")
@@ -44,5 +45,12 @@ anwang_vector = os.path.join(vector, 'anwang.pkl')
 wiki_vector = os.path.join(vector, 'wiki.pkl')
 
 clusterLog_path = os.path.join(rootPth, "clusterLog", "clusterLog.txt")
+
+sys.path.append(rootPth)
+sys.path.append(embeddings)
+sys.path.append(charinfo)
+sys.path.append(NER)
+sys.path.append(vector)
+sys.path.append(cache_path)
 if __name__ == '__main__':
     print(charinfo)
