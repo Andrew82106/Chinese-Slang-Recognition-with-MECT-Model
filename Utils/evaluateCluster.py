@@ -3,7 +3,7 @@ from torch import nn
 from fastNLP.io.loader import ConllLoader
 from fastNLP.core.metrics import SpanFPreRecMetric, AccuracyMetric
 from fastNLP import DataSet, Vocabulary
-
+from Utils.paths import *
 vocabs = {}
 
 
@@ -17,10 +17,10 @@ class EmptyModel(nn.Module):
         return {'pred': preds}
 
 
-def convertRunningLog(resultFilePath="../runningLog.txt"):
+def convertRunningLog(resultFilePath=clusterResult_path):
     with open(resultFilePath, "r", encoding='utf-8') as f:
         result = f.read()
-    newFilePath = resultFilePath.replace("Result.txt", "resultLog.bio")
+    newFilePath = clusterResultBio_path
     try:
         resultLst = eval(result)
         with open(newFilePath, "w", encoding='utf-8') as f:
@@ -33,27 +33,19 @@ def convertRunningLog(resultFilePath="../runningLog.txt"):
                     f.write(f"{word[i]}\t{'O' if label else ('B-CANT' if i == 0 else 'I-CANT')}\n")
                 if word == '。':
                     f.write("\n")
-        print(f"Success modified file {newFilePath}")
+        print(f"[file format modify]\nSuccess modified file {clusterResult_path} to {newFilePath}")
     except Exception as e:
         raise Exception(f"{e}")
     return newFilePath
 
 
-def evaluateDBScanMetric(resultFilePath="../Result.txt"):
+def evaluateDBScanMetric(resultFilePath=clusterResult_path):
     global vocabs
     new_Path = convertRunningLog(resultFilePath)
     loader = ConllLoader(['chars', 'target'])
-    try:
-        train_bundle = loader.load(
-            "/Users/andrewlee/Desktop/Projects/Chinese-Slang-Recognition-with-MECT-Model/datasets/NER/test/input.bio")
-    except:
-        try:
-            train_bundle = loader.load(
-                "/home/ubuntu/Project/Chinese-Slang-Recognition-with-MECT-Model/datasets/NER/test/input.bio")
-        except:
-            train_bundle = loader.load("B:\\Chinese-Slang-Recognition-with-MECT-Model\\datasets\\NER\\test\\input.bio")
+    train_bundle = loader.load(Standard_Test_BIO)
     test_bundle = loader.load(new_Path)
-
+    print(f'[testing result]\ncomparing file {Standard_Test_BIO} with {new_Path}')
     datasets = dict()
     datasets['train'] = train_bundle.datasets['train']
     datasets['test'] = test_bundle.datasets['train']

@@ -33,14 +33,14 @@ X_dict = None
 
 def writeLog(Content, init=False):
     if init:
-        with open("./runningLog.txt", "w", encoding='utf-8') as f:
+        with open(cluster_Log_Path, "w", encoding='utf-8') as f:
             f.write('')
-    with open("./runningLog.txt", "a", encoding='utf-8') as f:
+    with open(cluster_Log_Path, "a", encoding='utf-8') as f:
         f.write("\n" + Content)
 
 
 def writeResult(Content):
-    with open("./Result.txt", "w", encoding='utf-8') as f:
+    with open(clusterResult_path, "w", encoding='utf-8') as f:
         f.write(Content)
 
 
@@ -54,10 +54,7 @@ def saveFig(X, clusters, name="your_plot_name", xlabel='Feature 1', ylabel='Feat
     plt.title(title)
     plt.xlabel(xlabel)
     plt.ylabel(ylabel)
-    try:
-        plt.savefig(f'cluster_result/{name}.png')
-    except:
-        plt.savefig(f'../cluster_result/{name}.png')
+    plt.savefig(os.path.join(clusterResultPhoto_path, f'cluster_result/{name}.png'))
     plt.show()
 
 

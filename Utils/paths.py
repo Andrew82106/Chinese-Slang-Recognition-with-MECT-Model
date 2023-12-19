@@ -44,7 +44,19 @@ PKU_vector = os.path.join(vector, 'PKU.pkl')
 anwang_vector = os.path.join(vector, 'anwang.pkl')
 wiki_vector = os.path.join(vector, 'wiki.pkl')
 
-clusterLog_path = os.path.join(rootPth, "clusterLog", "clusterLog.txt")
+cluster_path = os.path.join(rootPth, "clusterRes")
+# 聚类结果存放总路径
+cluster_Log_Path = os.path.join(cluster_path, "clusterLog.txt")
+# 聚类算法运行记录存放路径
+clusterResult_path = os.path.join(cluster_path, "Result.txt")
+# 初步存放聚类结果
+clusterResultPhoto_path = os.path.join(cluster_path, "clusterLogs")
+# 存放聚类结果图片
+clusterResultBio_path = os.path.join(cluster_path, "Result.bio")
+# 存放BIO格式的聚类结果
+
+Standard_Test_BIO = os.path.join(test_path, "input.bio")
+# 测试数据test.bio的位置
 
 sys.path.append(rootPth)
 sys.path.append(embeddings)

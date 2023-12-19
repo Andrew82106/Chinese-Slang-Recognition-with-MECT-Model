@@ -1,8 +1,10 @@
 from Modules.dbScan import *
 from Utils.summary_word_vector import summary_lex
+from Utils.evaluateCluster import evaluateDBScanMetric
 from ConvWordToVecWithMECT import preprocess
 import tqdm
 import os
+import argparse
 
 metrics_calc_function = [
     calc_metric_in_steps,
@@ -39,7 +41,7 @@ def Find_many_word(dataset1, dataset2, mes=False):
 
 
 def compare(word, datasetLst):
-    file = "clusterLog/"
+    file = "clusterRes/"
     for FunctionID in range(0, 2):  # 对不同指标函数的结果进行测试
         metricLst = []
         for i in datasetLst:
@@ -52,7 +54,7 @@ def compare(word, datasetLst):
                 index = evaluate_function[FunctionID](metricLst[i], metricLst[j])
                 log = f"word {word} in dataset {datasetLst[i]} and {datasetLst[j]} with function {function_name[FunctionID]}: difference is {index}"
                 # print(log)
-                with open(os.path.join(file, "clusterLog.txt"), "a", encoding='utf-8') as f:
+                with open(os.path.join(file, "clusterRes.txt"), "a", encoding='utf-8') as f:
                     f.write(str(log) + "\n")
 
 
@@ -68,7 +70,7 @@ def calcSentence(baseDatabase='wiki', eps=18, metric='euclidean', min_samples=4)
     initVector(baseDatabase)
     for ID in tqdm.tqdm(range(len(tokenizeRes)), desc='processing'):
         for wordID in range(len(tokenizeRes[ID]['wordCutResult'])):
-        # for wordID in tqdm.tqdm(range(len(tokenizeRes[ID]['wordCutResult'])), desc=f'running sentence with ID:{ID}'):
+            # for wordID in tqdm.tqdm(range(len(tokenizeRes[ID]['wordCutResult'])), desc=f'running sentence with ID:{ID}'):
             try:
                 word = tokenizeRes[ID]['wordCutResult'][wordID]
                 if word in ".,!。，":
@@ -112,11 +114,19 @@ def calcSentence(baseDatabase='wiki', eps=18, metric='euclidean', min_samples=4)
     # print(cutResult)
 
 
-if __name__ == "__main__":
-    calcSentence()
-    """
-    xxx = ['weibo', 'tieba', 'msra', 'PKU', 'wiki', 'anwang']
-    for i in tqdm.tqdm(xxx):
-        cluster(i, "中国", savefig=True, eps=15)
-    exit()
-    """
+parser = argparse.ArgumentParser(description='Process some integers.')
+parser.add_argument('--mode', type=str, choices=['test', 'generate'], default='test')
+parser.add_argument('--eps', type=int, default=18, help='聚类所使用的eps值')
+parser.add_argument('--metric', type=str, default='euclidean', help='聚类所使用的距离算法')
+parser.add_argument('--min_samples', type=int, default=4, help='聚类所使用的min_samples参数')
+args = parser.parse_args()
+
+
+if args.mode == 'test':
+    evaluateDBScanMetric()
+elif args.mode == 'generate':
+    calcSentence(
+        eps=args.eps,
+        metric=args.metric,
+        min_samples=args.min_samples
+    )

@@ -35,7 +35,7 @@ def Find_many_word(dataset1, dataset2, mes=False):
 
 
 def compare(word, datasetLst):
-    file = "clusterLog/"
+    file = "clusterRes/"
     for FunctionID in range(0, 2):  # 对不同指标函数的结果进行测试
         metricLst = []
         for i in datasetLst:
@@ -48,7 +48,7 @@ def compare(word, datasetLst):
                 index = evaluate_function[FunctionID](metricLst[i], metricLst[j])
                 log = f"word {word} in dataset {datasetLst[i]} and {datasetLst[j]} with function {function_name[FunctionID]}: difference is {index}"
                 print(log)
-                with open(os.path.join(file, "clusterLog.txt"), "a", encoding='utf-8') as f:
+                with open(os.path.join(file, "clusterRes.txt"), "a", encoding='utf-8') as f:
                     f.write(str(log) + "\n")
 
 
