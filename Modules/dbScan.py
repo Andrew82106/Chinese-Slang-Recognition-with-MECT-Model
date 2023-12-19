@@ -181,9 +181,9 @@ def read_vector(dataset, word):
     if X_dict is None:
         initVector(dataset)
     R = X_dict['fastIndexWord'][word]
-    if len(R) > 10000:
+    if len(R) > 20000:
         print(f"debug: length={len(R)}")
-        R = R[: 10000]
+        R = R[: 20000]
     return R
 
 
