@@ -743,7 +743,7 @@ label_acc: acc=0.679607
 
 为了降维我们先比较了几种降维方法：
 
-![降维算法比较.png](Utils/Lab/LabCache/降维算法比较.png)
+<img src="Utils/Lab/LabCache/降维算法比较.png" alt="降维算法比较.png" width="30%">
 
 发现UMAP和t-SNE效果比较好
 
