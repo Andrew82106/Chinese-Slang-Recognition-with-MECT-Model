@@ -743,23 +743,29 @@ label_acc: acc=0.679607
 
 为了降维我们先比较了几种降维方法：
 
-<img src="Utils/Lab/LabCache/降维算法比较.png" alt="降维算法比较.png" width="30%">
+<img src="Utils/Lab/LabCache/降维算法比较.png" alt="降维算法比较.png" width="50%">
 
 发现UMAP和t-SNE效果比较好
 
 然后降维后的效果：
 
-![降维算法比较图_词语人.png](Utils/Lab/LabCache/降维算法比较图_词语人.png)
-![降维算法比较图_词语开心.png](Utils/Lab/LabCache/降维算法比较图_词语开心.png)
-![降维算法比较图_词语数据.png](Utils/Lab/LabCache/降维算法比较图_词语数据.png)
-![降维算法比较图_词语男生.png](Utils/Lab/LabCache/降维算法比较图_词语男生.png)
+<div style="display: flex; flex-direction: row;">
+    <img src="Utils/Lab/LabCache/降维算法比较图_词语人.png" alt="降维算法比较图_词语人.png" width="25%">
+    <img src="Utils/Lab/LabCache/降维算法比较图_词语开心.png" alt="降维算法比较图_词语开心.png" width="25%">
+    <img src="Utils/Lab/LabCache/降维算法比较图_词语数据.png" alt="降维算法比较图_词语数据.png" width="25%">
+    <img src="Utils/Lab/LabCache/降维算法比较图_词语男生.png" alt="降维算法比较图_词语男生.png" width="25%">
+</div>
+
 
 这些词语在部分的句子中都是暗语词汇
 
-![降维算法比较图_词语自己.png](Utils/Lab/LabCache/降维算法比较图_词语自己.png)
-![降维算法比较图_词语的.png](Utils/Lab/LabCache/降维算法比较图_词语的.png)
-![降维算法比较图_词语警方.png](Utils/Lab/LabCache/降维算法比较图_词语警方.png)
-![降维算法比较图_词语我们.png](Utils/Lab/LabCache/降维算法比较图_词语我们.png)
+<div style="display: flex; flex-direction: row;">
+    <img src="Utils/Lab/LabCache/降维算法比较图_词语自己.png" alt="降维算法比较图_词语自己.png" width="25%">
+    <img src="Utils/Lab/LabCache/降维算法比较图_词语的.png" alt="降维算法比较图_词语的.png" width="25%">
+    <img src="Utils/Lab/LabCache/降维算法比较图_词语警方.png" alt="降维算法比较图_词语警方.png" width="25%">
+    <img src="Utils/Lab/LabCache/降维算法比较图_词语我们.png" alt="降维算法比较图_词语我们.png" width="25%">
+</div>
+
 
 这些词语不是暗语词汇
 
