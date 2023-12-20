@@ -212,13 +212,14 @@ def mkData():
     return X
 
 
-def initVector(dataset):
+def initVector(dataset, refresh=False):
     global X_dict
-    with open(nameToPath[dataset], 'rb') as f:
-        print("initing x dict")
-        X_dict = pickle.load(f)
-        print("finish loading x dict")
-        time.sleep(0.5)
+    if X_dict is None or refresh:
+        with open(nameToPath[dataset], 'rb') as f:
+            print("initing x dict")
+            X_dict = pickle.load(f)
+            print("finish loading x dict")
+            time.sleep(0.5)
 
 
 def read_vector(dataset, word, maxLength=20000):
@@ -231,7 +232,7 @@ def read_vector(dataset, word, maxLength=20000):
     """
     assert dataset in OutdatasetLst, f"dataset illegal, got {dataset}"
     # if X_dict is None:
-    initVector(dataset)
+    initVector(dataset, refresh=True)
     R = X_dict['fastIndexWord'][word]
     if maxLength is not None and len(R) > maxLength:
         print(f"debug: length={len(R)}")

@@ -750,10 +750,12 @@ label_acc: acc=0.679607
 然后降维后的效果：
 
 <div style="display: flex; flex-direction: row;">
-    <img src="Utils/Lab/LabCache/降维算法比较图_词语人.png" alt="降维算法比较图_词语人.png" width="25%">
+    <img src="Utils/Lab/LabCache/降维算法比较图_词语客场.png" alt="降维算法比较图_词语客场.png" width="25%">
     <img src="Utils/Lab/LabCache/降维算法比较图_词语开心.png" alt="降维算法比较图_词语开心.png" width="25%">
     <img src="Utils/Lab/LabCache/降维算法比较图_词语数据.png" alt="降维算法比较图_词语数据.png" width="25%">
     <img src="Utils/Lab/LabCache/降维算法比较图_词语男生.png" alt="降维算法比较图_词语男生.png" width="25%">
+    <img src="Utils/Lab/LabCache/降维算法比较图_词语此案.png" alt="降维算法比较图_词语此案.png" width="25%">
+    <img src="Utils/Lab/LabCache/降维算法比较图_词语通讯员.png" alt="降维算法比较图_词语通讯员.png" width="25%">
 </div>
 
 
@@ -763,7 +765,7 @@ label_acc: acc=0.679607
     <img src="Utils/Lab/LabCache/降维算法比较图_词语自己.png" alt="降维算法比较图_词语自己.png" width="25%">
     <img src="Utils/Lab/LabCache/降维算法比较图_词语的.png" alt="降维算法比较图_词语的.png" width="25%">
     <img src="Utils/Lab/LabCache/降维算法比较图_词语警方.png" alt="降维算法比较图_词语警方.png" width="25%">
-    <img src="Utils/Lab/LabCache/降维算法比较图_词语我们.png" alt="降维算法比较图_词语我们.png" width="25%">
+    <img src="Utils/Lab/LabCache/降维算法比较图_词语我.png" alt="降维算法比较图_词语我.png" width="25%">
 </div>
 
 

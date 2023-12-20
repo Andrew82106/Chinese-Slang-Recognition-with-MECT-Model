@@ -60,9 +60,9 @@ def compare(word, datasetLst):
 
 def DrawWordCompare():
     # print(Find_many_word('wiki', 'test', Count=5))
-    # exit(0)
-    wordList = ['开心', '男生', '数据', '人', '我', '的', '自己', '警方']
-    for word in wordList:
+    cant_wordList = ['开心', '男生', '数据', '客场', '此案', '通讯员']
+    normal_wordList = ['我', '的', '自己', '警方']
+    for word in cant_wordList + normal_wordList:
         try:
             X_ = read_vector('wiki', word)
             X1_ = read_vector('test', word)
