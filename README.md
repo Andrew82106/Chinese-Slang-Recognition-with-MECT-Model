@@ -29,20 +29,21 @@ python main.py --dataset weibo --status generate --device cpu --extra_datasets t
 python main.py --dataset msra --status generate --device cpu --extra_datasets wiki
 ```
 
-## stage4: dbscan聚类分析
+## stage4: 生成文本解析结果
 
 ```py
-python cluster.py
+python cluster.py --mode generate
 ```
 
-## stage5: 生成文本解析结果
+## stage5: 评测解析结果
 
 ```py
-python Modules/dbScan.py
+python cluster.py --mode test
 ```
 
-## stage6: 评测解析结果
+## 快速操作
 
-```python
-python Utils/evaluateCluster.py
+- 对wiki数据集进行向量化+生成文本聚类分析结果+测试结果
+```shell
+bash RunCluster.sh
 ```

@@ -44,9 +44,9 @@ def compare(word, datasetLst):
     file = "clusterRes/"
     for FunctionID in range(0, 2):  # 对不同指标函数的结果进行测试
         metricLst = []
-        for i in datasetLst:
+        for i_ in datasetLst:
             # print(function_name[FunctionID], (i, word))
-            metricLst.append(metrics_calc_function[FunctionID](i, word))
+            metricLst.append(metrics_calc_function[FunctionID](i_, word))
         for i in range(len(metricLst)):
             for j in range(i, len(metricLst)):
                 if i == j:
@@ -58,7 +58,7 @@ def compare(word, datasetLst):
                     f.write(str(log) + "\n")
 
 
-def calcSentence(baseDatabase='wiki', eps=18, metric='euclidean', min_samples=4):
+def calcSentence(baseDatabase='wiki', eps=18, metric='euclidean', min_samples=4, maxLength=20000):
     print("starting cutting Result")
     writeLog("", init=1)
     cutResult = preprocess()
@@ -80,20 +80,26 @@ def calcSentence(baseDatabase='wiki', eps=18, metric='euclidean', min_samples=4)
                 Vector = wordVector[ID][wordID]
                 # 拿到word和对应的Vector
                 debugInfo(f'clustering word:{word}')
-                writeLog(f"TIME:{datetime.now().strftime('%Y-%m-%d %H:%M:%S')} INFO: clustering word:{word}\n")
-                clustera = cluster(baseDatabase, word, savefig=False, eps=eps, metric=metric,
-                                   min_samples=min_samples)
+                writeLog(f"INFO: clustering word:{word}")
+                clustera = cluster(
+                    baseDatabase,
+                    word,
+                    savefig=False,
+                    eps=eps,
+                    metric=metric,
+                    min_samples=min_samples,
+                    maxLength=maxLength
+                )
                 debugInfo(f'success running cluster function with word {word}')
-                writeLog(
-                    f"TIME:{datetime.now().strftime('%Y-%m-%d %H:%M:%S')} success running cluster function with word {word}")
+                writeLog(f"success running cluster function with word {word}")
                 # 计算出聚类结果
 
                 classify = clustera['cluster result']
                 count_N1 = sum([1 if i == -1 else 0 for i in classify])
-                # print(f"聚类结果离群点数：{count_N1}")
-                writeLog(f"聚类结果离群点数：{count_N1}\n")
-                # print(f"聚类结果聚类数量：{clustera['num_of_clusters']}")
-                writeLog(f"聚类结果聚类数量：{clustera['num_of_clusters']}")
+                debugInfo(f"词语{word}聚类结果离群点数：{count_N1}")
+                writeLog(f"词语{word}聚类结果离群点数：{count_N1}")
+                debugInfo(f"词语{word}聚类结果聚类数量：{clustera['num_of_clusters']}")
+                writeLog(f"词语{word}聚类结果聚类数量：{clustera['num_of_clusters']}")
                 center = getCenter(clustera['result class instance'])
                 if clustera['num_of_clusters'] == 1:
                     center = clustera['cluster_members']
@@ -101,24 +107,35 @@ def calcSentence(baseDatabase='wiki', eps=18, metric='euclidean', min_samples=4)
                 res.append(
                     [word, is_in_epsilon_neighborhood(Vector, center, epsilon=eps, metric=metric)]
                 )
-                debugInfo(f" append {word} in res")
+                debugInfo(f"append {word} in res")
+                writeLog(f"append {word} in res")
                 writeResult(f"{res}")
             except Exception as e:
                 debugInfo(f"clustering word {word} with error {e}", show=1)
-                writeLog(f"INFO: clustering word {word} with error {e}")
+                writeLog(f"clustering word {word} with error {e}")
                 res.append(
                     [word, 404]
                 )
                 writeResult(f"{res}")
     writeResult(f"{res}")
-    # print(cutResult)
+
+
+args_list = [
+    {'name': '--mode', 'type': str, 'choices': ['test', 'generate'], 'default': 'test'},
+    {'name': '--eps', 'type': int, 'default': 18, 'help': '聚类所使用的eps值'},
+    {'name': '--metric', 'type': str, 'default': 'euclidean', 'help': '聚类所使用的距离算法'},
+    {'name': '--min_samples', 'type': int, 'default': 4, 'help': '聚类所使用的min_samples参数'},
+    {'name': '--maxLength', 'type': int, 'default': 20000, 'help': '聚类所用的最多的向量数量'}
+]
 
 
 parser = argparse.ArgumentParser(description='Process some integers.')
-parser.add_argument('--mode', type=str, choices=['test', 'generate'], default='test')
-parser.add_argument('--eps', type=int, default=18, help='聚类所使用的eps值')
-parser.add_argument('--metric', type=str, default='euclidean', help='聚类所使用的距离算法')
-parser.add_argument('--min_samples', type=int, default=4, help='聚类所使用的min_samples参数')
+for arg in args_list:
+    arg_name = arg['name']
+    del arg['name']
+    parser.add_argument(arg_name, **arg)
+
+
 args = parser.parse_args()
 
 
@@ -128,5 +145,6 @@ elif args.mode == 'generate':
     calcSentence(
         eps=args.eps,
         metric=args.metric,
-        min_samples=args.min_samples
+        min_samples=args.min_samples,
+        maxLength=args.maxLength
     )

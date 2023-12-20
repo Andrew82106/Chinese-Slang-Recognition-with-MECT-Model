@@ -45,13 +45,13 @@ def evaluateDBScanMetric(resultFilePath=clusterResult_path):
     loader = ConllLoader(['chars', 'target'])
     train_bundle = loader.load(Standard_Test_BIO)
     test_bundle = loader.load(new_Path)
-    print(f'[testing result]\ncomparing file {Standard_Test_BIO} with {new_Path}')
     datasets = dict()
     datasets['train'] = train_bundle.datasets['train']
     datasets['test'] = test_bundle.datasets['train']
+    assert len(datasets['test']['chars']) == len(datasets['train']['chars']), '生成用例和测试用例长度不等，请完全生成文本后再评测'
     datasets['train'].add_seq_len('chars')
     datasets['test'].add_seq_len('chars')
-
+    print(f'[testing result]\ncomparing file {Standard_Test_BIO} with {new_Path}')
     datasetDict = {'chars': [], 'target0': [], 'seq_len': [], 'pred0': [], 'pred_sentence': []}
     for instance in datasets['test']:
         datasetDict['chars'].append(instance['chars'])

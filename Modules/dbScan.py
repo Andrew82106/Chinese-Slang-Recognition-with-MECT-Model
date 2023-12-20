@@ -34,14 +34,15 @@ X_dict = None
 def writeLog(Content, init=False):
     if init:
         with open(cluster_Log_Path, "w", encoding='utf-8') as f:
-            f.write('')
-    with open(cluster_Log_Path, "a", encoding='utf-8') as f:
-        f.write("\n" + Content)
+            f.write(Content)
+    else:
+        with open(cluster_Log_Path, "a", encoding='utf-8') as f:
+            f.write(f"TIME:{datetime.now().strftime('%Y-%m-%d %H:%M:%S')} " + Content + "\n")
 
 
 def writeResult(Content):
     with open(clusterResult_path, "w", encoding='utf-8') as f:
-        f.write(Content)
+        f.write(Content + "\n")
 
 
 def debugInfo(Content, show=0):
@@ -164,33 +165,31 @@ def initVector(dataset):
         time.sleep(0.5)
 
 
-def read_vector(dataset, word):
+def read_vector(dataset, word, maxLength=20000):
     """
     # 从dataset数据集读取word词语的词向量
     Input: dataset: 数据集的名称，比如weibo，anwang等
     Input: word: 需要读取的词语
     Output: X: dataset数据集中word词语的词向量集合，size为N x embeddingLength
-
-    其实这个cluster的缓存存的不太合理，最好的方式其实是直接去索引最后的结果而不是每次去遍历
-    但其实还好，这个函数可以加一个缓存就会快很多，我就不改这个的逻辑了
+    maxLength: 用于聚类的最大向量数量
     """
     assert dataset in OutdatasetLst, f"dataset illegal, got {dataset}"
     if X_dict is None:
         initVector(dataset)
     R = X_dict['fastIndexWord'][word]
-    if len(R) > 20000:
+    if len(R) > maxLength:
         print(f"debug: length={len(R)}")
-        R = R[: 20000]
+        R = R[: maxLength]
     return R
 
 
 @cache.cache_result(cache_path='cache_function_cluster.pkl')
-def cluster(dataset, word, eps=25, savefig=False, metric='euclidean', min_samples=5):
+def cluster(dataset, word, eps=25, savefig=False, metric='euclidean', min_samples=5, maxLength=20000):
     """
     聚类接口api
     从dataset中对word进行聚类
     """
-    X = read_vector(dataset, word)
+    X = read_vector(dataset, word, maxLength=maxLength)
     debugInfo(f"load vec of word {word}")
     try:
         res = dbscan(
@@ -202,9 +201,7 @@ def cluster(dataset, word, eps=25, savefig=False, metric='euclidean', min_sample
             word=word,
             min_samples=min_samples
         )
-        # {'cluster result': clusters, 'dbscan result': dbscan}
     except Exception as e:
-        # print(f"eps:{eps}\nX:{X}\ndataset:{dataset}\nword:{word}")
         raise e
     num_of_clusters = len(set(res['cluster result']))
 
@@ -285,62 +282,6 @@ def calc_metric_in_steps(dataset, word, delta=1, min_interval=1, max_interval=10
     # print(f"res:{res}")
     return res
 
-"""
-def calcSentence(baseDatabase='wiki', eps=18, metric='euclidean', min_samples=4):
-    word = ''
-    print("starting cutting Result")
-    writeLog("", init=1)
-    cutResult = preprocess()
-    # 这里cutResult存的是待标记数据集的向量化结果
-    tokenizeRes = cutResult['tokenize']
-    wordVector = cutResult['wordVector']
-    res = []
-    initVector(baseDatabase)
-    for ID in tqdm.tqdm(range(len(tokenizeRes)), desc='processing'):
-        # for wordID in range(len(tokenizeRes[ID]['wordCutResult'])):
-        for wordID in tqdm.tqdm(range(len(tokenizeRes[ID]['wordCutResult'])), desc=f'running sentence with ID:{ID}'):
-            try:
-                word = tokenizeRes[ID]['wordCutResult'][wordID]
-                if word in ".,!。，":
-                    res.append([word, True])
-                    writeResult(str(res))
-                    continue
-                Vector = wordVector[ID][wordID]
-                # 拿到word和对应的Vector
-                debugInfo(f'clustering word:{word}')
-                writeLog(f"TIME:{datetime.now().strftime('%Y-%m-%d %H:%M:%S')} INFO: clustering word:{word}\n")
-                clustera = cluster(baseDatabase, word, savefig=False, eps=eps, metric=metric,
-                                   min_samples=min_samples)
-                debugInfo(f'success running cluster function with word {word}')
-                writeLog(
-                    f"TIME:{datetime.now().strftime('%Y-%m-%d %H:%M:%S')} success running cluster function with word {word}")
-                # 计算出聚类结果
-
-                classify = clustera['cluster result']
-                count_N1 = sum([1 if i == -1 else 0 for i in classify])
-                # print(f"聚类结果离群点数：{count_N1}")
-                writeLog(f"聚类结果离群点数：{count_N1}\n")
-                # print(f"聚类结果聚类数量：{clustera['num_of_clusters']}")
-                writeLog(f"聚类结果聚类数量：{clustera['num_of_clusters']}")
-                center = getCenter(clustera['result class instance'])
-                if clustera['num_of_clusters'] == 1:
-                    center = clustera['cluster_members']
-
-                res.append(
-                    [word, is_in_epsilon_neighborhood(Vector, center, epsilon=eps, metric=metric)]
-                )
-                debugInfo(f" append {word} in res")
-                writeResult(f"{res}")
-            except Exception as e:
-                debugInfo(f"clustering word {word} with error {e}", show=1)
-                writeLog(f"INFO: clustering word {word} with error {e}")
-                res.append(
-                    [word, 404]
-                )
-                writeResult(f"{res}")
-    writeResult(f"{res}")
-    # print(cutResult)
-"""
 
 if __name__ == "__main__":
     # calcSentence()
