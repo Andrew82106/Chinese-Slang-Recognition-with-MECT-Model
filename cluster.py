@@ -5,7 +5,7 @@ from ConvWordToVecWithMECT import preprocess
 import tqdm
 import os
 import argparse
-
+from Utils.Lab.lab_of_lowdimension import main
 metrics_calc_function = [
     calc_metric_in_steps,
     maximize_metric_for_eps
@@ -22,13 +22,13 @@ function_name = [
 ]
 
 
-def Find_many_word(dataset1, dataset2, mes=False):
+def Find_many_word(dataset1, dataset2, mes=False, Count=50):
     """
     在两个数据集中找到都出现过大于50个的词语
     """
     Lex_tieba = summary_lex(dataset1)
     Lex_weibo = summary_lex(dataset2)
-    count = 50
+    count = Count
     aim_word_Lst = []  # 统计一下在两个词典中出现次数都大于count的词组
     for i in Lex_tieba:
         if Lex_tieba[i] > count and (i in Lex_weibo and Lex_weibo[i] > count):
@@ -56,6 +56,21 @@ def compare(word, datasetLst):
                 # print(log)
                 with open(os.path.join(file, "clusterRes.txt"), "a", encoding='utf-8') as f:
                     f.write(str(log) + "\n")
+
+
+def DrawWordCompare():
+    # print(Find_many_word('wiki', 'test', Count=5))
+    # exit(0)
+    wordList = ['开心', '男生', '数据', '人', '我', '的', '自己', '警方']
+    for word in wordList:
+        try:
+            X_ = read_vector('wiki', word)
+            X1_ = read_vector('test', word)
+            print(X_.shape)
+            print(X1_.shape)
+            draw_cluster_res_of_single_word(word, X_, X1_)
+        except Exception as e:
+            raise e
 
 
 def calcSentence(baseDatabase='wiki', eps=18, metric='euclidean', min_samples=4, maxLength=20000):
@@ -121,7 +136,7 @@ def calcSentence(baseDatabase='wiki', eps=18, metric='euclidean', min_samples=4,
 
 
 args_list = [
-    {'name': '--mode', 'type': str, 'choices': ['test', 'generate'], 'default': 'test'},
+    {'name': '--mode', 'type': str, 'default': 'CompareSensitiveWordLab'},
     {'name': '--eps', 'type': int, 'default': 18, 'help': '聚类所使用的eps值'},
     {'name': '--metric', 'type': str, 'default': 'euclidean', 'help': '聚类所使用的距离算法'},
     {'name': '--min_samples', 'type': int, 'default': 4, 'help': '聚类所使用的min_samples参数'},
@@ -148,3 +163,7 @@ elif args.mode == 'generate':
         min_samples=args.min_samples,
         maxLength=args.maxLength
     )
+elif args.mode == 'lowDimensionLab':
+    main()
+elif args.mode == 'CompareSensitiveWordLab':
+    DrawWordCompare()

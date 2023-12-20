@@ -1,3 +1,5 @@
+import os
+
 import matplotlib.pyplot as plt
 from sklearn.cluster import DBSCAN
 from sklearn.preprocessing import StandardScaler
@@ -22,6 +24,11 @@ from sklearn.metrics.pairwise import pairwise_distances
 from Utils.outfitDataset import OutdatasetLst, nameToPath
 from Modules.DWT import *
 import pickle
+import pandas as pd
+import seaborn as sns
+import patchworklib as pw
+from umap import UMAP
+from sklearn.manifold import TSNE, MDS, Isomap
 from Utils.AutoCache import Cache
 
 cache = Cache()
@@ -48,6 +55,55 @@ def writeResult(Content):
 def debugInfo(Content, show=0):
     if show:
         print(f"TIME:{datetime.now().strftime('%Y-%m-%d %H:%M:%S')} INFO: {Content}")
+
+
+def Dimensionality_reduction(vectors_list):
+    U = TSNE(n_components=2, random_state=42, perplexity=1)
+    vectors = U.fit_transform(vectors_list)
+    return vectors
+
+
+def draw_cluster_res_of_single_word(word, vectorList1, vectorList2=None):
+    """
+    对于 dataset 中的 word，对其进行降维并且画出其降维结果
+    """
+    # 处理 vectorList1
+    New_X1 = Dimensionality_reduction(vectorList1)
+    labels1 = np.zeros(New_X1.shape[0])  # 给 vectorList1 的数据打标签，用 0 表示
+
+    if vectorList2 is not None:
+        # 处理 vectorList2
+        New_X2 = Dimensionality_reduction(vectorList2)
+        labels2 = np.ones(New_X2.shape[0])  # 给 vectorList2 的数据打标签，用 1 表示
+        # 合并数据和标签
+        combined_data = np.vstack((New_X1, New_X2))
+        combined_labels = np.concatenate((labels1, labels2))
+        combined_sizes = np.concatenate((np.ones(New_X1.shape[0]) * 10, np.ones(New_X2.shape[0]) * 20))  # 调整不同类别点的大小
+    else:
+        combined_data = New_X1
+        combined_labels = labels1
+        combined_sizes = np.ones(New_X1.shape[0]) * 10  # 设置点的大小
+
+    # 创建一个图
+    fig, ax = plt.subplots(figsize=(6, 4))
+
+    # 根据标签绘制散点图，并为不同类别的数据点着色
+    scatter = ax.scatter(combined_data[:, 0], combined_data[:, 1], c=combined_labels, cmap='coolwarm', s=combined_sizes, label=['wiki', '暗语'])
+    legend1 = ax.legend(*scatter.legend_elements(), title="Classes")
+    ax.add_artist(legend1)
+
+    # 计算不同标签的样本数量
+    num_label0 = np.sum(combined_labels == 0)
+    num_label1 = np.sum(combined_labels == 1)
+
+    # 在图中添加标签
+    ax.text(0.1, 0.9, f'wiki数据集样本数: {num_label0}', transform=ax.transAxes)
+    ax.text(0.1, 0.85, f'暗语样本数: {num_label1}', transform=ax.transAxes)
+
+    ax.set_title(f'Word: {word}')
+    plt.tight_layout()
+    plt.savefig(os.path.join(LabCachePath, f"降维算法比较图_词语{word}.png"))
+    print(f"successfully save graph to path:{os.path.join(LabCachePath, f'降维算法比较图_词语：{word}.png')}")
 
 
 def saveFig(X, clusters, name="your_plot_name", xlabel='Feature 1', ylabel='Feature 2', title='DBSCAN Clustering'):
@@ -174,10 +230,10 @@ def read_vector(dataset, word, maxLength=20000):
     maxLength: 用于聚类的最大向量数量
     """
     assert dataset in OutdatasetLst, f"dataset illegal, got {dataset}"
-    if X_dict is None:
-        initVector(dataset)
+    # if X_dict is None:
+    initVector(dataset)
     R = X_dict['fastIndexWord'][word]
-    if len(R) > maxLength:
+    if maxLength is not None and len(R) > maxLength:
         print(f"debug: length={len(R)}")
         R = R[: maxLength]
     return R
@@ -284,6 +340,9 @@ def calc_metric_in_steps(dataset, word, delta=1, min_interval=1, max_interval=10
 
 
 if __name__ == "__main__":
+    X = read_vector('wiki', "数据")
+    X1 = read_vector('test', "数据")
+    draw_cluster_res_of_single_word('数据', X, X1)
     # calcSentence()
     # best_metric, best_eps = maximize_metric_for_eps("tieba", "你")
     # print(f"best_eps:{best_eps}, best_metric:{best_metric}")

@@ -1,6 +1,6 @@
 from Utils.paths import *
 
-OutdatasetLst = ['weibo', 'tieba', 'msra', 'PKU', 'wiki', 'anwang']
+OutdatasetLst = ['weibo', 'tieba', 'msra', 'PKU', 'wiki', 'anwang', 'test']
 
 nameToPath = {
         'tieba': tieba_vector,
@@ -8,5 +8,6 @@ nameToPath = {
         'msra': msra_vector,
         'PKU': PKU_vector,
         'wiki': wiki_vector,
-        'anwang': anwang_vector
+        'anwang': anwang_vector,
+        'test': test_vector
     }

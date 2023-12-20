@@ -23,17 +23,20 @@ def convertRunningLog(resultFilePath=clusterResult_path):
     newFilePath = clusterResultBio_path
     try:
         resultLst = eval(result)
+        Label_404 = 0
         with open(newFilePath, "w", encoding='utf-8') as f:
             for pairs in resultLst:
                 word = pairs[0]
                 label = pairs[1]
                 if label == 404:
                     label = False
+                    Label_404 += 1
                 for i in range(len(word)):
                     f.write(f"{word[i]}\t{'O' if label else ('B-CANT' if i == 0 else 'I-CANT')}\n")
                 if word == '。':
                     f.write("\n")
         print(f"[file format modify]\nSuccess modified file {clusterResult_path} to {newFilePath}")
+        print(f"404词语共{Label_404}个，在{len(resultLst)}个词语中占比{100*Label_404/len(resultLst)}%")
     except Exception as e:
         raise Exception(f"{e}")
     return newFilePath

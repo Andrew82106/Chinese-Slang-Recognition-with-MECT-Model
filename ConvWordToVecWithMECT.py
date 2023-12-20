@@ -569,7 +569,8 @@ def preprocess(outdatasetPath=test_path):
     tokenizer = ChineseTokenizer()
     save_path = os.path.join(rootPth, "datasets/pickle_data")
     file_name = f"{args.dataset if args.extra_datasets == 'None' else args.extra_datasets}.pkl"
-    write_to_pickle(os.path.join(save_path, file_name), {"tokenize": [], "wordVector": []})
+    res = {"tokenize": [], "wordVector": [], "fastIndexWord": {}}
+    # write_to_pickle(os.path.join(save_path, file_name), res)
     suc = 0
     fai = 0
     for i in tqdm.tqdm(range(len(text['test'])), desc="将字向量转化为词向量"):
@@ -604,15 +605,24 @@ def preprocess(outdatasetPath=test_path):
 
         tokenize = tokenizer.tokenize(sentence)
         wordVector = CharacterToWord.run(mect4cner_out_vector, tokenize['wordGroupsID'])
-        # res['tokenize'].append(tokenize)
-        # res['wordVector'].append(wordVector)
-        append_tokenize_to_pickle(os.path.join(save_path, file_name), tokenize)
-        append_wordVector_to_pickle(os.path.join(save_path, file_name), wordVector)
+        # append_tokenize_to_pickle(os.path.join(save_path, file_name), tokenize)
+        # append_wordVector_to_pickle(os.path.join(save_path, file_name), wordVector)
+        res['tokenize'].append(tokenize)
+        res['wordVector'].append(wordVector)
+        # res = load_from_pickle(os.path.join(save_path, file_name))
+        for Index in range(len(res['tokenize'][-1]['wordCutResult'])):
+            word = res['tokenize'][-1]['wordCutResult'][Index]
+            Vec = res['wordVector'][-1][Index]
+            if word not in res['fastIndexWord']:
+                res['fastIndexWord'][word] = Vec.unsqueeze(0)
+            else:
+                res['fastIndexWord'][word] = torch.cat((res['fastIndexWord'][word], Vec.unsqueeze(0)), dim=0)
+        # write_to_pickle(os.path.join(save_path, file_name), res)
     print(f"suc rate:{100 * suc / (suc + fai)}%")
-    # write_to_pickle(os.path.join(save_path, file_name), load_from_pickle(os.path.join(save_path, file_name)))
     print(f"successfully save to {os.path.join(save_path, file_name)}")
-    return load_from_pickle(os.path.join(save_path, file_name))
+    # return load_from_pickle(os.path.join(save_path, file_name))
+    return res
 
 
 if __name__ == '__main__':
-    print(preprocess())
+    preprocess()

@@ -47,3 +47,14 @@ python cluster.py --mode test
 ```shell
 bash RunCluster.sh
 ```
+
+## 其他操作
+
+- 运行降维算法比较测试脚本
+```shell
+python cluster.py --mode lowDimensionLab
+```
+- 运行暗语词汇词向量降维效果展示脚本
+```shell
+python cluster.py --mode CompareSensitiveWordLab
+```

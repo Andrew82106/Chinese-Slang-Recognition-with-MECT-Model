@@ -13,6 +13,7 @@ charinfo = os.path.join(rootPth, "datasets/charinfo")
 NER = os.path.join(rootPth, "datasets/NER")
 vector = os.path.join(rootPth, "datasets/pickle_data")
 cache_path = os.path.join(rootPth, "cache")
+Utils_path = os.path.join(rootPth, "Utils")
 
 yangjie_rich_pretrain_unigram_path = os.path.join(embeddings, 'gigaword_chn.all.a2b.uni.ite50.vec')
 yangjie_rich_pretrain_bigram_path = os.path.join(embeddings, 'gigaword_chn.all.a2b.bi.ite50.vec')
@@ -43,6 +44,7 @@ msra_vector = os.path.join(vector, 'msra.pkl')
 PKU_vector = os.path.join(vector, 'PKU.pkl')
 anwang_vector = os.path.join(vector, 'anwang.pkl')
 wiki_vector = os.path.join(vector, 'wiki.pkl')
+test_vector = os.path.join(vector, 'test.pkl')
 
 cluster_path = os.path.join(rootPth, "clusterRes")
 # 聚类结果存放总路径
@@ -57,6 +59,9 @@ clusterResultBio_path = os.path.join(cluster_path, "Result.bio")
 
 Standard_Test_BIO = os.path.join(test_path, "input.bio")
 # 测试数据test.bio的位置
+
+LabPath = os.path.join(Utils_path, "Lab")
+LabCachePath = os.path.join(LabPath, "LabCache")
 
 sys.path.append(rootPth)
 sys.path.append(embeddings)
