@@ -107,7 +107,7 @@ def calcSentence(baseDatabase='wiki', eps=18, metric='euclidean', min_samples=4,
 
 
 args_list = [
-    {'name': '--mode', 'type': str, 'default': 'generate'},
+    {'name': '--mode', 'type': str, 'default': 'ConvertExpandedData'},
     {'name': '--eps', 'type': int, 'default': 18, 'help': '聚类所使用的eps值'},
     {'name': '--metric', 'type': str, 'default': 'euclidean', 'help': '聚类所使用的距离算法'},
     {'name': '--min_samples', 'type': int, 'default': 4, 'help': '聚类所使用的min_samples参数'},
@@ -140,4 +140,5 @@ elif args.mode == 'CompareSensitiveWordLab':
     DrawWordCompare()
 elif args.mode == 'expandBaseData':
     Baidu.Expand()
+elif args.mode == 'ConvertExpandedData':
     dataConvert.Convert()

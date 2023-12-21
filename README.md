@@ -61,4 +61,5 @@ python cluster.py --mode CompareSensitiveWordLab
 - 运行wiki数据集增强脚本
 ```shell
 python cluster.py --mode expandBaseData
+python cluster.py --mode ConvertExpandedData
 ```

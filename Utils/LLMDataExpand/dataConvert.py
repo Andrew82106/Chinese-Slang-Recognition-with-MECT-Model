@@ -9,7 +9,7 @@ def Convert(
     with open(r_LLM_dataGenerate_txt, "r", encoding='utf-8') as f:
         cont = f.read()
     cont = cont.replace("\n", '')
-    for i in range(1, 30, 1):
+    for i in range(100, 1, -1):
         cont = cont.replace(f"{i}. ", "")
     with open(r_LLM_dataGenerate_bio, 'w', encoding='utf-8') as f:
         for i in cont:
@@ -18,6 +18,7 @@ def Convert(
             f.write(f"{i} O\n")
             if i in '.。':
                 f.write("\n")
+    print(f"successfully write {r_LLM_dataGenerate_txt} to {r_LLM_dataGenerate_bio}")
 
 
 if __name__ == '__main__':
