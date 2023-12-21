@@ -92,7 +92,7 @@ def calcSentence(baseDatabase='wiki', eps=18, metric='euclidean', min_samples=4,
                     res.append([word, True])
                     writeResult(str(res))
                     continue
-                Vector = wordVector[ID][wordID]
+                Vector = Dimensionality_reduction(wordVector[ID][wordID].reshape(1, -1))
                 # 拿到word和对应的Vector
                 debugInfo(f'clustering word:{word}')
                 writeLog(f"INFO: clustering word:{word}")
@@ -103,7 +103,8 @@ def calcSentence(baseDatabase='wiki', eps=18, metric='euclidean', min_samples=4,
                     eps=eps,
                     metric=metric,
                     min_samples=min_samples,
-                    maxLength=maxLength
+                    maxLength=maxLength,
+                    refresh=False
                 )
                 debugInfo(f'success running cluster function with word {word}')
                 writeLog(f"success running cluster function with word {word}")
@@ -136,7 +137,7 @@ def calcSentence(baseDatabase='wiki', eps=18, metric='euclidean', min_samples=4,
 
 
 args_list = [
-    {'name': '--mode', 'type': str, 'default': 'CompareSensitiveWordLab'},
+    {'name': '--mode', 'type': str, 'default': 'generate'},
     {'name': '--eps', 'type': int, 'default': 18, 'help': '聚类所使用的eps值'},
     {'name': '--metric', 'type': str, 'default': 'euclidean', 'help': '聚类所使用的距离算法'},
     {'name': '--min_samples', 'type': int, 'default': 4, 'help': '聚类所使用的min_samples参数'},

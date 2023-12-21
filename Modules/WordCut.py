@@ -1,14 +1,26 @@
 import jieba
+import pandas as pd
 
 
 class ChineseTokenizer:
+    def __init__(self, custom_words_file_path=None):
+        if custom_words_file_path is None:
+            return
+        df = pd.read_excel(custom_words_file_path)
+        try:
+            custom_words = [word for word in df['word']] + [word for word in df['cant']]
+            for word in custom_words:
+                jieba.add_word(word)
+        except Exception as e:
+            print(f"fail to load custom word to jieba tokenizer with error {e}")
 
-    def basicCut(self, sentence):
-        seg_list = jieba.cut(sentence)
+    @staticmethod
+    def basicCut(sentence_):
+        seg_list = jieba.cut(sentence_)
         return list(seg_list)
 
-    def tokenize(self, sentence):
-        seg_list = self.basicCut(sentence)
+    def tokenize(self, sentence_):
+        seg_list = self.basicCut(sentence_)
         word_groups = []
         word_cut_result = []
         start = 0
@@ -18,10 +30,10 @@ class ChineseTokenizer:
             word_cut_result.append(word)
             start = end
         word_groups_id = [[group[0], group[-1]] if group[0] != group[-1] else [group[0]] for group in word_groups]
-        
+
         return {"wordGroupsID": word_groups_id, "wordCutResult": word_cut_result}
 
-    
+
 if __name__ == "__main__":
     # 测试类的方法
     tokenizer = ChineseTokenizer()

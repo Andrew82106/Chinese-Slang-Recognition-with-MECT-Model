@@ -566,7 +566,7 @@ def preprocess(outdatasetPath=test_path):
     text = datasets  # 文本
     print(text['train'])
     CharacterToWord = CTW()
-    tokenizer = ChineseTokenizer()
+    tokenizer = ChineseTokenizer(cant_word_location)
     save_path = os.path.join(rootPth, "datasets/pickle_data")
     file_name = f"{args.dataset if args.extra_datasets == 'None' else args.extra_datasets}.pkl"
     res = {"tokenize": [], "wordVector": [], "fastIndexWord": {}}
@@ -620,6 +620,7 @@ def preprocess(outdatasetPath=test_path):
         # write_to_pickle(os.path.join(save_path, file_name), res)
     print(f"suc rate:{100 * suc / (suc + fai)}%")
     print(f"successfully save to {os.path.join(save_path, file_name)}")
+    write_to_pickle(os.path.join(save_path, file_name), res)
     # return load_from_pickle(os.path.join(save_path, file_name))
     return res
 

@@ -742,7 +742,7 @@ elif args.status == 'generate':
     # text = datasets
     sentenceID = random.randint(0, len(text['test']) - 1)
     CharacterToWord = CTW()
-    tokenizer = ChineseTokenizer()
+    tokenizer = ChineseTokenizer(cant_word_location)
     save_path = os.path.join(rootPth, "datasets/pickle_data")
     res = {"tokenize": [], "wordVector": [], 'fastIndexWord': {}}
     suc = 0

@@ -222,7 +222,7 @@ def initVector(dataset, refresh=False):
             time.sleep(0.5)
 
 
-def read_vector(dataset, word, maxLength=20000):
+def read_vector(dataset, word, maxLength=20000, refresh=True):
     """
     # 从dataset数据集读取word词语的词向量
     Input: dataset: 数据集的名称，比如weibo，anwang等
@@ -232,7 +232,7 @@ def read_vector(dataset, word, maxLength=20000):
     """
     assert dataset in OutdatasetLst, f"dataset illegal, got {dataset}"
     # if X_dict is None:
-    initVector(dataset, refresh=True)
+    initVector(dataset, refresh=refresh)
     R = X_dict['fastIndexWord'][word]
     if maxLength is not None and len(R) > maxLength:
         print(f"debug: length={len(R)}")
@@ -241,12 +241,13 @@ def read_vector(dataset, word, maxLength=20000):
 
 
 @cache.cache_result(cache_path='cache_function_cluster.pkl')
-def cluster(dataset, word, eps=25, savefig=False, metric='euclidean', min_samples=5, maxLength=20000):
+def cluster(dataset, word, eps=25, savefig=False, metric='euclidean', min_samples=5, maxLength=20000, refresh=True):
     """
     聚类接口api
     从dataset中对word进行聚类
     """
-    X = read_vector(dataset, word, maxLength=maxLength)
+    X = read_vector(dataset, word, maxLength=maxLength, refresh=refresh)
+    X = Dimensionality_reduction(X)
     debugInfo(f"load vec of word {word}")
     try:
         res = dbscan(
