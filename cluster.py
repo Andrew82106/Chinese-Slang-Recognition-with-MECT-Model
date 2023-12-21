@@ -3,23 +3,10 @@ from Utils.summary_word_vector import summary_lex
 from Utils.evaluateCluster import evaluateDBScanMetric
 from ConvWordToVecWithMECT import preprocess
 import tqdm
+from Utils.LLMDataExpand import Baidu, dataConvert
 import os
 import argparse
 from Utils.Lab.lab_of_lowdimension import main
-metrics_calc_function = [
-    calc_metric_in_steps,
-    maximize_metric_for_eps
-]  # 计算指标的函数，包括最大化函数、取样函数
-
-evaluate_function = [
-    index2,
-    index1
-]  # 衡量指标的函数，分别对应最大化函数、取样函数
-
-function_name = [
-    "取样函数",
-    "最大化聚类函数"
-]
 
 
 def Find_many_word(dataset1, dataset2, mes=False, Count=50):
@@ -38,24 +25,6 @@ def Find_many_word(dataset1, dataset2, mes=False, Count=50):
                     f"word {i} occurs in dataset {dataset1}:{Lex_tieba[i]} and occurs in dataset {dataset2}:{Lex_weibo[i]}")
     # print(aim_word_Lst,len(aim_word_Lst))
     return aim_word_Lst
-
-
-def compare(word, datasetLst):
-    file = "clusterRes/"
-    for FunctionID in range(0, 2):  # 对不同指标函数的结果进行测试
-        metricLst = []
-        for i_ in datasetLst:
-            # print(function_name[FunctionID], (i, word))
-            metricLst.append(metrics_calc_function[FunctionID](i_, word))
-        for i in range(len(metricLst)):
-            for j in range(i, len(metricLst)):
-                if i == j:
-                    continue
-                index = evaluate_function[FunctionID](metricLst[i], metricLst[j])
-                log = f"word {word} in dataset {datasetLst[i]} and {datasetLst[j]} with function {function_name[FunctionID]}: difference is {index}"
-                # print(log)
-                with open(os.path.join(file, "clusterRes.txt"), "a", encoding='utf-8') as f:
-                    f.write(str(log) + "\n")
 
 
 def DrawWordCompare():
@@ -92,7 +61,8 @@ def calcSentence(baseDatabase='wiki', eps=18, metric='euclidean', min_samples=4,
                     res.append([word, True])
                     writeResult(str(res))
                     continue
-                Vector = Dimensionality_reduction(wordVector[ID][wordID].reshape(1, -1))
+                # Vector = Dimensionality_reduction(wordVector[ID][wordID].reshape(1, -1))
+                Vector = wordVector[ID][wordID]
                 # 拿到word和对应的Vector
                 debugInfo(f'clustering word:{word}')
                 writeLog(f"INFO: clustering word:{word}")
@@ -127,7 +97,7 @@ def calcSentence(baseDatabase='wiki', eps=18, metric='euclidean', min_samples=4,
                 writeLog(f"append {word} in res")
                 writeResult(f"{res}")
             except Exception as e:
-                debugInfo(f"clustering word {word} with error {e}", show=1)
+                debugInfo(f"clustering word {word} with error {e}")
                 writeLog(f"clustering word {word} with error {e}")
                 res.append(
                     [word, 404]
@@ -168,3 +138,6 @@ elif args.mode == 'lowDimensionLab':
     main()
 elif args.mode == 'CompareSensitiveWordLab':
     DrawWordCompare()
+elif args.mode == 'expandBaseData':
+    Baidu.Expand()
+    dataConvert.Convert()

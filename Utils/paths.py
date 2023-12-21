@@ -56,11 +56,14 @@ clusterResultPhoto_path = os.path.join(cluster_path, "clusterLogs")
 # 存放聚类结果图片
 clusterResultBio_path = os.path.join(cluster_path, "Result.bio")
 # 存放BIO格式的聚类结果
+Standard_Test_BIO = os.path.join(test_path, 'input.bio')
 
 cant_word_location = os.path.join(test_path, "cant_word.xlsx")
 # 自定义词表的位置
 
 custom_word_table = os.path.join(vector, '.pkl')
+
+LLM_data_expand_path = os.path.join(Utils_path, "LLMDataExpand")
 
 LabPath = os.path.join(Utils_path, "Lab")
 LabCachePath = os.path.join(LabPath, "LabCache")

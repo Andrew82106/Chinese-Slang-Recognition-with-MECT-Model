@@ -115,20 +115,6 @@ def saveFig(X, clusters, name="your_plot_name", xlabel='Feature 1', ylabel='Feat
     plt.show()
 
 
-def index1(metricA: int, metricB: int):
-    """
-    按照第一种方法计算指标的相似度
-    """
-    return abs(metricA - metricB)
-
-
-def index2(metricLstA: list, metricLstB: list):
-    """
-    按照二种方法计算指标的相似度
-    """
-    return naive_DTW(metricLstA, metricLstB)
-
-
 def dbscan(X, metric, min_samples, eps=25, savefig=False, word=None, dataset=None):
     """
     # 进行dbscan聚类
@@ -152,12 +138,6 @@ def dbscan(X, metric, min_samples, eps=25, savefig=False, word=None, dataset=Non
             title=(
                       f"{dataset} clustering" if word is None else f"{dataset} clustering of word {word}") + f"[with_eps={eps}&n={n}&min_samples={min_samples}]",
         )
-    """
-    if not GETRES:
-        return clusters
-    else:
-        return dbscan
-    """
     return {'cluster result': clusters, 'dbscan result': dbscan}
 
 
@@ -204,14 +184,6 @@ def is_in_epsilon_neighborhood(new_vector, core_points, epsilon, metric):
     return is_in_epsilon
 
 
-def mkData():
-    # 生成样本数据
-    n_samples = 100
-    n_features = 256
-    X, _ = make_blobs(n_samples=n_samples, centers=3, n_features=n_features, random_state=42)
-    return X
-
-
 def initVector(dataset, refresh=False):
     global X_dict
     if X_dict is None or refresh:
@@ -233,9 +205,11 @@ def read_vector(dataset, word, maxLength=20000, refresh=True):
     assert dataset in OutdatasetLst, f"dataset illegal, got {dataset}"
     # if X_dict is None:
     initVector(dataset, refresh=refresh)
+    if word not in X_dict['fastIndexWord']:
+        raise Exception(f"{word} not in pkl of dataset {dataset}")
     R = X_dict['fastIndexWord'][word]
     if maxLength is not None and len(R) > maxLength:
-        print(f"debug: length={len(R)}")
+        # print(f"debug: length={len(R)}")
         R = R[: maxLength]
     return R
 
@@ -247,7 +221,7 @@ def cluster(dataset, word, eps=25, savefig=False, metric='euclidean', min_sample
     从dataset中对word进行聚类
     """
     X = read_vector(dataset, word, maxLength=maxLength, refresh=refresh)
-    X = Dimensionality_reduction(X)
+    # X = Dimensionality_reduction(X)
     debugInfo(f"load vec of word {word}")
     try:
         res = dbscan(
@@ -280,92 +254,7 @@ def generate_list_with_delta(min_interval, max_interval, delta):
     return my_list
 
 
-def maximize_metric_for_eps(dataset, word, delta=10, min_interval=1, max_interval=100, minndelta=0.001):
-    """
-    以精度为标准，递归的查找metric的最大值，从而求得聚类的最大值
-    """
-    maxx_metric = 0
-    maxx_met_eps = -1
-
-    forLst = generate_list_with_delta(min_interval, max_interval, delta)
-    # print(forLst)
-    for eps in forLst:
-        if eps <= 0:
-            continue
-        # print(f"eps:{eps} ", end="")
-        """
-        return {
-            "num_of_clusters": num_of_clusters,
-            "result class instance": res['dbscan result'],
-            "cluster result": res['cluster result']
-        }
-        """
-        metric = cluster(dataset, word, eps)['num_of_clusters']
-        # print(f"metric:{metric}")
-        if maxx_metric < metric:
-            maxx_metric = metric
-            maxx_met_eps = eps
-
-    if delta > minndelta:
-        new_delta = delta / 5
-        # print(f"recursive to next delta:{new_delta}")
-        res = maximize_metric_for_eps(dataset, word, new_delta, maxx_met_eps - (2 * new_delta),
-                                      maxx_met_eps + 2 * new_delta)
-        if res == 0:
-            return maxx_metric
-        else:
-            return res
-    else:
-        # return maxx_metric, maxx_met_eps
-        return maxx_metric
-
-
-def calc_metric_in_steps(dataset, word, delta=1, min_interval=1, max_interval=100):
-    """
-    平均的对某个范围内的聚类结果进行采样
-    """
-    # print('calc_metric_in_steps')
-    forLst = generate_list_with_delta(min_interval, max_interval, delta)
-    res = []
-    for eps in forLst:
-        """
-                return {
-                    "num_of_clusters": num_of_clusters,
-                    "result class instance": res['dbscan result'],
-                    "cluster result": res['cluster result']
-                }
-        """
-        metric = cluster(dataset, word, eps)['num_of_clusters']
-        res.append(metric)
-    # print(f"res:{res}")
-    return res
-
-
 if __name__ == "__main__":
     X = read_vector('wiki', "数据")
     X1 = read_vector('test', "数据")
     draw_cluster_res_of_single_word('数据', X, X1)
-    # calcSentence()
-    # best_metric, best_eps = maximize_metric_for_eps("tieba", "你")
-    # print(f"best_eps:{best_eps}, best_metric:{best_metric}")
-    """
-                    return {
-                        "num_of_clusters": num_of_clusters,
-                        "result class instance": res['dbscan result'],
-                        "cluster result": res['cluster result']
-                    }
-    """
-    """
-    Lex_tieba = summary_lex("tieba")
-    Lex_weibo = summary_lex("PKU")
-    count = 50
-    aim_word_Lst = []  # 统计一下在两个词典中出现次数都大于count的词组
-    for i in tqdm.tqdm(Lex_tieba):
-        if Lex_tieba[i] > count and (i in Lex_weibo and Lex_weibo[i] > count):
-            aim_word_Lst.append(i)
-    # print(aim_word_Lst,len(aim_word_Lst))
-    for i in aim_word_Lst:
-        best_metric, best_eps = maximize_metric_for_eps("tieba", i)
-        best_metric1, best_eps1 = maximize_metric_for_eps("weibo", i)
-        print(f"word:{i}\nbest_metric in tieba:{best_metric}\nbest_metric in weibo:{best_metric1}")
-    """

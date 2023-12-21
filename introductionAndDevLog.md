@@ -812,3 +812,43 @@ label_acc: acc=0.679607
 先下一步吧，后面再说这个。
 
 - 加入降维，将聚类算法修改为距离计算算法即可
+
+先不降维，先用原来的跑：
+
+```text
+404词语共3233个，在16204个词语中占比19.951863737348802%
+[testing result]
+comparing file /Users/andrewlee/Desktop/Projects/Chinese-Slang-Recognition-with-MECT-Model/datasets/NER/test/input.bio with /Users/andrewlee/Desktop/Projects/Chinese-Slang-Recognition-with-MECT-Model/clusterRes/Result.bio
+Evaluate data in 0.07 seconds!                                                                                                       
+[tester] 
+SpanFPreRecMetric: f=0.279161, pre=0.572581, rec=0.184575
+label_acc: acc=0.731987
+
+```
+
+404词语太多了看来，现在需要重新增强一下数据
+
+用下面这段脚本测试了一下：
+
+```python
+def test3():
+    List_404 = []
+    with open("./wiki.pkl", "rb") as f:
+        cont = pickle.load(f)
+    with open("./test.pkl", "rb") as f:
+        cont_test = pickle.load(f)
+    for word in cont_test['fastIndexWord']:
+        if word not in cont['fastIndexWord']:
+            List_404.append(word)
+
+    print(len(List_404))
+```
+
+结果：
+
+```text
+1918
+```
+
+然后再增强试试
+
