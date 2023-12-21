@@ -210,7 +210,11 @@ def main(word):
     response = requests.request("POST", url, headers=headers, data=payload)
     with open(os.path.join(LLM_data_expand_path, "LLM_dataGenerate.txt"), "a", encoding='utf-8') as f:
         res = eval(response.text.replace("false", 'False').replace("true", 'True'))
-        f.write(res['result'])
+        try:
+            f.write(res['result'])
+        except Exception as e:
+            print(res)
+            raise e
     # print(res['result'])
 
 

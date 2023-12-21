@@ -27,7 +27,7 @@ import pickle
 import pandas as pd
 import seaborn as sns
 import patchworklib as pw
-from umap import UMAP
+# from umap import UMAP
 from sklearn.manifold import TSNE, MDS, Isomap
 from Utils.AutoCache import Cache
 
