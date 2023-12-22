@@ -66,3 +66,11 @@ python cluster.py --mode CompareSensitiveWordLab
 python cluster.py --mode expandBaseData
 python cluster.py --mode ConvertExpandedData
 ```
+- 函数缓存清除
+```shell
+python cluster.py --mode clean_function_cache
+```
+- 数据集缓存清除
+```shell
+python cluster.py --mode clean_model_cache
+```

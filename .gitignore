@@ -1,5 +1,15 @@
 /.idea
-/datasets/*
+/datasets/charinfo
+/datasets/embeddings
+/datasets/pickle_data
+/datasets/NER/.ipynb_checkpoints
+/datasets/NER/anwang
+/datasets/NER/Demo_NER
+/datasets/NER/MSRA_NER
+/datasets/NER/PKU
+/datasets/NER/resume_NER
+/datasets/NER/tieba
+/datasets/NER/Weibo_NER
 /cache
 /datasets/scp
 /log

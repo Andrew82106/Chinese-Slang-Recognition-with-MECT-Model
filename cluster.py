@@ -1,6 +1,7 @@
 import torch
 
 from Modules.dbScan import *
+from Utils.paths import *
 from Utils.summary_word_vector import summary_lex
 from Utils.evaluateCluster import evaluateDBScanMetric
 from ConvWordToVecWithMECT import preprocess
@@ -263,3 +264,7 @@ elif args.mode == 'expandBaseData':
     Baidu.Expand()
 elif args.mode == 'ConvertExpandedData':
     dataConvert.Convert()
+elif args.mode == 'clean_function_cache':
+    del_cluster_cache_path()
+elif args.mode == 'clean_model_cache':
+    clean_cache_path()

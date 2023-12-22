@@ -1,12 +1,23 @@
 import os
 import sys
 
-if sys.platform == 'darwin':
-    rootPth = "/Users/andrewlee/Desktop/Projects/Chinese-Slang-Recognition-with-MECT-Model"
-elif sys.platform == 'linux':
-    rootPth = "/home/ubuntu/Project/Chinese-Slang-Recognition-with-MECT-Model"
+
+def find_root_path():
+    current_path = os.getcwd()
+    while True:
+        if os.path.exists(os.path.join(current_path, 'Chinese-Slang-Recognition-with-MECT-Model')):
+            return os.path.join(current_path, 'Chinese-Slang-Recognition-with-MECT-Model')
+        parent_path = os.path.dirname(current_path)
+        if current_path == parent_path:
+            return None
+        current_path = parent_path
+
+
+rootPth = find_root_path()
+if rootPth:
+    print(f"Project root path found: {rootPth}")
 else:
-    rootPth = "B:\Chinese-Slang-Recognition-with-MECT-Model"
+    raise Exception("Unable to find the project root path.")
 
 embeddings = os.path.join(rootPth, "datasets/embeddings")
 charinfo = os.path.join(rootPth, "datasets/charinfo")
@@ -68,11 +79,64 @@ LLM_data_expand_path = os.path.join(Utils_path, "LLMDataExpand")
 LabPath = os.path.join(Utils_path, "Lab")
 LabCachePath = os.path.join(LabPath, "LabCache")
 
+cluster_cache_path = os.path.join(cache_path, "cluster_cache")
+# 缓存函数存放位置
+
 sys.path.append(rootPth)
 sys.path.append(embeddings)
 sys.path.append(charinfo)
 sys.path.append(NER)
 sys.path.append(vector)
 sys.path.append(cache_path)
+
+
+def del_cluster_cache_path():
+    """
+    删除 cluster_cache_path 下所有文件
+    """
+    try:
+        # 列出目录下的所有文件和文件夹
+        files = os.listdir(cluster_cache_path)
+
+        # 遍历目录下的所有文件和文件夹
+        for file in files:
+            # 拼接文件的完整路径
+            file_path = os.path.join(cluster_cache_path, file)
+
+            # 如果是文件，就删除
+            if os.path.isfile(file_path):
+                os.remove(file_path)
+                print(f"Deleted file: {file_path}")
+
+        print("All files deleted successfully!")
+
+    except Exception as e:
+        print(f"Error while deleting files: {e}")
+
+
+def clean_cache_path():
+    """
+    删除cache_path下所有非文件夹文件
+    """
+    try:
+        # 列出目录下的所有文件和文件夹
+        files = os.listdir(cache_path)
+
+        # 遍历目录下的所有文件和文件夹
+        for file in files:
+            # 拼接文件的完整路径
+            file_path = os.path.join(cache_path, file)
+
+            # 如果是文件并且不是文件夹，就删除
+            if os.path.isfile(file_path) and not os.path.isdir(file_path):
+                os.remove(file_path)
+                print(f"Deleted file: {file_path}")
+
+        print("All non-directory files deleted successfully!")
+
+    except Exception as e:
+        print(f"Error while deleting non-directory files: {e}")
+
+
 if __name__ == '__main__':
     print(charinfo)
