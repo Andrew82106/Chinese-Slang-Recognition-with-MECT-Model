@@ -7,7 +7,6 @@ from Utils.evaluateCluster import evaluateDBScanMetric
 from ConvWordToVecWithMECT import preprocess
 import tqdm
 from Utils.LLMDataExpand import Baidu, dataConvert, merge_data
-import os
 import argparse
 from Utils.Lab.lab_of_lowdimension import main
 
@@ -218,29 +217,40 @@ def calcSentenceWithDimensionDecline(baseDatabase='wiki', eps=18, metric='euclid
             }
             word_info_list.append(word_info)  # 将每个词语的信息添加到列表中
     res = {}
-    for word_instance in word_info_list:
-        wiki_cluster_result = cluster(
-                    baseDatabase,
-                    word_instance['word'],
-                    savefig=False,
-                    eps=eps,
-                    metric=metric,
-                    min_samples=min_samples,
-                    maxLength=maxLength,
-                    refresh=False
-                )
+
+    cnt_404 = 0
+    cnt_false = 0
+    cnt_true = 0
+    for word_instance in tqdm.tqdm(word_info_list, desc='processing cluster algorithm'):
+        try:
+            wiki_cluster_result = cluster(
+                        baseDatabase,
+                        word_instance['word'],
+                        savefig=False,
+                        eps=eps,
+                        metric=metric,
+                        min_samples=min_samples,
+                        maxLength=maxLength,
+                        refresh=False,
+                        dimension_d=True
+                    )
+        except:
+            cnt_404 += 1
+            continue
         center = getCenter(wiki_cluster_result['result class instance'])
         if wiki_cluster_result['num_of_clusters'] == 1:
             center = wiki_cluster_result['cluster_members']
-        center = dimensionReduce(center)
+        # center = dimensionReduce(center)
         for index_, indices_ in enumerate(word_instance['indices']):
-            try:
-                Vector = word_instance['reduced_vectors'][index_]
-                label = is_in_epsilon_neighborhood(Vector, center, epsilon=eps, metric=metric)
-                if not label:
-                    print("111")
-            except:
-                print(word_instance['word'])
+            Vector = word_instance['reduced_vectors'][index_]
+            print(Vector.shape, end=' ')
+            print(center.shape)
+            label = is_in_epsilon_neighborhood(Vector, center, epsilon=eps, metric=metric)
+            if not label:
+                cnt_false += 1
+            else:
+                cnt_true += 1
+    print(f"all {len(word_info_list)} words has {cnt_404} 404 words and {cnt_false} false label and {cnt_true} true label")
 
 
 args_list = [

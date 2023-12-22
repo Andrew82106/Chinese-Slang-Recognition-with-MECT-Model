@@ -59,8 +59,8 @@ def debugInfo(Content, show=0):
 
 
 def Dimensionality_reduction(vectors_list):
-    # U = TSNE(n_components=1, random_state=42, perplexity=1)
-    U = PCA(n_components=1, random_state=42)
+    # U = TSNE(n_components=2, random_state=42, perplexity=1)
+    U = PCA(n_components=2, random_state=42)
     vectors = U.fit_transform(vectors_list)
     return vectors
 
@@ -217,12 +217,15 @@ def read_vector(dataset, word, maxLength=20000, refresh=True):
 
 
 @cache.cache_result(cache_path='cache_function_cluster.pkl')
-def cluster(dataset, word, eps=25, savefig=False, metric='euclidean', min_samples=5, maxLength=20000, refresh=True):
+def cluster(dataset, word, eps=25, savefig=False, metric='euclidean', min_samples=5, maxLength=20000, refresh=True, dimension_d=False):
     """
     聚类接口api
     从dataset中对word进行聚类
+    dimension_d: 是否使用降维算法
     """
     X = read_vector(dataset, word, maxLength=maxLength, refresh=refresh)
+    if dimension_d:
+        X = Dimensionality_reduction(X)
     # X = Dimensionality_reduction(X)
     debugInfo(f"load vec of word {word}")
     try:
