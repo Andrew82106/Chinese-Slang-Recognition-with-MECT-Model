@@ -46,6 +46,10 @@ demo_ner_path = os.path.join(NER, 'Demo_NER')
 tieba_path = os.path.join(NER, 'tieba')
 PKU_path = os.path.join(NER, 'PKU')
 wiki_path = os.path.join(NER, 'wiki')
+wiki_file_old_path = os.path.join(wiki_path, 'wiki_old.bmes')
+# 未增强的wiki文件路径
+wiki_file_path = os.path.join(wiki_path, 'wiki.bmes')
+# 增强后的wiki文件路径
 anwang_path = os.path.join(NER, 'anwang')
 test_path = os.path.join(NER, 'test')
 
@@ -75,6 +79,8 @@ cant_word_location = os.path.join(test_path, "cant_word.xlsx")
 custom_word_table = os.path.join(vector, '.pkl')
 
 LLM_data_expand_path = os.path.join(Utils_path, "LLMDataExpand")
+LLM_data_expand_bio_file_path = os.path.join(LLM_data_expand_path, "LLM_dataGenerate.bio")
+# 使用大模型进行增强的bio格式的文本
 
 LabPath = os.path.join(Utils_path, "Lab")
 LabCachePath = os.path.join(LabPath, "LabCache")
@@ -97,19 +103,15 @@ def del_cluster_cache_path():
     try:
         # 列出目录下的所有文件和文件夹
         files = os.listdir(cluster_cache_path)
-
         # 遍历目录下的所有文件和文件夹
         for file in files:
             # 拼接文件的完整路径
             file_path = os.path.join(cluster_cache_path, file)
-
             # 如果是文件，就删除
             if os.path.isfile(file_path):
                 os.remove(file_path)
                 print(f"Deleted file: {file_path}")
-
         print("All files deleted successfully!")
-
     except Exception as e:
         print(f"Error while deleting files: {e}")
 
@@ -121,19 +123,15 @@ def clean_cache_path():
     try:
         # 列出目录下的所有文件和文件夹
         files = os.listdir(cache_path)
-
         # 遍历目录下的所有文件和文件夹
         for file in files:
             # 拼接文件的完整路径
             file_path = os.path.join(cache_path, file)
-
             # 如果是文件并且不是文件夹，就删除
             if os.path.isfile(file_path) and not os.path.isdir(file_path):
                 os.remove(file_path)
                 print(f"Deleted file: {file_path}")
-
         print("All non-directory files deleted successfully!")
-
     except Exception as e:
         print(f"Error while deleting non-directory files: {e}")
 

@@ -59,7 +59,7 @@ def debugInfo(Content, show=0):
 
 
 def Dimensionality_reduction(vectors_list):
-    # U = TSNE(n_components=2, random_state=42, perplexity=1)
+    # U = TSNE(n_components=1, random_state=42, perplexity=1)
     U = PCA(n_components=1, random_state=42)
     vectors = U.fit_transform(vectors_list)
     return vectors

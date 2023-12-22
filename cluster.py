@@ -6,7 +6,7 @@ from Utils.summary_word_vector import summary_lex
 from Utils.evaluateCluster import evaluateDBScanMetric
 from ConvWordToVecWithMECT import preprocess
 import tqdm
-from Utils.LLMDataExpand import Baidu, dataConvert
+from Utils.LLMDataExpand import Baidu, dataConvert, merge_data
 import os
 import argparse
 from Utils.Lab.lab_of_lowdimension import main
@@ -168,19 +168,23 @@ def mergeVectorsByWordWithIndices(tokenizeRes, wordVector):
     return merged_matrices  # 返回包含词向量及索引位置的字典
 
 
-def reduceDimensionsForMatrices(merged_matrices):
-    reduced_matrices = {}  # 用于存储降维后的矩阵
+def dimensionReduce(Matrix):
+    if Matrix.shape[0] == 1:  # 如果词向量矩阵只有一行
+        vectors_matrix = torch.cat((Matrix, Matrix), dim=0)
+        reduced_matrix = Dimensionality_reduction(vectors_matrix)
+        reduced_matrix = reduced_matrix[0:1]
+    else:
+        vectors_matrix = Matrix
+        reduced_matrix = Dimensionality_reduction(vectors_matrix)
+    return reduced_matrix
 
-    # 遍历 merged_matrices 中的每个词语及其对应的向量矩阵
+
+def reduceDimensionsForMatrices(merged_matrices):
+    reduced_matrices = {}
     for word, data in tqdm.tqdm(merged_matrices.items(), desc='对数据进行降维'):
         vectors_matrix = data['vectors']  # 获取词向量矩阵
-
-        # 对词向量矩阵进行降维处理
-        reduced_matrix = Dimensionality_reduction(vectors_matrix)
-
-        # 将降维后的矩阵存储到 reduced_matrices 中
+        reduced_matrix = dimensionReduce(vectors_matrix)
         reduced_matrices[word] = reduced_matrix
-
     return reduced_matrices
 
 
@@ -196,7 +200,7 @@ def calcSentenceWithDimensionDecline(baseDatabase='wiki', eps=18, metric='euclid
     wordVector = cutResult['wordVector']
     merged_matrices = mergeVectorsByWordWithIndices(tokenizeRes, wordVector)
     reduced_matrices = reduceDimensionsForMatrices(merged_matrices)
-
+    initVector(baseDatabase)
     # 在这里对每个词语的信息进行汇总
     word_info_list = []  # 存储每个词语的信息
     for word, data in tqdm.tqdm(merged_matrices.items(), desc='存储每个词语的信息'):
@@ -204,7 +208,6 @@ def calcSentenceWithDimensionDecline(baseDatabase='wiki', eps=18, metric='euclid
             original_vectors = data['vectors']  # 原始向量矩阵
             indices = data['indices']  # 词语在原数据集中的索引位置
             reduced_vectors = reduced_matrices[word]  # 降维后的向量矩阵
-
             # 汇总每个词语的信息
             word_info = {
                 'word': word,
@@ -214,11 +217,30 @@ def calcSentenceWithDimensionDecline(baseDatabase='wiki', eps=18, metric='euclid
                 # 还可以根据需要添加其他信息
             }
             word_info_list.append(word_info)  # 将每个词语的信息添加到列表中
-
-    # 在这里使用 word_info_list 中的信息进行聚类操作或其他处理
-    # ...
-
-    return word_info_list  # 返回每个词语的信息列表，用于后续操作
+    res = {}
+    for word_instance in word_info_list:
+        wiki_cluster_result = cluster(
+                    baseDatabase,
+                    word_instance['word'],
+                    savefig=False,
+                    eps=eps,
+                    metric=metric,
+                    min_samples=min_samples,
+                    maxLength=maxLength,
+                    refresh=False
+                )
+        center = getCenter(wiki_cluster_result['result class instance'])
+        if wiki_cluster_result['num_of_clusters'] == 1:
+            center = wiki_cluster_result['cluster_members']
+        center = dimensionReduce(center)
+        for index_, indices_ in enumerate(word_instance['indices']):
+            try:
+                Vector = word_instance['reduced_vectors'][index_]
+                label = is_in_epsilon_neighborhood(Vector, center, epsilon=eps, metric=metric)
+                if not label:
+                    print("111")
+            except:
+                print(word_instance['word'])
 
 
 args_list = [
@@ -266,5 +288,7 @@ elif args.mode == 'ConvertExpandedData':
     dataConvert.Convert()
 elif args.mode == 'clean_function_cache':
     del_cluster_cache_path()
+elif args.mode == 'strengthen_wiki':
+    merge_data.merge_LLM_data()
 elif args.mode == 'clean_model_cache':
     clean_cache_path()

@@ -74,3 +74,7 @@ python cluster.py --mode clean_function_cache
 ```shell
 python cluster.py --mode clean_model_cache
 ```
+- 合并wiki和大模型增强数据
+```shell
+python cluster.py --mode strengthen_wiki
+```
