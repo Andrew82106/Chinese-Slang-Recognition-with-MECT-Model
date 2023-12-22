@@ -6,7 +6,7 @@
 
 - 微博数据集
 
-```py
+```shell
 python main.py --dataset weibo
 ```
 
@@ -14,13 +14,13 @@ python main.py --dataset weibo
 
 将``--status``参数定义为 ``run`` 即可加载已有模型（模型路径需要改改）：
 
-```py
+```shell
 python main.py --dataset weibo --status run --device cpu
 ```
 
 ## stage3: 数据集输出为词向量：
 
-```py
+```shell
 # 加载训练集对应测试集并转化为词向量
 python main.py --dataset weibo --status generate --device cpu
 
@@ -31,14 +31,17 @@ python main.py --dataset msra --status generate --device cpu --extra_datasets wi
 
 ## stage4: 生成文本解析结果
 
-```py
+```shell
 python cluster.py --mode generate
 ```
 
 ## stage5: 评测解析结果
 
-```py
+```shell
+# 使用标准测试
 python cluster.py --mode test
+# 使用降维算法进行测试
+python cluster.py --mode test_dimension_decline
 ```
 
 ## 快速操作

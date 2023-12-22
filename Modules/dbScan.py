@@ -29,6 +29,7 @@ import seaborn as sns
 import patchworklib as pw
 # from umap import UMAP
 from sklearn.manifold import TSNE, MDS, Isomap
+from sklearn.decomposition import PCA
 from Utils.AutoCache import Cache
 
 cache = Cache()
@@ -58,7 +59,8 @@ def debugInfo(Content, show=0):
 
 
 def Dimensionality_reduction(vectors_list):
-    U = TSNE(n_components=2, random_state=42, perplexity=1)
+    # U = TSNE(n_components=2, random_state=42, perplexity=1)
+    U = PCA(n_components=1, random_state=42)
     vectors = U.fit_transform(vectors_list)
     return vectors
 
