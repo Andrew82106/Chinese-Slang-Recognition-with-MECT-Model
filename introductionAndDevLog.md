@@ -916,7 +916,7 @@ label_acc: acc=0.855365
 第三次增强的结果：
 
 ```text
-[tester] 
+[tester]
 SpanFPreRecMetric: f=0.336975, pre=0.359319, rec=0.317247
 label_acc: acc=0.855365
 ```
@@ -924,3 +924,4 @@ label_acc: acc=0.855365
 居然，一点变化都没有.......
 
 我想尝试一下使用MNGG dataset的全量数据集进行测试
+

@@ -1,14 +1,130 @@
 import torch
-
-from Modules.dbScan import *
+from Modules.dbScan import cluster, read_vector, initVector, writeLog, writeResult, draw_cluster_res_of_single_word, debugInfo, getCenter, is_in_epsilon_neighborhood, Dimensionality_reduction, StandardScaler
 from Utils.paths import *
 from Utils.summary_word_vector import summary_lex
 from Utils.evaluateCluster import evaluateDBScanMetric
 from ConvWordToVecWithMECT import preprocess
 import tqdm
+from Utils.outfitDataset import OutdatasetLst
 from Utils.LLMDataExpand import Baidu, dataConvert, merge_data
 import argparse
 from Utils.Lab.lab_of_lowdimension import main
+
+args_list = [
+    {'name': '--mode', 'type': str, 'default': 'test_dimension_decline'},
+    {'name': '--eps', 'type': float, 'default': 18, 'help': '聚类所使用的eps值'},
+    {'name': '--metric', 'type': str, 'default': 'euclidean', 'help': '聚类所使用的距离算法'},
+    {'name': '--min_samples', 'type': int, 'default': 4, 'help': '聚类所使用的min_samples参数'},
+    {'name': '--maxLength', 'type': int, 'default': 20000, 'help': '聚类所用的最多的向量数量'}
+]
+
+parser = argparse.ArgumentParser(description='Process some integers.')
+for arg in args_list:
+    parser.add_argument(arg['name'], type=arg['type'], default=arg['default'], help=arg.get('help', None))
+
+parser.add_argument('--status', default='generate', choices=['train', 'run', 'generate'])
+parser.add_argument('--extra_datasets', default='None', choices=OutdatasetLst)
+parser.add_argument('--msg', default='_')
+parser.add_argument('--train_clip', default=False, help='是不是要把train的char长度限制在200以内')
+parser.add_argument('--device', default='0')
+parser.add_argument('--debug', default=0, type=int)
+parser.add_argument('--gpumm', default=False, help='查看显存')
+parser.add_argument('--see_convergence', default=False)
+parser.add_argument('--see_param', default=False)
+parser.add_argument('--test_batch', default=-1)
+parser.add_argument('--seed', default=100, type=int)
+parser.add_argument('--test_train', default=False)
+parser.add_argument('--number_normalized', type=int, default=0,
+                    choices=[0, 1, 2, 3], help='0不norm，1只norm char,2norm char和bigram，3norm char，bigram和lattice')
+parser.add_argument('--lexicon_name', default='yj', choices=['lk', 'yj'])
+parser.add_argument('--update_every', default=1, type=int)
+parser.add_argument('--use_pytorch_dropout', type=int, default=0)
+
+parser.add_argument('--char_min_freq', default=1, type=int)
+parser.add_argument('--bigram_min_freq', default=1, type=int)
+parser.add_argument('--lattice_min_freq', default=1, type=int)
+parser.add_argument('--only_train_min_freq', default=True)
+parser.add_argument('--only_lexicon_in_train', default=False)
+
+parser.add_argument('--word_min_freq', default=1, type=int)
+
+# hyper of training
+parser.add_argument('--early_stop', default=40, type=int)
+parser.add_argument('--epoch', default=100, type=int)
+parser.add_argument('--batch', default=20, type=int)
+parser.add_argument('--optim', default='sgd', help='sgd|adam')
+parser.add_argument('--lr', default=1e-3, type=float)
+parser.add_argument('--embed_lr_rate', default=1, type=float)
+parser.add_argument('--momentum', default=0.9)
+parser.add_argument('--init', default='uniform', help='norm|uniform')
+parser.add_argument('--self_supervised', default=False)
+parser.add_argument('--weight_decay', default=0, type=float)
+parser.add_argument('--norm_embed', default=True)
+parser.add_argument('--norm_lattice_embed', default=True)
+
+parser.add_argument('--warmup', default=0.1, type=float)
+
+# hyper of model
+parser.add_argument('--use_bert', type=int)
+parser.add_argument('--model', default='transformer', help='lstm|transformer')
+parser.add_argument('--lattice', default=1, type=int)
+parser.add_argument('--use_bigram', default=1, type=int)
+parser.add_argument('--hidden', default=-1, type=int)
+parser.add_argument('--ff', default=3, type=int)
+parser.add_argument('--layer', default=1, type=int)
+parser.add_argument('--head', default=8, type=int)
+parser.add_argument('--head_dim', default=20, type=int)
+parser.add_argument('--scaled', default=False)
+parser.add_argument('--ff_activate', default='relu', help='leaky|relu')
+
+parser.add_argument('--k_proj', default=False)
+parser.add_argument('--q_proj', default=True)
+parser.add_argument('--v_proj', default=True)
+parser.add_argument('--r_proj', default=True)
+
+parser.add_argument('--attn_ff', default=False)
+
+# parser.add_argument('--rel_pos', default=False)
+parser.add_argument('--use_abs_pos', default=False)
+parser.add_argument('--use_rel_pos', default=True)
+# 相对位置和绝对位置不是对立的，可以同时使用
+parser.add_argument('--rel_pos_shared', default=True)
+parser.add_argument('--add_pos', default=False)
+parser.add_argument('--learn_pos', default=False)
+parser.add_argument('--pos_norm', default=False)
+parser.add_argument('--rel_pos_init', default=1)
+parser.add_argument('--four_pos_shared', default=True, help='只针对相对位置编码，指4个位置编码是不是共享权重')
+parser.add_argument('--four_pos_fusion', default='ff_two', choices=['ff', 'attn', 'gate', 'ff_two', 'ff_linear'],
+                    help='ff就是输入带非线性隐层的全连接，'
+                         'attn就是先计算出对每个位置编码的加权，然后求加权和'
+                         'gate和attn类似，只不过就是计算的加权多了一个维度')
+
+parser.add_argument('--four_pos_fusion_shared', default=True, help='是不是要共享4个位置融合之后形成的pos')
+
+# parser.add_argument('--rel_pos_scale',default=2,help='在lattice且用相对位置编码时，由于中间过程消耗显存过大，所以可以使4个位置的初始embedding size缩小，最后融合时回到正常的hidden size即可')  # modify this to decrease the use of gpu memory
+
+parser.add_argument('--pre', default='')
+parser.add_argument('--post', default='nda')
+
+over_all_dropout = -1
+parser.add_argument('--embed_dropout_before_pos', default=False)
+parser.add_argument('--embed_dropout', default=0.5, type=float)
+parser.add_argument('--gaz_dropout', default=0.5, type=float)
+parser.add_argument('--char_dropout', default=0, type=float)
+parser.add_argument('--output_dropout', default=0.3, type=float)
+parser.add_argument('--pre_dropout', default=0.5, type=float)
+parser.add_argument('--post_dropout', default=0.3, type=float)
+parser.add_argument('--ff_dropout', default=0.15, type=float)
+parser.add_argument('--ff_dropout_2', default=-1, type=float)
+parser.add_argument('--attn_dropout', default=0, type=float)
+parser.add_argument('--embed_dropout_pos', default='0')
+parser.add_argument('--abs_pos_fusion_func', default='nonlinear_add',
+                    choices=['add', 'concat', 'nonlinear_concat', 'nonlinear_add', 'concat_nonlinear',
+                             'add_nonlinear'])
+
+parser.add_argument('--dataset', default='msra', help='weibo|resume|ontonotes|msra|tieba')
+parser.add_argument('--label', default='all', help='ne|nm|all')
+args = parser.parse_args()
 
 
 def Find_many_word(dataset1, dataset2, mes=False, Count=50):
@@ -175,7 +291,8 @@ def dimensionReduce(Matrix):
     else:
         vectors_matrix = Matrix
         reduced_matrix = Dimensionality_reduction(vectors_matrix)
-    return reduced_matrix
+    return StandardScaler().fit_transform(reduced_matrix)
+    # return reduced_matrix
 
 
 def reduceDimensionsForMatrices(merged_matrices):
@@ -187,12 +304,20 @@ def reduceDimensionsForMatrices(merged_matrices):
     return reduced_matrices
 
 
+def convertResDictToResList(ResDict):
+    ResList = []
+    for Index in range(len(ResDict)):
+        assert isinstance(list(ResDict.keys())[0], int), f'KEY TYPE ERROR:{type(list(ResDict.keys())[0])}'
+        label = ResDict[Index]
+        ResList.append(label)
+    return ResList
+
+
 def calcSentenceWithDimensionDecline(baseDatabase='wiki', eps=18, metric='euclidean', min_samples=4, maxLength=20000):
     """
     用降维进行聚类
     """
     print("starting cutting Result")
-    writeLog("", init=1)
     cutResult = preprocess()
     # 这里cutResult存的是待标记数据集的向量化结果
     tokenizeRes = cutResult['tokenize']
@@ -213,15 +338,16 @@ def calcSentenceWithDimensionDecline(baseDatabase='wiki', eps=18, metric='euclid
                 'original_vectors': original_vectors,
                 'indices': indices,
                 'reduced_vectors': reduced_vectors
-                # 还可以根据需要添加其他信息
             }
             word_info_list.append(word_info)  # 将每个词语的信息添加到列表中
-    res = {}
-
+    resDict = {}
     cnt_404 = 0
     cnt_false = 0
     cnt_true = 0
     for word_instance in tqdm.tqdm(word_info_list, desc='processing cluster algorithm'):
+        if (cnt_true + cnt_404 + cnt_false) % 200 == 0:
+            print(
+                f"now has {cnt_404} 404 words and {cnt_false} false label and {cnt_true} true label")
         try:
             wiki_cluster_result = cluster(
                         baseDatabase,
@@ -235,7 +361,10 @@ def calcSentenceWithDimensionDecline(baseDatabase='wiki', eps=18, metric='euclid
                         dimension_d=True
                     )
         except:
-            cnt_404 += 1
+            for indices_ in word_instance['indices']:
+                cnt_404 += 1
+                assert indices_ not in resDict, f"indices_ {indices_} in resDict"
+                resDict[indices_] = [word_instance['word'], 404]
             continue
         center = getCenter(wiki_cluster_result['result class instance'])
         if wiki_cluster_result['num_of_clusters'] == 1:
@@ -243,33 +372,16 @@ def calcSentenceWithDimensionDecline(baseDatabase='wiki', eps=18, metric='euclid
         # center = dimensionReduce(center)
         for index_, indices_ in enumerate(word_instance['indices']):
             Vector = word_instance['reduced_vectors'][index_]
-            print(Vector.shape, end=' ')
-            print(center.shape)
             label = is_in_epsilon_neighborhood(Vector, center, epsilon=eps, metric=metric)
+            assert indices_ not in resDict, f"indices_ {indices_} in resDict"
+            resDict[indices_] = [word_instance['word'], label]
             if not label:
                 cnt_false += 1
             else:
                 cnt_true += 1
-    print(f"all {len(word_info_list)} words has {cnt_404} 404 words and {cnt_false} false label and {cnt_true} true label")
-
-
-args_list = [
-    {'name': '--mode', 'type': str, 'default': 'test_dimension_decline'},
-    {'name': '--eps', 'type': int, 'default': 18, 'help': '聚类所使用的eps值'},
-    {'name': '--metric', 'type': str, 'default': 'euclidean', 'help': '聚类所使用的距离算法'},
-    {'name': '--min_samples', 'type': int, 'default': 4, 'help': '聚类所使用的min_samples参数'},
-    {'name': '--maxLength', 'type': int, 'default': 20000, 'help': '聚类所用的最多的向量数量'}
-]
-
-
-parser = argparse.ArgumentParser(description='Process some integers.')
-for arg in args_list:
-    arg_name = arg['name']
-    del arg['name']
-    parser.add_argument(arg_name, **arg)
-
-
-args = parser.parse_args()
+    print(f"there are {cnt_404} 404 words and {cnt_false} false label and {cnt_true} true label")
+    res = convertResDictToResList(resDict)
+    writeResult(str(res))
 
 
 if args.mode == 'test':

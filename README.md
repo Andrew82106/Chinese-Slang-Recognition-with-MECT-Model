@@ -32,16 +32,16 @@ python main.py --dataset msra --status generate --device cpu --extra_datasets wi
 ## stage4: 生成文本解析结果
 
 ```shell
+# 使用非降维算法进行测试
 python cluster.py --mode generate
-```
-
-## stage5: 评测解析结果
-
-```shell
-# 使用标准测试
-python cluster.py --mode test
 # 使用降维算法进行测试
 python cluster.py --mode test_dimension_decline
+```
+
+## stage5: 调用Fastnlp接口评测解析结果
+
+```shell
+python cluster.py --mode test
 ```
 
 ## 快速操作

@@ -24,9 +24,6 @@ from sklearn.metrics.pairwise import pairwise_distances
 from Utils.outfitDataset import OutdatasetLst, nameToPath
 from Modules.DWT import *
 import pickle
-import pandas as pd
-import seaborn as sns
-import patchworklib as pw
 # from umap import UMAP
 from sklearn.manifold import TSNE, MDS, Isomap
 from sklearn.decomposition import PCA
@@ -51,6 +48,7 @@ def writeLog(Content, init=False):
 def writeResult(Content):
     with open(clusterResult_path, "w", encoding='utf-8') as f:
         f.write(Content + "\n")
+    print(f"successfully rewrite file {clusterResult_path}")
 
 
 def debugInfo(Content, show=0):

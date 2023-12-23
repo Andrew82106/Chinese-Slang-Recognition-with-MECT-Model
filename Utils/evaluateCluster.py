@@ -51,7 +51,7 @@ def evaluateDBScanMetric(resultFilePath=clusterResult_path):
     datasets = dict()
     datasets['train'] = train_bundle.datasets['train']
     datasets['test'] = test_bundle.datasets['train']
-    assert len(datasets['test']['chars']) == len(datasets['train']['chars']), '生成用例和测试用例长度不等，请完全生成文本后再评测'
+    assert len(datasets['test']['chars']) == len(datasets['train']['chars']), f"生成用例和测试用例长度不等，请完全生成文本后再评测（长度：{len(datasets['test']['chars'])} {len(datasets['train']['chars'])}）"
     datasets['train'].add_seq_len('chars')
     datasets['test'].add_seq_len('chars')
     print(f'[testing result]\ncomparing file {Standard_Test_BIO} with {new_Path}')
