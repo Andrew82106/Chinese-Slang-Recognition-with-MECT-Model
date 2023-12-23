@@ -9,6 +9,9 @@ from Utils.outfitDataset import OutdatasetLst
 from Utils.LLMDataExpand import Baidu, dataConvert, merge_data
 import argparse
 from Utils.Lab.lab_of_lowdimension import main
+import matplotlib as plt
+plt.rcParams['font.sans-serif'] = ['SimHei']  # Show Chinese label
+plt.rcParams['axes.unicode_minus'] = False  # These two lines need to be set manually
 
 args_list = [
     {'name': '--mode', 'type': str, 'default': 'test_dimension_decline'},
@@ -127,6 +130,20 @@ parser.add_argument('--label', default='all', help='ne|nm|all')
 args = parser.parse_args()
 
 
+def dimensionReduce(Matrix, dimension=2):
+    if Matrix.shape[0] == 1:  # 如果词向量矩阵只有一行
+        s_matrix = (Matrix for _ in range(dimension+1))
+        vectors_matrix = torch.cat(tuple(s_matrix), dim=0)
+        # print(vectors_matrix.shape)
+        reduced_matrix = Dimensionality_reduction(vectors_matrix, dimension, algo='t-sne')
+        reduced_matrix = reduced_matrix[0:1]
+    else:
+        vectors_matrix = Matrix
+        reduced_matrix = Dimensionality_reduction(vectors_matrix, dimension)
+    return StandardScaler().fit_transform(reduced_matrix)
+    # return reduced_matrix
+
+
 def Find_many_word(dataset1, dataset2, mes=False, Count=50):
     """
     在两个数据集中找到都出现过大于50个的词语
@@ -147,15 +164,15 @@ def Find_many_word(dataset1, dataset2, mes=False, Count=50):
 
 def DrawWordCompare():
     # 需要比较聚类结果的词语列表
-    cant_wordList = ['开心', '男生', '数据', '客场', '此案', '通讯员']
-    normal_wordList = ['我', '的', '自己', '警方']
+    cant_wordList = ['开心', '数据', '日本', '你在开玩笑', '立体', '金姐', '啥也看不见', '绞丝']
+    normal_wordList = ['我', '的', '自己', '可以', '运动', '时尚']
 
     # 对每个词语进行处理
     for word in cant_wordList + normal_wordList:
         try:
             # 读取两个数据集中特定词语的向量
-            X_ = read_vector('wiki', word)
-            X1_ = read_vector('test', word)
+            X_ = dimensionReduce(read_vector('wiki', word))
+            X1_ = dimensionReduce(read_vector('test', word))
 
             # 打印两个向量的形状
             print(X_.shape)
@@ -283,23 +300,12 @@ def mergeVectorsByWordWithIndices(tokenizeRes, wordVector):
     return merged_matrices  # 返回包含词向量及索引位置的字典
 
 
-def dimensionReduce(Matrix):
-    if Matrix.shape[0] == 1:  # 如果词向量矩阵只有一行
-        vectors_matrix = torch.cat((Matrix, Matrix), dim=0)
-        reduced_matrix = Dimensionality_reduction(vectors_matrix)
-        reduced_matrix = reduced_matrix[0:1]
-    else:
-        vectors_matrix = Matrix
-        reduced_matrix = Dimensionality_reduction(vectors_matrix)
-    return StandardScaler().fit_transform(reduced_matrix)
-    # return reduced_matrix
-
-
-def reduceDimensionsForMatrices(merged_matrices):
+def reduceDimensionsForMatrices(merged_matrices, dimension=2):
     reduced_matrices = {}
     for word, data in tqdm.tqdm(merged_matrices.items(), desc='对数据进行降维'):
         vectors_matrix = data['vectors']  # 获取词向量矩阵
-        reduced_matrix = dimensionReduce(vectors_matrix)
+        # print(vectors_matrix.shape)
+        reduced_matrix = dimensionReduce(vectors_matrix, dimension=dimension)
         reduced_matrices[word] = reduced_matrix
     return reduced_matrices
 
@@ -313,17 +319,24 @@ def convertResDictToResList(ResDict):
     return ResList
 
 
-def calcSentenceWithDimensionDecline(baseDatabase='wiki', eps=18, metric='euclidean', min_samples=4, maxLength=20000):
+def calcSentenceWithDimensionDecline(
+        baseDatabase='wiki',
+        eps=18,
+        metric='euclidean',
+        min_samples=4,
+        maxLength=20000,
+        dimension=2
+):
     """
     用降维进行聚类
     """
     print("starting cutting Result")
-    cutResult = preprocess()
+    cutResult = preprocess(args)
     # 这里cutResult存的是待标记数据集的向量化结果
     tokenizeRes = cutResult['tokenize']
     wordVector = cutResult['wordVector']
     merged_matrices = mergeVectorsByWordWithIndices(tokenizeRes, wordVector)
-    reduced_matrices = reduceDimensionsForMatrices(merged_matrices)
+    reduced_matrices = reduceDimensionsForMatrices(merged_matrices, dimension=dimension)
     initVector(baseDatabase)
     # 在这里对每个词语的信息进行汇总
     word_info_list = []  # 存储每个词语的信息
@@ -345,9 +358,10 @@ def calcSentenceWithDimensionDecline(baseDatabase='wiki', eps=18, metric='euclid
     cnt_false = 0
     cnt_true = 0
     for word_instance in tqdm.tqdm(word_info_list, desc='processing cluster algorithm'):
-        if (cnt_true + cnt_404 + cnt_false) % 200 == 0:
+        if (cnt_true + cnt_404 + cnt_false) % 1000 == 0:
             print(
                 f"now has {cnt_404} 404 words and {cnt_false} false label and {cnt_true} true label")
+        """
         try:
             wiki_cluster_result = cluster(
                         baseDatabase,
@@ -366,10 +380,24 @@ def calcSentenceWithDimensionDecline(baseDatabase='wiki', eps=18, metric='euclid
                 assert indices_ not in resDict, f"indices_ {indices_} in resDict"
                 resDict[indices_] = [word_instance['word'], 404]
             continue
+        
         center = getCenter(wiki_cluster_result['result class instance'])
-        if wiki_cluster_result['num_of_clusters'] == 1:
+        # if wiki_cluster_result['num_of_clusters'] == 1:
+        if wiki_cluster_result['num_of_clusters']:
             center = wiki_cluster_result['cluster_members']
         # center = dimensionReduce(center)
+        """
+        try:
+            center = dimensionReduce(
+                read_vector(baseDatabase, word_instance['word'], maxLength=maxLength, refresh=False),
+                dimension=dimension
+            )
+        except:
+            for indices_ in word_instance['indices']:
+                cnt_404 += 1
+                assert indices_ not in resDict, f"indices_ {indices_} in resDict"
+                resDict[indices_] = [word_instance['word'], 404]
+            continue
         for index_, indices_ in enumerate(word_instance['indices']):
             Vector = word_instance['reduced_vectors'][index_]
             label = is_in_epsilon_neighborhood(Vector, center, epsilon=eps, metric=metric)
@@ -382,6 +410,12 @@ def calcSentenceWithDimensionDecline(baseDatabase='wiki', eps=18, metric='euclid
     print(f"there are {cnt_404} 404 words and {cnt_false} false label and {cnt_true} true label")
     res = convertResDictToResList(resDict)
     writeResult(str(res))
+
+
+"""
+print(Find_many_word('wiki', 'test', Count=30))
+exit()
+"""
 
 
 if args.mode == 'test':

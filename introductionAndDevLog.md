@@ -214,7 +214,7 @@ for dimension 0 with size 42889
 
 函数现在是构建好了，但是运行速度太慢了，一下午只能比较一丢丢东西，结果大概是这种情况：
 
-```
+```text
 100%|█████████████████████████████████████████████████████████████████████████████████████████████████| 10/10 [00:00<00:00, 25.60it/s]
 100%|█████████████████████████████████████████████████████████████████████████████████████████████████| 10/10 [04:34<00:00, 27.42s/it]
 word 我 in dataset weibo and tieba with function 取样函数: difference is 252.0
@@ -925,3 +925,30 @@ label_acc: acc=0.855365
 
 我想尝试一下使用MNGG dataset的全量数据集进行测试
 
+# 12.24号总结
+
+现在对降维算法进行测试
+
+结果如下
+
+```text
+参数：降维至2维；直接进行距离计算；PCA降维；
+>>>>>> eps=0.3：
+SpanFPreRecMetric: f=0.235752, pre=0.732079, rec=0.140499
+label_acc: acc=0.60886
+>>>>>> eps=0.5：
+SpanFPreRecMetric: f=0.252336, pre=0.580645, rec=0.161194
+label_acc: acc=0.708018
+>>>>>> eps=0.7：
+SpanFPreRecMetric: f=0.253579, pre=0.444444, rec=0.177396
+label_acc: acc=0.771722
+>>>>>> eps=1：
+SpanFPreRecMetric: f=0.237592, pre=0.261649, rec=0.217586
+label_acc: acc=0.845556
+>>>>>> eps=1.2：
+SpanFPreRecMetric: f=0.216112, pre=0.200717, rec=0.234065
+label_acc: acc=0.86125
+>>>>>> eps=1.4：
+SpanFPreRecMetric: f=0.177445, pre=0.148746, rec=0.219868
+label_acc: acc=0.864603
+```

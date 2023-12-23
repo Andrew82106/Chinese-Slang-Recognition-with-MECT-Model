@@ -30,9 +30,6 @@ from sklearn.decomposition import PCA
 from Utils.AutoCache import Cache
 
 cache = Cache()
-plt.rcParams['font.sans-serif'] = ['SimHei']  # Show Chinese label
-plt.rcParams['axes.unicode_minus'] = False  # These two lines need to be set manually
-
 X_dict = None
 
 
@@ -56,9 +53,11 @@ def debugInfo(Content, show=0):
         print(f"TIME:{datetime.now().strftime('%Y-%m-%d %H:%M:%S')} INFO: {Content}")
 
 
-def Dimensionality_reduction(vectors_list):
-    # U = TSNE(n_components=2, random_state=42, perplexity=1)
-    U = PCA(n_components=2, random_state=42)
+def Dimensionality_reduction(vectors_list, dimension=2, algo='default'):
+    if algo == 'default':
+        U = TSNE(n_components=dimension, random_state=42, perplexity=1)
+    else:
+        U = PCA(n_components=dimension, random_state=42)
     vectors = U.fit_transform(vectors_list)
     return vectors
 
@@ -68,12 +67,14 @@ def draw_cluster_res_of_single_word(word, vectorList1, vectorList2=None):
     对于 dataset 中的 word，对其进行降维并且画出其降维结果
     """
     # 处理 vectorList1
-    New_X1 = Dimensionality_reduction(vectorList1)
+    # New_X1 = Dimensionality_reduction(vectorList1)
+    New_X1 = vectorList1
     labels1 = np.zeros(New_X1.shape[0])  # 给 vectorList1 的数据打标签，用 0 表示
 
     if vectorList2 is not None:
         # 处理 vectorList2
-        New_X2 = Dimensionality_reduction(vectorList2)
+        # New_X2 = Dimensionality_reduction(vectorList2)
+        New_X2 = vectorList2
         labels2 = np.ones(New_X2.shape[0])  # 给 vectorList2 的数据打标签，用 1 表示
         # 合并数据和标签
         combined_data = np.vstack((New_X1, New_X2))
