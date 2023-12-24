@@ -3,14 +3,20 @@ import pandas as pd
 
 
 class ChineseTokenizer:
-    def __init__(self, custom_words_file_path=None):
+    def __init__(self, custom_words_file_path=None, test_pkl_word_list=None):
+        """
+        如果载入test_pkl_word_list，则需要从test.pkl中进行加载
+        """
         if custom_words_file_path is None:
             return
         df = pd.read_excel(custom_words_file_path)
         try:
             custom_words = [word for word in df['word']] + [word for word in df['cant']]
+            if test_pkl_word_list is not None:
+                custom_words = list(set(custom_words + test_pkl_word_list))
             for word in custom_words:
                 jieba.add_word(word)
+            print("successfully imported custom word list")
         except Exception as e:
             print(f"fail to load custom word to jieba tokenizer with error {e}")
 

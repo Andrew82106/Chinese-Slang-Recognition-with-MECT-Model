@@ -182,7 +182,7 @@ def DrawWordCompare():
 def calcSentence(baseDatabase='wiki', eps=18, metric='euclidean', min_samples=4, maxLength=20000):
     print("starting cutting Result")
     writeLog("", init=1)
-    cutResult = preprocess()
+    cutResult = preprocess(args, refresh=False)
     # 这里cutResult存的是待标记数据集的向量化结果
     tokenizeRes = cutResult['tokenize']
     wordVector = cutResult['wordVector']
@@ -501,3 +501,5 @@ elif args.mode == 'strengthen_wiki':
     merge_data.merge_LLM_data()
 elif args.mode == 'clean_model_cache':
     clean_cache_path()
+elif args.mode == 'refresh_test':
+    preprocess(args, refresh=True)

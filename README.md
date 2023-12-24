@@ -26,7 +26,10 @@ python main.py --dataset weibo --status generate --device cpu
 
 # 加载外部数据集并转化为词向量
 python main.py --dataset weibo --status generate --device cpu --extra_datasets tieba
+# 加载外部数据集并转化为词向量（重建wiki.pkl，重建的时候必须有test.pkl存在）
 python main.py --dataset msra --status generate --device cpu --extra_datasets wiki
+# 加载外部数据集并转化为词向量（test.pkl）
+python cluster.py --mode refresh_test
 ```
 
 ## stage4: 生成文本解析结果

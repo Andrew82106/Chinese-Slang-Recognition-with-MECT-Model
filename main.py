@@ -38,6 +38,7 @@ import pprint
 import traceback
 import warnings
 import sys
+from ConvWordToVecWithMECT import preprocess
 
 # print('tuner_params：')
 # print(tuner_params)
@@ -742,7 +743,11 @@ elif args.status == 'generate':
     # text = datasets
     sentenceID = random.randint(0, len(text['test']) - 1)
     CharacterToWord = CTW()
-    tokenizer = ChineseTokenizer(cant_word_location)
+    test_pkl = preprocess(args)
+    tokenizer = ChineseTokenizer(
+        custom_words_file_path=cant_word_location,
+        test_pkl_word_list=list(set(test_pkl['fastIndexWord'].keys()))
+    )
     save_path = os.path.join(rootPth, "datasets/pickle_data")
     res = {"tokenize": [], "wordVector": [], 'fastIndexWord': {}}
     suc = 0

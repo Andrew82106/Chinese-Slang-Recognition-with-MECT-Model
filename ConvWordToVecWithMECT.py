@@ -12,7 +12,6 @@ from Modules.WordCut import ChineseTokenizer
 from Utils.ToAndFromPickle import *
 from Utils.AutoCache import Cache
 
-
 cache = Cache()
 use_fitlog = False
 if not use_fitlog:
@@ -44,16 +43,21 @@ import traceback
 import warnings
 import sys
 
+
 # print('tuner_params：')
 # print(tuner_params)
 # exit()
 
 
-@cache.cache_result(cache_path='preprocess.pkl')
-def preprocess(args, outdatasetPath=test_path):
+# @cache.cache_result(cache_path='preprocess.pkl')
+def preprocess(args, outdatasetPath=test_path, refresh=False):
     """
     该函数使用了MECT4CNER，将outdatasetPath中的文本变成向量组，作为返回结果
+    这里需要注意的是，只要test.pkl存在，并且没有强制要求刷新，那就不要再跑一次这份代码了，很蠢
     """
+    if os.path.exists(test_vector) and (refresh is False):
+        print(f"file {test_vector} exists, no need to fresh")
+        return load_from_pickle(test_vector)
 
     if args.ff_dropout_2 < 0:
         args.ff_dropout_2 = args.ff_dropout

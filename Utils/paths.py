@@ -50,6 +50,8 @@ wiki_file_old_path = os.path.join(wiki_path, 'wiki_old.bmes')
 # 未增强的wiki文件路径
 wiki_file_path = os.path.join(wiki_path, 'wiki.bmes')
 # 增强后的wiki文件路径
+wiki_txt_path = os.path.join(wiki_path, 'wiki.txt')
+# wiki.txt文件路径
 anwang_path = os.path.join(NER, 'anwang')
 test_path = os.path.join(NER, 'test')
 
