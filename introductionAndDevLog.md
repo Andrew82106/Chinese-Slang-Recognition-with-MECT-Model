@@ -936,19 +936,55 @@ label_acc: acc=0.855365
 >>>>>> eps=0.3：
 SpanFPreRecMetric: f=0.235752, pre=0.732079, rec=0.140499
 label_acc: acc=0.60886
+SpanFPreRecMetric: f=0.23315, pre=0.739247, rec=0.1384
+label_acc: acc=0.599158
 >>>>>> eps=0.5：
 SpanFPreRecMetric: f=0.252336, pre=0.580645, rec=0.161194
 label_acc: acc=0.708018
+SpanFPreRecMetric: f=0.250095, pre=0.592294, rec=0.158513
+label_acc: acc=0.699601
 >>>>>> eps=0.7：
 SpanFPreRecMetric: f=0.253579, pre=0.444444, rec=0.177396
 label_acc: acc=0.771722
+SpanFPreRecMetric: f=0.250681, pre=0.453405, rec=0.173228
+label_acc: acc=0.764553
 >>>>>> eps=1：
 SpanFPreRecMetric: f=0.237592, pre=0.261649, rec=0.217586
 label_acc: acc=0.845556
+SpanFPreRecMetric: f=0.236256, pre=0.284946, rec=0.201777
+label_acc: acc=0.832465
 >>>>>> eps=1.2：
 SpanFPreRecMetric: f=0.216112, pre=0.200717, rec=0.234065
 label_acc: acc=0.86125
 >>>>>> eps=1.4：
 SpanFPreRecMetric: f=0.177445, pre=0.148746, rec=0.219868
 label_acc: acc=0.864603
+
+参数：降维至3维；直接进行距离计算；PCA降维；
+>>>>>> eps=0.3：
+SpanFPreRecMetric: f=0.19514, pre=0.924731, rec=0.109079
+label_acc: acc=0.410437
+>>>>>> eps=0.5：
+SpanFPreRecMetric: f=0.220426, pre=0.830645, rec=0.127073
+label_acc: acc=0.528356
+>>>>>> eps=0.7：
+SpanFPreRecMetric: f=0.239344, pre=0.719534, rec=0.143547
+label_acc: acc=0.623627
+>>>>>> eps=1：
+SpanFPreRecMetric: f=0.254075, pre=0.509857, rec=0.169194
+label_acc: acc=0.742831
+>>>>>> eps=1.2：
+SpanFPreRecMetric: f=0.252847, pre=0.397849, rec=0.185309
+label_acc: acc=0.793444
+
+参数：降维至4维；直接进行距离计算；PCA降维；
+>>>>>> eps=1：
+SpanFPreRecMetric: f=0.244441, pre=0.743728, rec=0.146256
+label_acc: acc=0.624376
+>>>>>> eps=1.2：
+SpanFPreRecMetric: f=0.259342, pre=0.621864, rec=0.163834
+label_acc: acc=0.702383
 ```
+
+总结一下，PCA就和shi一样
+

@@ -1,6 +1,7 @@
 import os
 
 import matplotlib.pyplot as plt
+import torch
 from sklearn.cluster import DBSCAN
 from sklearn.preprocessing import StandardScaler
 from sklearn.datasets import make_blobs
@@ -18,7 +19,7 @@ try:
     patch_sklearn()
 except:
     print("sklearnex isn't available, skip init sklearnex")
-
+from umap import UMAP
 from Utils.paths import *
 from sklearn.metrics.pairwise import pairwise_distances
 from Utils.outfitDataset import OutdatasetLst, nameToPath
@@ -54,12 +55,30 @@ def debugInfo(Content, show=0):
 
 
 def Dimensionality_reduction(vectors_list, dimension=2, algo='default'):
-    if algo == 'default':
+    if algo == 't-sne':
         U = TSNE(n_components=dimension, random_state=42, perplexity=1)
+    elif algo == 'umap':
+        U = UMAP(n_components=dimension, random_state=42)
     else:
         U = PCA(n_components=dimension, random_state=42)
     vectors = U.fit_transform(vectors_list)
     return vectors
+
+
+def dimensionReduce(Matrix, dimension=2, algo='default'):
+    # print(Matrix.shape)
+    if Matrix.shape[0] <= dimension:  # 如果词向量矩阵只有一行
+        origin_shape = Matrix.shape[0]
+        s_matrix = (Matrix for _ in range(dimension+1))
+        vectors_matrix = torch.cat(tuple(s_matrix), dim=0)
+        # print(vectors_matrix.shape)
+        reduced_matrix = Dimensionality_reduction(vectors_matrix, dimension, algo=algo)
+        reduced_matrix = reduced_matrix[0:origin_shape]
+    else:
+        vectors_matrix = Matrix
+        reduced_matrix = Dimensionality_reduction(vectors_matrix, dimension, algo=algo)
+    return StandardScaler().fit_transform(reduced_matrix)
+    # return reduced_matrix
 
 
 def draw_cluster_res_of_single_word(word, vectorList1, vectorList2=None):

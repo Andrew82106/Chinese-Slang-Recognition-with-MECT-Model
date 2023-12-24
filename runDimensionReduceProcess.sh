@@ -1,7 +1,7 @@
 #!/bin/bash
 
 if [ -z "$1" ]; then
-    echo "请输入提交信息作为参数"
+    echo "请输入eps值"
     exit 1
 fi
 

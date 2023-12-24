@@ -51,6 +51,11 @@ python cluster.py --mode test
 bash RunCluster.sh
 ```
 
+- 删除缓存+使用降维算法进行测试+测试结果
+```shell
+bash runDimensionReduceProcess.sh
+```
+
 ## 其他操作
 
 - 运行降维算法比较测试脚本

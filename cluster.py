@@ -1,5 +1,6 @@
 import torch
-from Modules.dbScan import cluster, read_vector, initVector, writeLog, writeResult, draw_cluster_res_of_single_word, debugInfo, getCenter, is_in_epsilon_neighborhood, Dimensionality_reduction, StandardScaler
+from Modules.dbScan import (cluster, read_vector, initVector, writeLog, writeResult, draw_cluster_res_of_single_word, debugInfo, getCenter,
+                            is_in_epsilon_neighborhood, dimensionReduce)
 from Utils.paths import *
 from Utils.summary_word_vector import summary_lex
 from Utils.evaluateCluster import evaluateDBScanMetric
@@ -128,20 +129,6 @@ parser.add_argument('--abs_pos_fusion_func', default='nonlinear_add',
 parser.add_argument('--dataset', default='msra', help='weibo|resume|ontonotes|msra|tieba')
 parser.add_argument('--label', default='all', help='ne|nm|all')
 args = parser.parse_args()
-
-
-def dimensionReduce(Matrix, dimension=2):
-    if Matrix.shape[0] == 1:  # 如果词向量矩阵只有一行
-        s_matrix = (Matrix for _ in range(dimension+1))
-        vectors_matrix = torch.cat(tuple(s_matrix), dim=0)
-        # print(vectors_matrix.shape)
-        reduced_matrix = Dimensionality_reduction(vectors_matrix, dimension, algo='t-sne')
-        reduced_matrix = reduced_matrix[0:1]
-    else:
-        vectors_matrix = Matrix
-        reduced_matrix = Dimensionality_reduction(vectors_matrix, dimension)
-    return StandardScaler().fit_transform(reduced_matrix)
-    # return reduced_matrix
 
 
 def Find_many_word(dataset1, dataset2, mes=False, Count=50):
@@ -300,12 +287,12 @@ def mergeVectorsByWordWithIndices(tokenizeRes, wordVector):
     return merged_matrices  # 返回包含词向量及索引位置的字典
 
 
-def reduceDimensionsForMatrices(merged_matrices, dimension=2):
+def reduceDimensionsForMatrices(merged_matrices, dimension=2, algo='default'):
     reduced_matrices = {}
     for word, data in tqdm.tqdm(merged_matrices.items(), desc='对数据进行降维'):
         vectors_matrix = data['vectors']  # 获取词向量矩阵
         # print(vectors_matrix.shape)
-        reduced_matrix = dimensionReduce(vectors_matrix, dimension=dimension)
+        reduced_matrix = dimensionReduce(vectors_matrix, dimension=dimension, algo=algo)
         reduced_matrices[word] = reduced_matrix
     return reduced_matrices
 
@@ -325,7 +312,8 @@ def calcSentenceWithDimensionDecline(
         metric='euclidean',
         min_samples=4,
         maxLength=20000,
-        dimension=2
+        dimension=4,
+        algo='default'
 ):
     """
     用降维进行聚类
@@ -336,7 +324,7 @@ def calcSentenceWithDimensionDecline(
     tokenizeRes = cutResult['tokenize']
     wordVector = cutResult['wordVector']
     merged_matrices = mergeVectorsByWordWithIndices(tokenizeRes, wordVector)
-    reduced_matrices = reduceDimensionsForMatrices(merged_matrices, dimension=dimension)
+    reduced_matrices = reduceDimensionsForMatrices(merged_matrices, dimension=dimension, algo=algo)
     initVector(baseDatabase)
     # 在这里对每个词语的信息进行汇总
     word_info_list = []  # 存储每个词语的信息
@@ -390,7 +378,7 @@ def calcSentenceWithDimensionDecline(
         try:
             center = dimensionReduce(
                 read_vector(baseDatabase, word_instance['word'], maxLength=maxLength, refresh=False),
-                dimension=dimension
+                dimension=dimension, algo=algo
             )
         except:
             for indices_ in word_instance['indices']:
