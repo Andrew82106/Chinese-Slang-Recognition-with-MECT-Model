@@ -988,3 +988,125 @@ label_acc: acc=0.702383
 
 总结一下，PCA就和shi一样
 
+现在修改了算法逻辑，解决了以下问题：
+
+之前的算法有一个问题，也就是样本数量不够导致PCA降维的时候报错（t-sne更不用说了肯定报错）
+
+现在的逻辑是，将测试数据集和基准数据集的数据合并，形成一个更大的矩阵进行降维，然后取出降维后的数据
+
+这个方法现在解决了上面提到的问题
+
+现在对修改后的降维算法进行测试
+
+结果如下
+
+```text
+参数：降维至2维；直接进行距离计算；PCA降维；
+>>>>>> eps=1.6：
+SpanFPreRecMetric: f=0.245238, pre=0.369176, rec=0.183601
+label_acc: acc=0.794479
+>>>>>> eps=1.2：
+SpanFPreRecMetric: f=0.278926, pre=0.525986, rec=0.189783
+label_acc: acc=0.763982
+```
+
+都还是不大行
+
+现在做一下定性分析看看
+
+通过统计打标结果，发现如下词语打标差距很大
+
+```text
+椅子, 41
+新西兰, 7
+友情, 12
+巧克力, 13
+张韶涵, 34
+骨折, 9
+尘土帽子, 11
+中间部分, 35
+马上, 15
+海绵, 8
+绿箭口香糖, 7
+努力, 18
+一种称呼, 11
+维生素, 8
+清凉, 7
+现在, 10
+温暖, 7
+宜家, 6
+```
+
+每个词语后面的数字是其在标准答案中打标数量和其在实际结果中打标数量的差。具体的计算函数如下：
+
+```python
+def generate_r_compare(result_bio, input_bio):
+    compare_word_dict = {}
+    summary_word_dict = []
+    for word in input_bio:
+        if word not in result_bio:
+            result_bio[word] = 0
+        compare_word_dict[word] = input_bio[word] - result_bio[word]
+        if compare_word_dict[word] > 5:
+            print(f'{word}, {compare_word_dict[word]}')
+            summary_word_dict.append(word)
+    return summary_word_dict
+R = extract_sensitive_word_from_bio('/Users/andrewlee/Desktop/Projects/Chinese-Slang-Recognition-with-MECT-Model/clusterRes/Result.bio')
+I = extract_sensitive_word_from_bio('/Users/andrewlee/Desktop/Projects/Chinese-Slang-Recognition-with-MECT-Model/datasets/NER/test/input.bio')
+generate_r_compare(R, I)
+```
+
+同理，使用如下函数计算的另一指标如下：
+
+
+```python
+R = extract_sensitive_word_from_bio('/Users/andrewlee/Desktop/Projects/Chinese-Slang-Recognition-with-MECT-Model/clusterRes/Result.bio')
+I = extract_sensitive_word_from_bio('/Users/andrewlee/Desktop/Projects/Chinese-Slang-Recognition-with-MECT-Model/datasets/NER/test/input.bio')
+generate_r_compare(I, R)
+```
+
+```text
+腹部, 15
+内裤, 6
+；, 25
+哦, 9
+丰胸, 13
+胸部, 12
+放入, 6
+中医, 8
+经络, 9
+靠, 6
+或者, 16
+大脑, 6
+导语, 16
+排除, 6
+装扮, 6
+臀, 7
+;, 9
+消耗, 10
+缺氧, 6
+颈部, 7
+卡路里, 6
+头晕, 6
+欧令奋, 6
+鼻, 7
+医师, 8
+妹, 6
+皮鞋, 8
+```
+
+将图画出然后分析了一下结果，发现t-sne算法真不能用
+
+因为它会将所有点分得很开，因此当eps很小的时候，很多非暗语词汇也会被识别成暗语词汇。但当eps大的时候，很多暗语词汇会被识别成非暗语词汇
+
+此时就对应了两种情况：p值降低和r值降低
+
+使用PCA画图，也得到了和上面类似的分析结果
+
+但是我们现在发现一个现象，很奇怪，就是增强后的wiki数据集中仍然会出现大量的词语短缺。比如：
+
+<img alt="降维算法比较图_词语缺氧.png" src="Utils/Lab/LabCache1/降维算法比较图_词语缺氧.png"/>
+
+很显然wiki中的数据完全不够，根本没法计算，因此这个词语就被错误的判断为了暗语词汇。
+
+那么现在需要做的事情就是，再次增强wiki数据集，并且保证test数据集中的每个词语在wiki数据集中都有**100**倍以上的数据

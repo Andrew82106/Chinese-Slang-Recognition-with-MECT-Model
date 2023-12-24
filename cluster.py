@@ -1,6 +1,7 @@
 import torch
-from Modules.dbScan import (cluster, read_vector, initVector, writeLog, writeResult, draw_cluster_res_of_single_word, debugInfo, getCenter,
-                            is_in_epsilon_neighborhood, dimensionReduce)
+from Modules.dbScan import (cluster, read_vector, initVector, writeLog, writeResult, draw_cluster_res_of_single_word,
+                            debugInfo, getCenter,
+                            is_in_epsilon_neighborhood, dimensionReduce, merge_matrix_and_reduce_dimension)
 from Utils.paths import *
 from Utils.summary_word_vector import summary_lex
 from Utils.evaluateCluster import evaluateDBScanMetric
@@ -11,6 +12,7 @@ from Utils.LLMDataExpand import Baidu, dataConvert, merge_data
 import argparse
 from Utils.Lab.lab_of_lowdimension import main
 import matplotlib as plt
+
 plt.rcParams['font.sans-serif'] = ['SimHei']  # Show Chinese label
 plt.rcParams['axes.unicode_minus'] = False  # These two lines need to be set manually
 
@@ -19,7 +21,7 @@ args_list = [
     {'name': '--eps', 'type': float, 'default': 18, 'help': '聚类所使用的eps值'},
     {'name': '--metric', 'type': str, 'default': 'euclidean', 'help': '聚类所使用的距离算法'},
     {'name': '--min_samples', 'type': int, 'default': 4, 'help': '聚类所使用的min_samples参数'},
-    {'name': '--maxLength', 'type': int, 'default': 20000, 'help': '聚类所用的最多的向量数量'}
+    {'name': '--maxLength', 'type': int, 'default': 1000, 'help': '聚类所用的最多的向量数量'}
 ]
 
 parser = argparse.ArgumentParser(description='Process some integers.')
@@ -151,16 +153,21 @@ def Find_many_word(dataset1, dataset2, mes=False, Count=50):
 
 def DrawWordCompare():
     # 需要比较聚类结果的词语列表
-    cant_wordList = ['开心', '数据', '日本', '你在开玩笑', '立体', '金姐', '啥也看不见', '绞丝']
-    normal_wordList = ['我', '的', '自己', '可以', '运动', '时尚']
+    # cant_wordList = ['开心', '数据', '日本', '你在开玩笑', '立体', '金姐', '啥也看不见', '绞丝']
+    cant_wordList = ['椅子', '新西兰', '友情', '巧克力', '张韶涵', '骨折', '尘土帽子', '中间部分', '马上', '海绵',
+                     '绿箭口香糖', '努力', '一种称呼', '维生素', '清凉', '现在', '温暖', '宜家']
+    # normal_wordList = ['我', '的', '自己', '可以', '运动', '时尚']
+    normal_wordList = ['腹部', '内裤', '；', '丰胸', '胸部', '放入', '中医', '经络', '靠', '或者', '大脑', '导语',
+                       '排除', '装扮', '消耗', '缺氧', '颈部', '卡路里', '头晕', '欧令奋', '鼻', '医师',
+                       '妹', '皮鞋']
 
     # 对每个词语进行处理
     for word in cant_wordList + normal_wordList:
         try:
             # 读取两个数据集中特定词语的向量
-            X_ = dimensionReduce(read_vector('wiki', word))
-            X1_ = dimensionReduce(read_vector('test', word))
-
+            X_ = read_vector('wiki', word, maxLength=args.maxLength)
+            X1_ = read_vector('test', word)
+            X_, X1_ = merge_matrix_and_reduce_dimension(X_, X1_, dimension=2, algo='default')
             # 打印两个向量的形状
             print(X_.shape)
             print(X1_.shape)
@@ -288,6 +295,9 @@ def mergeVectorsByWordWithIndices(tokenizeRes, wordVector):
 
 
 def reduceDimensionsForMatrices(merged_matrices, dimension=2, algo='default'):
+    """
+    仅对于merged_matrices进行降维
+    """
     reduced_matrices = {}
     for word, data in tqdm.tqdm(merged_matrices.items(), desc='对数据进行降维'):
         vectors_matrix = data['vectors']  # 获取词向量矩阵
@@ -307,6 +317,62 @@ def convertResDictToResList(ResDict):
 
 
 def calcSentenceWithDimensionDecline(
+        baseDatabase='wiki',
+        eps=18,
+        metric='euclidean',
+        min_samples=4,
+        maxLength=2000,
+        dimension=2,
+        algo='t-sne'
+):
+    """
+    用降维直接进行距离计算，不使用聚类算法
+    """
+    print("starting cutting Result")
+    cutResult = preprocess(args)
+    # 这里cutResult存的是待标记数据集的向量化结果
+    tokenizeRes = cutResult['tokenize']
+    wordVector = cutResult['wordVector']
+    merged_matrices = mergeVectorsByWordWithIndices(tokenizeRes, wordVector)
+    initVector(baseDatabase)
+    resDict = {}
+    cnt_404 = 0
+    cnt_false = 0
+    cnt_true = 0
+    for word in tqdm.tqdm(merged_matrices, desc='processing word with immediate distance calculation'):
+        if (cnt_true + cnt_404 + cnt_false) % 3000 == 0:
+            print(
+                f"now has {cnt_404} 404 words and {cnt_false} false label and {cnt_true} true label")
+        test_word_matrix = merged_matrices[word]['vectors']
+        test_word_indices = merged_matrices[word]['indices']
+        try:
+            base_dataset_word_matrix = read_vector('wiki', word, refresh=False, maxLength=maxLength)
+            new_base_dataset_word_matrix, new_test_word_matrix = merge_matrix_and_reduce_dimension(
+                base_dataset_word_matrix, test_word_matrix, algo=algo, dimension=dimension)
+
+            for index_, indices_ in enumerate(test_word_indices):
+                Vector = new_test_word_matrix[index_]
+                label = is_in_epsilon_neighborhood(Vector, new_base_dataset_word_matrix, epsilon=eps, metric=metric)
+                assert indices_ not in resDict, f"indices_ {indices_} in resDict"
+                resDict[indices_] = [word, label]
+                if not label:
+                    cnt_false += 1
+                else:
+                    cnt_true += 1
+        except Exception as e:
+            if not isinstance(e, KeyError):
+                # print(f'processing word with error {e}')
+                raise e
+            for indices_ in test_word_indices:
+                cnt_404 += 1
+                assert indices_ not in resDict, f"indices_ {indices_} in resDict"
+                resDict[indices_] = [word, 404]
+            continue
+    res = convertResDictToResList(resDict)
+    writeResult(str(res))
+
+
+def calcSentenceWithDimensionDecline_with_cluster(
         baseDatabase='wiki',
         eps=18,
         metric='euclidean',
@@ -368,7 +434,7 @@ def calcSentenceWithDimensionDecline(
                 assert indices_ not in resDict, f"indices_ {indices_} in resDict"
                 resDict[indices_] = [word_instance['word'], 404]
             continue
-        
+
         center = getCenter(wiki_cluster_result['result class instance'])
         # if wiki_cluster_result['num_of_clusters'] == 1:
         if wiki_cluster_result['num_of_clusters']:
@@ -404,7 +470,6 @@ def calcSentenceWithDimensionDecline(
 print(Find_many_word('wiki', 'test', Count=30))
 exit()
 """
-
 
 if args.mode == 'test':
     evaluateDBScanMetric()

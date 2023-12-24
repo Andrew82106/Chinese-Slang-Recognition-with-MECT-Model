@@ -55,18 +55,30 @@ def debugInfo(Content, show=0):
 
 
 def Dimensionality_reduction(vectors_list, dimension=2, algo='default'):
+    """
+    降维算法接口
+    输入矩阵，输出降维后的矩阵
+    所有的降维算法都需要使用这一个接口
+    接口输出的值已经经过归一化，无需额外归一化
+    """
     if algo == 't-sne':
+        assert vectors_list.shape[0] < 20000, 'too many points for t-sne!'
         U = TSNE(n_components=dimension, random_state=42, perplexity=1)
     elif algo == 'umap':
         U = UMAP(n_components=dimension, random_state=42)
     else:
         U = PCA(n_components=dimension, random_state=42)
     vectors = U.fit_transform(vectors_list)
-    return vectors
+    return StandardScaler().fit_transform(vectors)
 
 
 def dimensionReduce(Matrix, dimension=2, algo='default'):
+    """
+    该接口本身是容错接口，但是这个容错在新算法中不应发生
+    这个接口最好在未来被抛弃
+    """
     # print(Matrix.shape)
+    """
     if Matrix.shape[0] <= dimension:  # 如果词向量矩阵只有一行
         origin_shape = Matrix.shape[0]
         s_matrix = (Matrix for _ in range(dimension+1))
@@ -78,12 +90,30 @@ def dimensionReduce(Matrix, dimension=2, algo='default'):
         vectors_matrix = Matrix
         reduced_matrix = Dimensionality_reduction(vectors_matrix, dimension, algo=algo)
     return StandardScaler().fit_transform(reduced_matrix)
+    """
+    reduced_matrix = Dimensionality_reduction(Matrix, dimension, algo=algo)
+    return reduced_matrix
     # return reduced_matrix
+
+
+def merge_matrix_and_reduce_dimension(base_data_matrix, test_data_matrix, dimension=2, algo='default'):
+    """
+    将base dataset中的词语和test dataset中的词语合并起来，进行降维操作，并且返回降维后的两个数据集中的向量
+    """
+    merged_matrix = torch.cat((base_data_matrix, test_data_matrix), dim=0)
+    # print(base_data_matrix.shape, test_data_matrix.shape)
+    # print(merged_matrix.shape)
+    new_matrix = Dimensionality_reduction(merged_matrix, dimension, algo=algo)
+    assert base_data_matrix.shape[0] + test_data_matrix.shape[0] == new_matrix.shape[0], f'降维后矩阵行数出错: {base_data_matrix.shape[0]}, {test_data_matrix.shape[0]}, {new_matrix.shape[0]}'
+    new_base_data_matrix = new_matrix[0:base_data_matrix.shape[0]]
+    new_test_data_matrix = new_matrix[base_data_matrix.shape[0]:base_data_matrix.shape[0] + test_data_matrix.shape[0]]
+    return new_base_data_matrix, new_test_data_matrix
 
 
 def draw_cluster_res_of_single_word(word, vectorList1, vectorList2=None):
     """
     对于 dataset 中的 word，对其进行降维并且画出其降维结果
+    传入处理好的矩阵即可
     """
     # 处理 vectorList1
     # New_X1 = Dimensionality_reduction(vectorList1)
@@ -122,8 +152,8 @@ def draw_cluster_res_of_single_word(word, vectorList1, vectorList2=None):
 
     ax.set_title(f'Word: {word}')
     plt.tight_layout()
-    plt.savefig(os.path.join(LabCachePath, f"降维算法比较图_词语{word}.png"))
-    print(f"successfully save graph to path:{os.path.join(LabCachePath, f'降维算法比较图_词语：{word}.png')}")
+    plt.savefig(os.path.join(LabCachePath1, f"降维算法比较图_词语{word}.png"))
+    print(f"successfully save graph to path:{os.path.join(LabCachePath1, f'降维算法比较图_词语：{word}.png')}")
 
 
 def saveFig(X, clusters, name="your_plot_name", xlabel='Feature 1', ylabel='Feature 2', title='DBSCAN Clustering'):
@@ -214,7 +244,7 @@ def initVector(dataset, refresh=False):
             time.sleep(0.5)
 
 
-def read_vector(dataset, word, maxLength=20000, refresh=True):
+def read_vector(dataset, word, maxLength=None, refresh=True):
     """
     # 从dataset数据集读取word词语的词向量
     Input: dataset: 数据集的名称，比如weibo，anwang等
@@ -226,7 +256,7 @@ def read_vector(dataset, word, maxLength=20000, refresh=True):
     # if X_dict is None:
     initVector(dataset, refresh=refresh)
     if word not in X_dict['fastIndexWord']:
-        raise Exception(f"{word} not in pkl of dataset {dataset}")
+        raise KeyError(f"{word} not in pkl of dataset {dataset}")
     R = X_dict['fastIndexWord'][word]
     if maxLength is not None and len(R) > maxLength:
         # print(f"debug: length={len(R)}")

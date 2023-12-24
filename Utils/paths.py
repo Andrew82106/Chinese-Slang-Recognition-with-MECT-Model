@@ -84,6 +84,7 @@ LLM_data_expand_bio_file_path = os.path.join(LLM_data_expand_path, "LLM_dataGene
 
 LabPath = os.path.join(Utils_path, "Lab")
 LabCachePath = os.path.join(LabPath, "LabCache")
+LabCachePath1 = os.path.join(LabPath, "LabCache1")
 
 cluster_cache_path = os.path.join(cache_path, "cluster_cache")
 # 缓存函数存放位置
