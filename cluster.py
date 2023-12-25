@@ -167,7 +167,7 @@ def DrawWordCompare():
             # 读取两个数据集中特定词语的向量
             X_ = read_vector('wiki', word, maxLength=args.maxLength)
             X1_ = read_vector('test', word)
-            X_, X1_ = merge_matrix_and_reduce_dimension(X_, X1_, dimension=2, algo='default')
+            X_, X1_ = merge_matrix_and_reduce_dimension(X_, X1_, dimension=2, algo='t-sne')
             # 打印两个向量的形状
             print(X_.shape)
             print(X1_.shape)

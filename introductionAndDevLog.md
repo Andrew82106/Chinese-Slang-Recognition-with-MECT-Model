@@ -1103,9 +1103,7 @@ generate_r_compare(I, R)
 
 使用PCA画图，也得到了和上面类似的分析结果
 
-但是我们现在发现一个现象，很奇怪，就是增强后的wiki数据集中仍然会出现大量的词语短缺。比如：
-
-<img alt="降维算法比较图_词语缺氧.png" src="Utils/Lab/LabCache1/降维算法比较图_词语缺氧.png"/>
+但是我们现在发现一个现象，很奇怪，就是增强后的wiki数据集中仍然会出现大量的词语短缺。
 
 很显然wiki中的数据完全不够，根本没法计算，因此这个词语就被错误的判断为了暗语词汇。
 
@@ -1144,3 +1142,34 @@ generate_r_compare(I, R)
 
 因此现在基于上述数据集，我们进一步进行定量分析。
 
+定量分析的结果就是，效果太差了
+
+做几次实验看看：
+
+先是PCA的
+```text
+参数：降维至2维；直接进行距离计算；PCA降维；
+>>>>>eps=1
+SpanFPreRecMetric: f=0.234971, pre=0.921147, rec=0.134661
+label_acc: acc=0.505315
+>>>>>eps=1.5
+SpanFPreRecMetric: f=0.244933, pre=0.893369, rec=0.141922
+label_acc: acc=0.539021
+>>>>>eps=1.8
+SpanFPreRecMetric: f=0.244218, pre=0.827957, rec=0.143234
+label_acc: acc=0.565309
+>>>>>eps=2.2
+SpanFPreRecMetric: f=0.18445, pre=0.491039, rec=0.113552
+label_acc: acc=0.610572
+```
+然后是t-sne的
+
+```text
+参数：降维至2维；直接进行距离计算；t-sne降维；
+>>>>>eps=1
+SpanFPreRecMetric: f=0.281517, pre=0.532258, rec=0.191366
+label_acc: acc=0.764446
+>>>>>eps=0.8
+SpanFPreRecMetric: f=0.290498, pre=0.621864, rec=0.189514
+label_acc: acc=0.742617
+```
