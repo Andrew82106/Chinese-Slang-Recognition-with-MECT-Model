@@ -92,6 +92,8 @@ def Expand():
         cnt += 1
         with open(os.path.join(LLM_data_expand_path, "LLM_dataGenerate.txt"), "r", encoding='utf-8') as f:
             cont = f.read() + wiki
+            # print(cont.count('成龙'))
+            # exit(0)
             if cnt % 2000 == 0:
                 check_dataGenerate_txt(cont)
             if cont.count(str(i)) >= 15:

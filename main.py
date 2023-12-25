@@ -741,59 +741,64 @@ elif args.status == 'generate':
     else:
         text = datasets  # 文本
     # text = datasets
-    sentenceID = random.randint(0, len(text['test']) - 1)
     CharacterToWord = CTW()
     test_pkl = preprocess(args)
+    # debug
+    # print("debug")
+    # 思洲要睡觉了
+    # debug
     tokenizer = ChineseTokenizer(
         custom_words_file_path=cant_word_location,
         test_pkl_word_list=list(set(test_pkl['fastIndexWord'].keys()))
     )
     save_path = os.path.join(rootPth, "datasets/pickle_data")
     res = {"tokenize": [], "wordVector": [], 'fastIndexWord': {}}
-    suc = 0
-    fai = 0
-    for i in tqdm.tqdm(range(len(text['test'])), desc="将字向量转化为词向量"):
-        """
-        try:
-            if (suc+fai)%1000 == 0:
-                print(f"suc rate:{100*suc/(suc+fai)}%")
-        except:
-            pass
-        """
-        sentence = text['test'][i:i + 1]
-        sentence.set_target("target")
-        sentence.set_input("bigrams")
-        sentence.set_input("seq_len")
-        sentence.set_input("lex_num")
-        sentence.set_input("target")
-        # sentence.print_field_meta()
-        try:
-            test_label_list = predictor.predict(sentence)  # 预测结果
-        except Exception as e:
-            fai += 1
-            continue
-        suc += 1
-        test_raw_char = sentence['raw_chars']  # 原始文字
-        # print(f"test_raw_char:{test_raw_char[0]}")
-        sentence = ""
-        for i_ in test_raw_char[0]:
-            sentence += i_
 
-        # HERE
-        mect4cner_out_vector = test_label_list['char_encoded']
 
-        tokenize = tokenizer.tokenize(sentence)
-        wordVector = CharacterToWord.run(mect4cner_out_vector, tokenize['wordGroupsID'])
-        res['tokenize'].append(tokenize)
-        res['wordVector'].append(wordVector)
-        for Index in range(len(res['tokenize'][-1]['wordCutResult'])):
-            word = res['tokenize'][-1]['wordCutResult'][Index]
-            Vec = res['wordVector'][-1][Index]
-            if word not in res['fastIndexWord']:
-                res['fastIndexWord'][word] = Vec.unsqueeze(0)
-            else:
-                res['fastIndexWord'][word] = torch.cat((res['fastIndexWord'][word], Vec.unsqueeze(0)), dim=0)
-    print(f"suc rate:{100 * suc / (suc + fai)}%")
+    def processingText(T):
+        suc = 0
+        fai = 0
+        for i__ in tqdm.tqdm(range(len(T)), desc="将字向量转化为词向量"):
+            sentence_ = T[i__:i__ + 1]
+            sentence_.set_target("target")
+            sentence_.set_input("bigrams")
+            sentence_.set_input("seq_len")
+            sentence_.set_input("lex_num")
+            sentence_.set_input("target")
+            sentence_raw = "".join(sentence_['raw_chars'][0])
+            # debug
+            # if '思洲要睡觉了' not in sentence_raw:
+            #     continue
+            # debug
+            # sentence_.print_field_meta()
+            try:
+                test_label_list_ = predictor.predict(sentence_)  # 预测结果
+            except Exception as e:
+                fai += 1
+                continue
+            suc += 1
+            # print(f"test_raw_char_:{test_raw_char_[0]}")
+
+            # HERE
+            mect4cner_out_vector = test_label_list_['char_encoded']
+
+            tokenize = tokenizer.tokenize(sentence_raw)
+            wordVector = CharacterToWord.run(mect4cner_out_vector, tokenize['wordGroupsID'])
+            res['tokenize'].append(tokenize)
+            res['wordVector'].append(wordVector)
+            for Index in range(len(res['tokenize'][-1]['wordCutResult'])):
+                word = res['tokenize'][-1]['wordCutResult'][Index]
+                Vec = res['wordVector'][-1][Index]
+                if word not in res['fastIndexWord']:
+                    res['fastIndexWord'][word] = Vec.unsqueeze(0)
+                else:
+                    res['fastIndexWord'][word] = torch.cat((res['fastIndexWord'][word], Vec.unsqueeze(0)), dim=0)
+
+        print(f"suc rate:{100 * suc / (suc + fai)}%")
+
+
+    # processingText(text['train']) # wiki中，train=test
+    processingText(text['test'])
 
     file_name = f"{args.dataset if args.extra_datasets == 'None' else args.extra_datasets}.pkl"
     write_to_pickle(os.path.join(save_path, file_name), res)
