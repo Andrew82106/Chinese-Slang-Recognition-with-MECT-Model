@@ -415,7 +415,6 @@ def calcSentenceWithDimensionDecline_with_cluster(
         if (cnt_true + cnt_404 + cnt_false) % 1000 == 0:
             print(
                 f"now has {cnt_404} 404 words and {cnt_false} false label and {cnt_true} true label")
-        """
         try:
             wiki_cluster_result = cluster(
                         baseDatabase,
@@ -434,24 +433,11 @@ def calcSentenceWithDimensionDecline_with_cluster(
                 assert indices_ not in resDict, f"indices_ {indices_} in resDict"
                 resDict[indices_] = [word_instance['word'], 404]
             continue
-
         center = getCenter(wiki_cluster_result['result class instance'])
         # if wiki_cluster_result['num_of_clusters'] == 1:
         if wiki_cluster_result['num_of_clusters']:
             center = wiki_cluster_result['cluster_members']
         # center = dimensionReduce(center)
-        """
-        try:
-            center = dimensionReduce(
-                read_vector(baseDatabase, word_instance['word'], maxLength=maxLength, refresh=False),
-                dimension=dimension, algo=algo
-            )
-        except:
-            for indices_ in word_instance['indices']:
-                cnt_404 += 1
-                assert indices_ not in resDict, f"indices_ {indices_} in resDict"
-                resDict[indices_] = [word_instance['word'], 404]
-            continue
         for index_, indices_ in enumerate(word_instance['indices']):
             Vector = word_instance['reduced_vectors'][index_]
             label = is_in_epsilon_neighborhood(Vector, center, epsilon=eps, metric=metric)

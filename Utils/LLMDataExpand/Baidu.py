@@ -113,4 +113,4 @@ def Expand():
             res.append(cont1.count(str(i)))
     print(f"增强文本中平均包含暗语词汇数量：{sum(res) / len(res)}\n增强文本中最少包含暗语词汇数量：{min(res)}\n增强文本中最多包含暗语词汇数量：{max(res)}")
     print("增强文本词频统计细则：")
-    # pprint.pprint(summaryDict)
+    pprint.pprint(summaryDict)
