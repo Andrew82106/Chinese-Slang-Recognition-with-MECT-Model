@@ -10,7 +10,9 @@ matplotlib~=3.8.1
 scikit-learn~=1.3.2
 tqdm
 chardet
-patchworklib
-seaborn
+patchworklib~=0.6.3
+seaborn~=0.13.0
 umap-learn
-pandas
+pandas~=2.1.3
+requests~=2.31.0
+pypinyin~=0.50.0

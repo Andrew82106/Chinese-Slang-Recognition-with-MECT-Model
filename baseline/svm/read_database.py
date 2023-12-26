@@ -34,4 +34,8 @@ def generate_word_to_index(text_data):
 
 
 def encode_word(word, word_to_index):
-    return word_to_index.get(word, -1)
+    if isinstance(word, list):
+        if len(word) == 0:
+            return -1
+        return int(''.join([str(word_to_index.get(word_i, 0)) for word_i in word]))/1000
+    return word_to_index.get(word, 0)/1000
