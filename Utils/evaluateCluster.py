@@ -4,6 +4,7 @@ from fastNLP.io.loader import ConllLoader
 from fastNLP.core.metrics import SpanFPreRecMetric, AccuracyMetric
 from fastNLP import DataSet, Vocabulary
 from Utils.paths import *
+import pandas as pd
 vocabs = {}
 
 
@@ -97,6 +98,44 @@ def wordToID(words):
     return result
 
 
+def evaluateUsingTraditionalMeasure(resultFilePath=clusterResult_path):
+    with open(resultFilePath, "r", encoding='utf-8') as f:
+        result = f.read()
+
+    result_list = eval(result)
+    cant_in_result_list = []
+    not_cant_in_result_list = []
+    for instance in result_list:
+        if instance[-1] is False:
+            cant_in_result_list.append(instance[0])
+        else:
+            not_cant_in_result_list.append(instance[0])
+    # print(len(cant_in_result_list))
+    cant_in_result_list = list(set(cant_in_result_list))
+    # print(len(cant_in_result_list))
+    cant_word_list = list(pd.read_excel(cant_word_location)['cant'])
+
+    # r值应该是做出的预测中正确的样本数量和做出的预测的数量的比值
+    # p值应该是实际的暗语中被预测到的数量和暗语数量的比值
+
+    r_ = 0
+    for word in cant_in_result_list:
+        if word in cant_word_list:
+            r_ += 1
+    r_ = r_/len(cant_in_result_list)
+
+    p_ = 0
+    for cant in cant_word_list:
+        if cant in cant_in_result_list:
+            p_ += 1
+    p_ = p_/len(cant_word_list)
+
+    f_ = 2 * (p_ * r_) / (p_ + r_)
+
+    print(f"f:{f_} p:{p_} r:{r_}")
+
+
 if __name__ == '__main__':
-    evaluateDBScanMetric()
+    # evaluateDBScanMetric()
+    evaluateUsingTraditionalMeasure()
     print("end")

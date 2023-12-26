@@ -675,10 +675,10 @@ Embedding-V1是基于百度文心大模型技术的文本表示模型，将文�
 现在的结果和之前的结果对比如下：
 
 
-| 数据集      | 数据集的词汇表大小 | 所以词语占比                        |
-|----------|-----------|-------------------------------|
-| old wiki | 42970     | 所有10485个词语，3145是不在wiki中的，占29% |
-| new wiki | 47262     | 所有10485个词语，184是不在wiki中的，占1%   |
+| 数据集   | 数据集的词汇表大小 | 所以词语占比                               |
+| -------- | ------------------ | ------------------------------------------ |
+| old wiki | 42970              | 所有10485个词语，3145是不在wiki中的，占29% |
+| new wiki | 47262              | 所有10485个词语，184是不在wiki中的，占1%   |
 
 接下来就是处理新数据
 
@@ -758,7 +758,6 @@ label_acc: acc=0.679607
     <img src="Utils/Lab/LabCache/降维算法比较图_词语通讯员.png" alt="降维算法比较图_词语通讯员.png" width="25%">
 </div>
 
-
 这些词语在部分的句子中都是暗语词汇
 
 <div style="display: flex; flex-direction: row;">
@@ -767,7 +766,6 @@ label_acc: acc=0.679607
     <img src="Utils/Lab/LabCache/降维算法比较图_词语警方.png" alt="降维算法比较图_词语警方.png" width="25%">
     <img src="Utils/Lab/LabCache/降维算法比较图_词语我.png" alt="降维算法比较图_词语我.png" width="25%">
 </div>
-
 
 这些词语不是暗语词汇
 
@@ -819,7 +817,7 @@ label_acc: acc=0.679607
 404词语共3233个，在16204个词语中占比19.951863737348802%
 [testing result]
 comparing file /Users/andrewlee/Desktop/Projects/Chinese-Slang-Recognition-with-MECT-Model/datasets/NER/test/input.bio with /Users/andrewlee/Desktop/Projects/Chinese-Slang-Recognition-with-MECT-Model/clusterRes/Result.bio
-Evaluate data in 0.07 seconds!                                                                                                       
+Evaluate data in 0.07 seconds!                                                                                                     
 [tester] 
 SpanFPreRecMetric: f=0.279161, pre=0.572581, rec=0.184575
 label_acc: acc=0.731987
@@ -899,7 +897,6 @@ label_acc: acc=0.855365
 现在看看第三次增强能带来什么改变。
 
 不过先得写个功能实现缓存的删除和数据集合并，不然容易出问题
-
 
 第三次增强后用上面的代码测试wiki数据集的结果：
 
@@ -1058,7 +1055,6 @@ generate_r_compare(R, I)
 
 同理，使用如下函数计算的另一指标如下：
 
-
 ```python
 R = extract_sensitive_word_from_bio('/Users/andrewlee/Desktop/Projects/Chinese-Slang-Recognition-with-MECT-Model/clusterRes/Result.bio')
 I = extract_sensitive_word_from_bio('/Users/andrewlee/Desktop/Projects/Chinese-Slang-Recognition-with-MECT-Model/datasets/NER/test/input.bio')
@@ -1187,7 +1183,7 @@ label_acc: acc=0.711656
 
 eps越小，做出的预测（打标为暗语的数量）应该越多，因此做出的预测中错误的样本数量会变多，但实际的暗语中被预测到的数量应该也会增多
 
-因此，r值应该是做出的预测中错误的样本数量和做出的预测的数量的比值，p值应该是实际的暗语中被预测到的数量和暗语数量的比值，这才是正确的理解方式
+因此，r值应该是做出的预测中正确的样本数量和做出的预测的数量的比值，p值应该是实际的暗语中被预测到的数量和暗语数量的比值，这才是正确的理解方式
 
 那么现在，可以借鉴Context-aware Entity Morph Decoding这篇文章的两步走模型，拯救一下偏低的r值
 
@@ -1208,3 +1204,25 @@ Context-aware Entity Morph Decoding这篇文章里面先用了一个SVM，然后
 如果指标还是不够高，那么就尝试用他这种两步增强的方法去试试
 
 如果两步增强还是没用，那就复现一下SVM，看看SVM的判断方法在我们当前项目这种基于span的序列打标计算方式下指标如何
+
+
+---
+
+现在更改指标计算的方法出来了,效果：
+
+```text
+f:0.16500033330707278 p:0.1311572700296736 r:0.2223826714801444
+```
+
+同样的数据，使用span计算：
+
+```text
+SpanFPreRecMetric: f=0.288622, pre=0.71147, rec=0.181031
+label_acc: acc=0.711656
+```
+
+其实用span计算在此时是占便宜的
+
+但是反过来想，用新的指标计算方法而不用span计算的好处在于，新指标的计算方法和之前的论文接轨，同时新指标的优化方向也很清晰，就是减小分母
+
+因此还是不能用span的方法来计算
