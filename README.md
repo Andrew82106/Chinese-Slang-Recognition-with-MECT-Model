@@ -57,7 +57,7 @@ bash RunCluster.sh
 
 - 删除缓存+使用降维算法进行测试+测试结果
 ```shell
-bash runDimensionReduceProcess.sh 0.9
+bash runDimensionReduceProcess.sh 0.8
 ```
 
 ## 其他操作

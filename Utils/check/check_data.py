@@ -1,3 +1,16 @@
+def extract_word_from_bio(r):
+    with open(r, 'r', encoding='utf-8') as f:
+        content = f.read()
+    res_list = []
+    content_list = content.split("\n")
+    for word_pair in content_list:
+        if '\t' not in word_pair:
+            continue
+        word, label = word_pair.split("\t")
+        res_list.append(word)
+    return res_list
+
+
 def extract_sensitive_word_from_bio(r):
     """
     从.bio格式的文件中提取暗语词汇列表

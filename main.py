@@ -780,7 +780,7 @@ elif args.status == 'generate':
             # print(f"test_raw_char_:{test_raw_char_[0]}")
 
             # HERE
-            mect4cner_out_vector = test_label_list_['char_encoded']
+            mect4cner_out_vector = test_label_list_['seq_output']
 
             tokenize = tokenizer.tokenize(sentence_raw)
             wordVector = CharacterToWord.run(mect4cner_out_vector, tokenize['wordGroupsID'])

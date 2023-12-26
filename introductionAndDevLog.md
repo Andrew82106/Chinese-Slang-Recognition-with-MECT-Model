@@ -817,7 +817,7 @@ label_acc: acc=0.679607
 404词语共3233个，在16204个词语中占比19.951863737348802%
 [testing result]
 comparing file /Users/andrewlee/Desktop/Projects/Chinese-Slang-Recognition-with-MECT-Model/datasets/NER/test/input.bio with /Users/andrewlee/Desktop/Projects/Chinese-Slang-Recognition-with-MECT-Model/clusterRes/Result.bio
-Evaluate data in 0.07 seconds!                                                                                                     
+Evaluate data in 0.07 seconds!                                                                                                   
 [tester] 
 SpanFPreRecMetric: f=0.279161, pre=0.572581, rec=0.184575
 label_acc: acc=0.731987
@@ -1205,7 +1205,6 @@ Context-aware Entity Morph Decoding这篇文章里面先用了一个SVM，然后
 
 如果两步增强还是没用，那就复现一下SVM，看看SVM的判断方法在我们当前项目这种基于span的序列打标计算方式下指标如何
 
-
 ---
 
 现在更改指标计算的方法出来了,效果：
@@ -1226,3 +1225,6 @@ label_acc: acc=0.711656
 但是反过来想，用新的指标计算方法而不用span计算的好处在于，新指标的计算方法和之前的论文接轨，同时新指标的优化方向也很清晰，就是减小分母
 
 因此还是不能用span的方法来计算
+
+
+还有一件事，感觉和已有的论文比起来，我们的数据集其实不是很好，数据集看看怎么改改比较好
