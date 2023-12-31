@@ -372,6 +372,7 @@ def calcSentenceWithDimensionDecline(
     writeResult(str(res))
 
 
+
 def calcSentenceWithDimensionDecline_with_cluster(
         baseDatabase='wiki',
         eps=18,
@@ -381,9 +382,80 @@ def calcSentenceWithDimensionDecline_with_cluster(
         dimension=4,
         algo='default'
 ):
-    """
-    用降维进行聚类
-    """
+    print("starting cutting Result")
+    writeLog("", init=1)
+    cutResult = preprocess(args)
+    # 这里cutResult存的是待标记数据集的向量化结果
+    tokenizeRes = cutResult['tokenize']
+    wordVector = cutResult['wordVector']
+    res = []
+    word = ""
+    initVector(baseDatabase)
+    for ID in tqdm.tqdm(range(len(tokenizeRes)), desc='processing'):
+        for wordID in range(len(tokenizeRes[ID]['wordCutResult'])):
+            # for wordID in tqdm.tqdm(range(len(tokenizeRes[ID]['wordCutResult'])), desc=f'running sentence with ID:{ID}'):
+            try:
+                word = tokenizeRes[ID]['wordCutResult'][wordID]
+                if word in ".,!。，":
+                    res.append([word, True])
+                    writeResult(str(res))
+                    continue
+                # Vector = Dimensionality_reduction(wordVector[ID][wordID].reshape(1, -1))
+                Vector = wordVector[ID][wordID]
+                # 拿到word和对应的Vector
+                debugInfo(f'clustering word:{word}')
+                writeLog(f"INFO: clustering word:{word}")
+                clustera = cluster(
+                    baseDatabase,
+                    word,
+                    savefig=False,
+                    eps=eps,
+                    metric=metric,
+                    min_samples=min_samples,
+                    maxLength=maxLength,
+                    refresh=False
+                )
+                debugInfo(f'success running cluster function with word {word}')
+                writeLog(f"success running cluster function with word {word}")
+                # 计算出聚类结果
+
+                classify = clustera['cluster result']
+                count_N1 = sum([1 if i == -1 else 0 for i in classify])
+                debugInfo(f"词语{word}聚类结果离群点数：{count_N1}")
+                writeLog(f"词语{word}聚类结果离群点数：{count_N1}")
+                debugInfo(f"词语{word}聚类结果聚类数量：{clustera['num_of_clusters']}")
+                writeLog(f"词语{word}聚类结果聚类数量：{clustera['num_of_clusters']}")
+                center = getCenter(clustera['result class instance'])
+                if clustera['num_of_clusters'] == 1:
+                    center = clustera['cluster_members']
+
+                res.append(
+                    [word, is_in_epsilon_neighborhood(Vector, center, epsilon=eps, metric=metric)]
+                )
+                debugInfo(f"append {word} in res")
+                writeLog(f"append {word} in res")
+                writeResult(f"{res}")
+            except Exception as e:
+                debugInfo(f"clustering word {word} with error {e}")
+                writeLog(f"clustering word {word} with error {e}")
+                res.append(
+                    [word, 404]
+                )
+                writeResult(f"{res}")
+    writeResult(f"{res}")
+
+
+"""
+def calcSentenceWithDimensionDecline_with_cluster(
+        baseDatabase='wiki',
+        eps=18,
+        metric='euclidean',
+        min_samples=4,
+        maxLength=20000,
+        dimension=4,
+        algo='default'
+):
+    # 用降维进行聚类
     print("starting cutting Result")
     cutResult = preprocess(args)
     # 这里cutResult存的是待标记数据集的向量化结果
@@ -450,7 +522,7 @@ def calcSentenceWithDimensionDecline_with_cluster(
     print(f"there are {cnt_404} 404 words and {cnt_false} false label and {cnt_true} true label")
     res = convertResDictToResList(resDict)
     writeResult(str(res))
-
+"""
 
 """
 print(Find_many_word('wiki', 'test', Count=30))
@@ -467,7 +539,15 @@ elif args.mode == 'test_dimension_decline':
         maxLength=args.maxLength
     )
 elif args.mode == 'generate':
+    """
     calcSentence(
+        eps=args.eps,
+        metric=args.metric,
+        min_samples=args.min_samples,
+        maxLength=args.maxLength
+    )
+    """
+    calcSentenceWithDimensionDecline_with_cluster(
         eps=args.eps,
         metric=args.metric,
         min_samples=args.min_samples,

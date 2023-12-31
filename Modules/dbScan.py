@@ -46,7 +46,7 @@ def writeLog(Content, init=False):
 def writeResult(Content):
     with open(clusterResult_path, "w", encoding='utf-8') as f:
         f.write(Content + "\n")
-    print(f"successfully rewrite file {clusterResult_path}")
+    # print(f"successfully rewrite file {clusterResult_path}")
 
 
 def debugInfo(Content, show=0):
