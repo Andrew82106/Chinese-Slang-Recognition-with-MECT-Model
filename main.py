@@ -765,8 +765,7 @@ elif args.status == 'generate':
                 fai += 1
                 continue
             suc += 1
-            # HERE
-            mect4cner_out_vector = test_label_list_['seq_output']
+            mect4cner_out_vector = test_label_list_['final_output']
 
             tokenize = tokenizer.tokenize(sentence_raw)
             wordVector = CharacterToWord.run(mect4cner_out_vector, tokenize['wordGroupsID'])

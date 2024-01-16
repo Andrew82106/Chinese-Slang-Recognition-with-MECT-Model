@@ -420,21 +420,15 @@ def preprocess(args, outdatasetPath=test_path, refresh=False):
             continue
         suc += 1
         test_raw_char = sentence['raw_chars']  # 原始文字
-        # print(f"test_raw_char:{test_raw_char[0]}")
         sentence = ""
         for i in test_raw_char[0]:
             sentence += i
-
-        # HERE
-        mect4cner_out_vector = test_label_list['seq_output']
+        mect4cner_out_vector = test_label_list['final_output']
 
         tokenize = tokenizer.tokenize(sentence)
         wordVector = CharacterToWord.run(mect4cner_out_vector, tokenize['wordGroupsID'])
-        # append_tokenize_to_pickle(os.path.join(save_path, file_name), tokenize)
-        # append_wordVector_to_pickle(os.path.join(save_path, file_name), wordVector)
         res['tokenize'].append(tokenize)
         res['wordVector'].append(wordVector)
-        # res = load_from_pickle(os.path.join(save_path, file_name))
         for Index in range(len(res['tokenize'][-1]['wordCutResult'])):
             word = res['tokenize'][-1]['wordCutResult'][Index]
             Vec = res['wordVector'][-1][Index]
@@ -442,11 +436,9 @@ def preprocess(args, outdatasetPath=test_path, refresh=False):
                 res['fastIndexWord'][word] = Vec.unsqueeze(0)
             else:
                 res['fastIndexWord'][word] = torch.cat((res['fastIndexWord'][word], Vec.unsqueeze(0)), dim=0)
-        # write_to_pickle(os.path.join(save_path, file_name), res)
     print(f"suc rate:{100 * suc / (suc + fai)}%")
     print(f"successfully save to {os.path.join(save_path, file_name)}")
     write_to_pickle(os.path.join(save_path, file_name), res)
-    # return load_from_pickle(os.path.join(save_path, file_name))
     return res
 
 

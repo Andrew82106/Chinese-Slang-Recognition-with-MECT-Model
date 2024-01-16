@@ -51,9 +51,6 @@ class CTW(nn.Module):
             if len(Groups) == 1:
                 Groups.append(Groups[0])
             for ID in range(Groups[0], Groups[1] + 1, 1):
-                # print(f"InputVector:{InputVector}")
-                # print(ID)
-                # print(f"before:{result_tensor}")
                 if result_tensor is None:
                     result_tensor = copy.deepcopy(InputVector[ID])
                     # 这里还需要深拷贝一下，不然InputVector就被加上去了

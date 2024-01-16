@@ -320,10 +320,9 @@ def calcSentenceWithDimensionDecline(
         baseDatabase='wiki',
         eps=18,
         metric='euclidean',
-        min_samples=4,
         maxLength=2000,
         dimension=2,
-        algo='PCA'
+        algo='t-sne'
 ):
     """
     用降维直接进行距离计算，不使用聚类算法
@@ -361,7 +360,6 @@ def calcSentenceWithDimensionDecline(
                     cnt_true += 1
         except Exception as e:
             if not isinstance(e, KeyError):
-                # print(f'processing word with error {e}')
                 raise e
             for indices_ in test_word_indices:
                 cnt_404 += 1
@@ -449,7 +447,6 @@ elif args.mode == 'test_dimension_decline':
     calcSentenceWithDimensionDecline(
         eps=args.eps,
         metric=args.metric,
-        min_samples=args.min_samples,
         maxLength=args.maxLength
     )
 elif args.mode == 'generate':

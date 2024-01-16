@@ -336,8 +336,8 @@ class CSR_MECTNER(nn.Module):
                 'fusion': fusion, 
                 'radical_encoded': radical_encoded, 
                 'char_encoded': char_encoded[:, :max_seq_len, :],
-                'seq_output': seq_output
-                
+                'seq_output': seq_output,
+                'final_output': seq_output  # 用于向量工作的输出接口
             }
             # note: 之前出现过如下报错：
             """

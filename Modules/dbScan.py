@@ -1,19 +1,9 @@
-import os
-
 import matplotlib.pyplot as plt
 import torch
 from sklearn.cluster import DBSCAN
 from sklearn.preprocessing import StandardScaler
-from sklearn.datasets import make_blobs
 import time
 from datetime import datetime
-import numpy as np
-"""
-try:
-    from ConvWordToVecWithMECT import preprocess
-except:
-    from ..ConvWordToVecWithMECT import preprocess
-"""
 try:
     from sklearnex import patch_sklearn, unpatch_sklearn
     patch_sklearn()
@@ -265,7 +255,6 @@ def read_vector(dataset, word, maxLength=None, refresh=True):
     return R
 
 
-# @cache.cache_result(cache_path='cache_function_cluster.pkl')
 def cluster(dataset, word, eps=25, savefig=False, metric='euclidean', min_samples=5, maxLength=20000, refresh=True, dimension_d=False):
     """
     聚类接口api
