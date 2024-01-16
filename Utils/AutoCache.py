@@ -52,10 +52,16 @@ class Cache:
             pickle.dump(cache, file)
 
     def load_cache(self, cache, cache_path):
-        if os.path.exists(os.path.join(self.cache_path, cache_path)):
-            with open(os.path.join(self.cache_path, cache_path), 'rb') as file:
-                loaded_cache = pickle.load(file)
-                cache.update(loaded_cache)
+        file_path = os.path.join(self.cache_path, cache_path)
+        if os.path.exists(file_path):
+            try:
+                with open(file_path, 'rb') as file:
+                    loaded_cache = pickle.load(file)
+                    cache.update(loaded_cache)
+            except (EOFError, pickle.UnpicklingError) as e:
+                print(f"Error loading cache from {file_path}: {e}")
+        else:
+            print(f"Cache file not found: {file_path}")
 
 
 if __name__ == "__main__":

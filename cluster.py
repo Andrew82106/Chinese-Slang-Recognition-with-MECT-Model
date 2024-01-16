@@ -373,14 +373,12 @@ def calcSentenceWithDimensionDecline(
 
 
 
-def calcSentenceWithDimensionDecline_with_cluster(
+def calc_sentence_with_cluster(
         baseDatabase='wiki',
         eps=18,
         metric='euclidean',
         min_samples=4,
-        maxLength=20000,
-        dimension=4,
-        algo='default'
+        maxLength=20000
 ):
     print("starting cutting Result")
     writeLog("", init=1)
@@ -445,90 +443,6 @@ def calcSentenceWithDimensionDecline_with_cluster(
     writeResult(f"{res}")
 
 
-"""
-def calcSentenceWithDimensionDecline_with_cluster(
-        baseDatabase='wiki',
-        eps=18,
-        metric='euclidean',
-        min_samples=4,
-        maxLength=20000,
-        dimension=4,
-        algo='default'
-):
-    # 用降维进行聚类
-    print("starting cutting Result")
-    cutResult = preprocess(args)
-    # 这里cutResult存的是待标记数据集的向量化结果
-    tokenizeRes = cutResult['tokenize']
-    wordVector = cutResult['wordVector']
-    merged_matrices = mergeVectorsByWordWithIndices(tokenizeRes, wordVector)
-    reduced_matrices = reduceDimensionsForMatrices(merged_matrices, dimension=dimension, algo=algo)
-    initVector(baseDatabase)
-    # 在这里对每个词语的信息进行汇总
-    word_info_list = []  # 存储每个词语的信息
-    for word, data in tqdm.tqdm(merged_matrices.items(), desc='存储每个词语的信息'):
-        if word in reduced_matrices:  # 确保降维后的向量也存在
-            original_vectors = data['vectors']  # 原始向量矩阵
-            indices = data['indices']  # 词语在原数据集中的索引位置
-            reduced_vectors = reduced_matrices[word]  # 降维后的向量矩阵
-            # 汇总每个词语的信息
-            word_info = {
-                'word': word,
-                'original_vectors': original_vectors,
-                'indices': indices,
-                'reduced_vectors': reduced_vectors
-            }
-            word_info_list.append(word_info)  # 将每个词语的信息添加到列表中
-    resDict = {}
-    cnt_404 = 0
-    cnt_false = 0
-    cnt_true = 0
-    for word_instance in tqdm.tqdm(word_info_list, desc='processing cluster algorithm'):
-        if (cnt_true + cnt_404 + cnt_false) % 1000 == 0:
-            print(
-                f"now has {cnt_404} 404 words and {cnt_false} false label and {cnt_true} true label")
-        try:
-            wiki_cluster_result = cluster(
-                        baseDatabase,
-                        word_instance['word'],
-                        savefig=False,
-                        eps=eps,
-                        metric=metric,
-                        min_samples=min_samples,
-                        maxLength=maxLength,
-                        refresh=False,
-                        dimension_d=True
-                    )
-        except:
-            for indices_ in word_instance['indices']:
-                cnt_404 += 1
-                assert indices_ not in resDict, f"indices_ {indices_} in resDict"
-                resDict[indices_] = [word_instance['word'], 404]
-            continue
-        center = getCenter(wiki_cluster_result['result class instance'])
-        # if wiki_cluster_result['num_of_clusters'] == 1:
-        if wiki_cluster_result['num_of_clusters']:
-            center = wiki_cluster_result['cluster_members']
-        # center = dimensionReduce(center)
-        for index_, indices_ in enumerate(word_instance['indices']):
-            Vector = word_instance['reduced_vectors'][index_]
-            label = is_in_epsilon_neighborhood(Vector, center, epsilon=eps, metric=metric)
-            assert indices_ not in resDict, f"indices_ {indices_} in resDict"
-            resDict[indices_] = [word_instance['word'], label]
-            if not label:
-                cnt_false += 1
-            else:
-                cnt_true += 1
-    print(f"there are {cnt_404} 404 words and {cnt_false} false label and {cnt_true} true label")
-    res = convertResDictToResList(resDict)
-    writeResult(str(res))
-"""
-
-"""
-print(Find_many_word('wiki', 'test', Count=30))
-exit()
-"""
-
 if args.mode == 'test':
     evaluateDBScanMetric()
 elif args.mode == 'test_dimension_decline':
@@ -547,7 +461,7 @@ elif args.mode == 'generate':
         maxLength=args.maxLength
     )
     """
-    calcSentenceWithDimensionDecline_with_cluster(
+    calc_sentence_with_cluster(
         eps=args.eps,
         metric=args.metric,
         min_samples=args.min_samples,

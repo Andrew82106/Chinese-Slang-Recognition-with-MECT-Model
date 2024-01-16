@@ -736,17 +736,10 @@ elif args.status == 'generate':
                                                                       only_train_min_freq=args.only_train_min_freq)
         text = datasets  # 文本
         print(">>>>>>>成功加载外入数据集<<<<<<<")
-        # print(text)
-        # exit(0)
     else:
         text = datasets  # 文本
-    # text = datasets
     CharacterToWord = CTW()
     test_pkl = preprocess(args)
-    # debug
-    # print("debug")
-    # 思洲要睡觉了
-    # debug
     tokenizer = ChineseTokenizer(
         custom_words_file_path=cant_word_location,
         test_pkl_word_list=list(set(test_pkl['fastIndexWord'].keys()))
@@ -766,19 +759,12 @@ elif args.status == 'generate':
             sentence_.set_input("lex_num")
             sentence_.set_input("target")
             sentence_raw = "".join(sentence_['raw_chars'][0])
-            # debug
-            # if '思洲要睡觉了' not in sentence_raw:
-            #     continue
-            # debug
-            # sentence_.print_field_meta()
             try:
                 test_label_list_ = predictor.predict(sentence_)  # 预测结果
             except Exception as e:
                 fai += 1
                 continue
             suc += 1
-            # print(f"test_raw_char_:{test_raw_char_[0]}")
-
             # HERE
             mect4cner_out_vector = test_label_list_['seq_output']
 

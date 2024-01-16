@@ -26,9 +26,11 @@ python main.py --dataset weibo --status generate --device cpu
 
 # 加载外部数据集并转化为词向量
 python main.py --dataset weibo --status generate --device cpu --extra_datasets tieba
+
 # 加载外部数据集并转化为词向量（重建wiki.pkl，重建的时候必须有test.pkl存在，并且重建之前需要先清除wiki数据集的缓存）
 python cluster.py --mode clean_model_cache
 python main.py --dataset msra --status generate --device cpu --extra_datasets wiki
+
 # 加载外部数据集并转化为词向量（test.pkl）
 python cluster.py --mode refresh_test
 ```
@@ -38,6 +40,7 @@ python cluster.py --mode refresh_test
 ```shell
 # 使用非降维算法进行测试
 python cluster.py --mode generate
+
 # 使用降维算法进行测试
 python cluster.py --mode test_dimension_decline
 ```

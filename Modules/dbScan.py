@@ -165,6 +165,7 @@ def saveFig(X, clusters, name="your_plot_name", xlabel='Feature 1', ylabel='Feat
     plt.show()
 
 
+@cache.cache_result(cache_path='dbscan.pkl')
 def dbscan(X, metric, min_samples, eps=25, savefig=False, word=None, dataset=None):
     """
     # 进行dbscan聚类
@@ -264,7 +265,7 @@ def read_vector(dataset, word, maxLength=None, refresh=True):
     return R
 
 
-@cache.cache_result(cache_path='cache_function_cluster.pkl')
+# @cache.cache_result(cache_path='cache_function_cluster.pkl')
 def cluster(dataset, word, eps=25, savefig=False, metric='euclidean', min_samples=5, maxLength=20000, refresh=True, dimension_d=False):
     """
     聚类接口api

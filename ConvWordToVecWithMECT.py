@@ -23,33 +23,18 @@ fitlog.set_rng_seed(load_dataset_seed)
 import sys
 
 sys.path.append('../')
-import argparse
-from fastNLP.core import Trainer
-# from trainer import Trainer
-from fastNLP.core import Callback
 import torch
 import collections
 import torch.optim as optim
 import torch.nn as nn
-from fastNLP import LossInForward
 from fastNLP.core.metrics import SpanFPreRecMetric, AccuracyMetric
 from fastNLP.core.callback import WarmupCallback, GradientClipCallback, EarlyStopCallback
 from fastNLP import LRScheduler, DataSetIter, SequentialSampler
 from torch.optim.lr_scheduler import LambdaLR
-# from models import LSTM_SeqLabel,LSTM_SeqLabel_True
 from fastNLP import logger
 import pprint
-import traceback
-import warnings
-import sys
 
 
-# print('tuner_params：')
-# print(tuner_params)
-# exit()
-
-
-# @cache.cache_result(cache_path='preprocess.pkl')
 def preprocess(args, outdatasetPath=test_path, refresh=False):
     """
     该函数使用了MECT4CNER，将outdatasetPath中的文本变成向量组，作为返回结果
@@ -78,23 +63,7 @@ def preprocess(args, outdatasetPath=test_path, refresh=False):
     if args.test_batch == -1:
         args.test_batch = args.batch // 2
     fitlog.add_hyper(now_time, 'time')
-    if args.debug:
-        # args.dataset = 'toy'
-        pass
-
-    if args.device != 'cpu':
-        assert args.device.isdigit()
-        device = torch.device('cuda:{}'.format(args.device))
-        print('device: cuda:{}'.format(args.device))
-    else:
-        device = None
-        print('device: cpu')
-
-    # device = None  # in order to run on macbook
     refresh_data = False
-    # import random
-    # print('**'*12,random.random,'**'*12)
-
     for k, v in args.__dict__.items():
         print_info('{}:{}'.format(k, v))
 
@@ -155,7 +124,7 @@ def preprocess(args, outdatasetPath=test_path, refresh=False):
                                                        bigram_min_freq=args.bigram_min_freq,
                                                        only_train_min_freq=args.only_train_min_freq
                                                        )
-    elif args.dataset == 'demo':
+    else:
         datasets, vocabs, embeddings = load_demo(demo_ner_path, yangjie_rich_pretrain_unigram_path,
                                                  yangjie_rich_pretrain_bigram_path,
                                                  _refresh=refresh_data, index_token=False, train_clip=args.train_clip,
@@ -261,18 +230,6 @@ def preprocess(args, outdatasetPath=test_path, refresh=False):
         elif args.label == 'nm':
             cache_name = 'nm' + cache_name
 
-    # print(datasets['train'])
-
-    def debugOnWin():
-        print(cache_name)
-        print(yangjie_rich_pretrain_word_path)
-        print(yangjie_rich_pretrain_char_and_word_path)
-
-    if "\\" in cache_name:
-        cache_name = cache_name.replace("/", "\\")
-        cache_name = os.path.join(rootPth, cache_name)
-
-    # debugOnWin()
 
     datasets, vocabs, embeddings = equip_chinese_ner_with_lexicon(datasets, vocabs, embeddings,
                                                                   w_list, yangjie_rich_pretrain_word_path,
@@ -282,23 +239,6 @@ def preprocess(args, outdatasetPath=test_path, refresh=False):
                                                                   number_normalized=args.number_normalized,
                                                                   lattice_min_freq=args.lattice_min_freq,
                                                                   only_train_min_freq=args.only_train_min_freq)
-
-    # equip_chinese_ner_with_lexicon返回三个东西：datasets, vocabs, embeddings, 具体含义见load_data.py
-    def debug_dataset(datasets):
-        print(datasets['train'][0])
-        pprint.pprint(f"chars:{datasets['train'][0]['chars']}, len={len(datasets['train'][0]['chars'])}")
-        pprint.pprint(f"target:{datasets['train'][0]['target']}")
-        pprint.pprint(f"bigrams:{datasets['train'][0]['bigrams']}, len={len(datasets['train'][0]['bigrams'])}")
-        pprint.pprint(f"seq_len:{datasets['train'][0]['seq_len']}")
-        pprint.pprint(f"raw_chars:{datasets['train'][0]['raw_chars']}")
-        pprint.pprint(f"lexicons:{datasets['train'][0]['lexicons']}")
-        pprint.pprint(f"lex_num:{datasets['train'][0]['lex_num']}")
-        pprint.pprint(f"lex_s:{datasets['train'][0]['lex_s']}")
-        pprint.pprint(f"lex_e:{datasets['train'][0]['lex_e']}")
-        pprint.pprint(f"lattice:{datasets['train'][0]['lattice']}, len={len(datasets['train'][0]['lattice'])}")
-        pprint.pprint(f"pos_s:{datasets['train'][0]['pos_s']}")
-        pprint.pprint(f"pos_e:{datasets['train'][0]['pos_e']}")
-        exit(0)
 
     max_seq_len = max(*map(lambda x: max(x['seq_len']), datasets.values()))
 
@@ -344,12 +284,6 @@ def preprocess(args, outdatasetPath=test_path, refresh=False):
                                                         dropout=args.radical_dropout, pool_method='max'
                                                         , include_word_start_end=False, min_char_freq=1)
 
-    def debug_embeddings():
-        print("embeddings")
-        print(embeddings)
-        for i in embeddings:
-            print(i, type(embeddings[i]))
-        exit(0)
 
     print("finish embeddings model!")
     model_old = MECTNER(embeddings['lattice'], embeddings['bigram'], embeddings['components'], args.hidden,
@@ -415,7 +349,6 @@ def preprocess(args, outdatasetPath=test_path, refresh=False):
 
     print("INFO:: Load Model")
     model_path = os.path.join(rootPth, 'model/best_CSR_MECTNER_f_msra')
-    # model_path = '/Users/andrewlee/Desktop/Projects/Chinese-Slang-Recognition-with-MECT-Model/model/best_CSR_MECTNER_f_msra1.0'
     states = torch.load(model_path).state_dict()
     model.load_state_dict(states)
     from fastNLP.core.predictor import Predictor
@@ -463,7 +396,7 @@ def preprocess(args, outdatasetPath=test_path, refresh=False):
                                                                   lattice_min_freq=args.lattice_min_freq,
                                                                   only_train_min_freq=args.only_train_min_freq)
     text = datasets  # 文本
-    print(text['train'])
+    print(text['test'])
     CharacterToWord = CTW()
     tokenizer = ChineseTokenizer(cant_word_location)
     save_path = os.path.join(rootPth, "datasets/pickle_data")
@@ -473,13 +406,6 @@ def preprocess(args, outdatasetPath=test_path, refresh=False):
     suc = 0
     fai = 0
     for i in tqdm.tqdm(range(len(text['test'])), desc="将字向量转化为词向量"):
-        """
-        try:
-            if (suc+fai)%1000 == 0:
-                print(f"suc rate:{100*suc/(suc+fai)}%")
-        except:
-            pass
-        """
         sentence = text['test'][i:i + 1]
         sentence.set_target("target")
         sentence.set_input("bigrams")
@@ -525,4 +451,4 @@ def preprocess(args, outdatasetPath=test_path, refresh=False):
 
 
 if __name__ == '__main__':
-    preprocess()
+    preprocess(1, 1)
