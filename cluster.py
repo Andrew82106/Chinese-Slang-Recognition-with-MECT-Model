@@ -322,7 +322,7 @@ def calcSentenceWithDimensionDecline(
         metric='euclidean',
         maxLength=2000,
         dimension=2,
-        algo='t-sne'
+        algo='PCA'
 ):
     """
     用降维直接进行距离计算，不使用聚类算法
