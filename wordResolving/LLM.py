@@ -17,8 +17,8 @@ def segment_text(text):
 
 
 def sendMessage(message):
-    # url = "https://aip.baidubce.com/rpc/2.0/ai_custom/v1/wenxinworkshop/chat/completions_pro?access_token=" + get_access_token()
-    url = 'https://aip.baidubce.com/rpc/2.0/ai_custom/v1/wenxinworkshop/chat/eb-instant?access_token=' + get_access_token()
+    url = "https://aip.baidubce.com/rpc/2.0/ai_custom/v1/wenxinworkshop/chat/completions_pro?access_token=" + get_access_token()
+    # url = 'https://aip.baidubce.com/rpc/2.0/ai_custom/v1/wenxinworkshop/chat/eb-instant?access_token=' + get_access_token()
 
     payload = json.dumps(message)
     headers = {
@@ -38,26 +38,6 @@ def get_access_token():
     url = "https://aip.baidubce.com/oauth/2.0/token"
     params = {"grant_type": "client_credentials", "client_id": API_KEY, "client_secret": SECRET_KEY}
     return str(requests.post(url, params=params).json().get("access_token"))
-
-
-def get_access_token_for_turbo():
-    """
-    使用 API Key，Secret Key 获取access_token，替换下列示例中的应用API Key、应用Secret Key
-    """
-    AppID = 44592571
-    ApiKey = 'tEUIklndR5n0EtmZBCTXGIMZ'
-    SK = 'lUKitI49tkevMOiMl9NUIP6kpA7osNxN'
-
-    url = f"https://aip.baidubce.com/oauth/2.0/token?grant_type=client_credentials&client_id={ApiKey}&client_secret={SK}"
-
-    payload = json.dumps("")
-    headers = {
-        'Content-Type': 'application/json',
-        'Accept': 'application/json'
-    }
-
-    response = requests.request("POST", url, headers=headers, data=payload)
-    return response.json().get("access_token")
 
 
 def main():
@@ -124,7 +104,7 @@ def main1():
             refer = CantListMap[cantWordList[0]]
             referWordList = [CantListMap[cantWordList[0]]]
             # referWordList = []
-            while len(referWordList) <= 3:
+            while len(referWordList) <= 10:
                 referWordList.append(list(ReferListMap.keys())[random.randint(0, len(ReferListMap) - 1)])
             random.shuffle(referWordList)
             message = {
