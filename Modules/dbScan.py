@@ -249,7 +249,7 @@ def read_vector(dataset, word, maxLength=None, refresh=True):
     if word not in X_dict['fastIndexWord']:
         raise KeyError(f"{word} not in pkl of dataset {dataset}")
     R = X_dict['fastIndexWord'][word]
-    if maxLength is not None and len(R) > maxLength:
+    if (maxLength != -1) and (len(R) > maxLength):
         # print(f"debug: length={len(R)}")
         R = R[: maxLength]
     return R

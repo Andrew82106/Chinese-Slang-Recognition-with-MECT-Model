@@ -21,7 +21,7 @@ args_list = [
     {'name': '--eps', 'type': float, 'default': 18, 'help': '聚类所使用的eps值'},
     {'name': '--metric', 'type': str, 'default': 'euclidean', 'help': '聚类所使用的距离算法'},
     {'name': '--min_samples', 'type': int, 'default': 4, 'help': '聚类所使用的min_samples参数'},
-    {'name': '--maxLength', 'type': int, 'default': 1000, 'help': '聚类所用的最多的向量数量'}
+    {'name': '--maxLength', 'type': int, 'default': -1, 'help': '聚类所用的最多的向量数量'}
 ]
 
 parser = argparse.ArgumentParser(description='Process some integers.')
@@ -450,14 +450,6 @@ elif args.mode == 'test_dimension_decline':
         maxLength=args.maxLength
     )
 elif args.mode == 'generate':
-    """
-    calcSentence(
-        eps=args.eps,
-        metric=args.metric,
-        min_samples=args.min_samples,
-        maxLength=args.maxLength
-    )
-    """
     calc_sentence_with_cluster(
         eps=args.eps,
         metric=args.metric,

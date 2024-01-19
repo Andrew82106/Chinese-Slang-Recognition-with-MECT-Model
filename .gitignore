@@ -18,3 +18,5 @@
 /Utils/cache
 /Modules/cache
 /Utils/lab.ipynb
+wordResolving/model
+wordResolving/summary.json

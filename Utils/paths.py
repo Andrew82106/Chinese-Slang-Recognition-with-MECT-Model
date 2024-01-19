@@ -25,6 +25,7 @@ NER = os.path.join(rootPth, "datasets/NER")
 vector = os.path.join(rootPth, "datasets/pickle_data")
 cache_path = os.path.join(rootPth, "cache")
 Utils_path = os.path.join(rootPth, "Utils")
+wordResolving_path = os.path.join(rootPth, "wordResolving")
 
 yangjie_rich_pretrain_unigram_path = os.path.join(embeddings, 'gigaword_chn.all.a2b.uni.ite50.vec')
 yangjie_rich_pretrain_bigram_path = os.path.join(embeddings, 'gigaword_chn.all.a2b.bi.ite50.vec')
@@ -97,6 +98,7 @@ sys.path.append(charinfo)
 sys.path.append(NER)
 sys.path.append(vector)
 sys.path.append(cache_path)
+sys.path.append(wordResolving_path)
 
 
 def del_cluster_cache_path():
