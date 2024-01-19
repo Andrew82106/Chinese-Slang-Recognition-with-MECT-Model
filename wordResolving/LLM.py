@@ -124,7 +124,7 @@ def main1():
             refer = CantListMap[cantWordList[0]]
             referWordList = [CantListMap[cantWordList[0]]]
             # referWordList = []
-            while len(referWordList) <= 5:
+            while len(referWordList) <= 3:
                 referWordList.append(list(ReferListMap.keys())[random.randint(0, len(ReferListMap) - 1)])
             random.shuffle(referWordList)
             message = {
